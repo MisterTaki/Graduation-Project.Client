@@ -1,0 +1,25 @@
+@mixin center($top: 0, $bottom: 0) {
+  margin: $top auto $bottom;
+}
+@mixin clearfloat {
+  zoom: 1;
+  &:after {
+    display: block;
+    clear: both;
+    content: "";
+    visibility: hidden;
+    height: 0;
+  }
+}
+@mixin line {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+@mixin average {
+  @for $i from 1 through 10 {
+    &:first-child:nth-last-child(#{$i}), &:first-child:nth-last-child(#{$i}) ~ & {
+      width: 1 / $i * 100%;
+    }
+  }
+}
