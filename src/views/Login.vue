@@ -1,6 +1,9 @@
 <template>
   <div class="main-container">
-    <div class="main">
+    <div class="main-wrapper">
+      <div class="logo-wrapper">
+        <img src="../assets/images/logo_400x400.png" alt="logo">
+      </div>
       <h1 class="title">毕业设计（论文）系统</h1>
       <h2 class="sub-title">让毕设变得更方便、高效和优秀</h2>
       <form class="login-form">
@@ -12,15 +15,15 @@
             <input class="input-dom pwd" placeholder="密码" type="password" v-model="loginData.pwd">
           </div>
         </div>
-        <div class="wrapper radio-group">
+        <div class="radio-group wrapper-marginTop">
           <el-radio v-model="loginData.level" label="student">学生</el-radio>
           <el-radio v-model="loginData.level" label="teacher">导师</el-radio>
           <el-radio v-model="loginData.level" label="admin">管理员</el-radio>
         </div>
-        <div class="wrapper login-btn-wrapper">
+        <div class="login-btn-wrapper wrapper-marginTop">
           <button class="button-dom full-width default-color login" type="submit" @click.prevent="login">登录</button>
         </div>
-        <div class="wrapper misc-btn-wrapper">
+        <div class="misc-btn-wrapper wrapper-marginTop">
           <button class="button-dom text default-color find-pwd" @click.prevent="showDialog('findPwd', '找回密码')">找回密码</button>
           <button class="button-dom text not-account" @click.prevent="showDialog('register', '申请账号（仅限学生）')">账号不存在？</button>
         </div>
@@ -36,13 +39,13 @@
             </div>
           </template>
           <template v-if="findPwd.step === 1">
-            <div class="btn-wrapper">
+            <div class="inline-btn-wrapper">
               <button class="button-dom" type="button" @click.prevent="findPwd.step=0">修改</button>
             </div>
             <div class="input-wrapper">
               <input class="input-dom" placeholder="请输入收到的验证码" type="text" v-model="findPwdData.captcha" :readonly="findPwd.step !== 1">
             </div>
-            <div class="btn-wrapper">
+            <div class="inline-btn-wrapper">
               <button class="button-dom" @click.prevent="">重新获取验证码</button>
             </div>
           </template>
@@ -55,12 +58,12 @@
             </div>
           </template>
           <template v-if="findPwd.step < 2">
-            <div class="wrapper">
+            <div class="next-btn-wrapper wrapper-marginTop">
               <button class="button-dom  full-width default-color" @click.prevent="findPwd.step += 1" type="submit">下一步</button>
             </div>
           </template>
           <template v-if="findPwd.step === 2">
-            <div class="wrapper">
+            <div class="submit-btn-wrapper wrapper-marginTop">
               <button class="button-dom  full-width default-color" @click.prevent="" type="submit">提交</button>
             </div>
           </template>
@@ -81,7 +84,7 @@
           <div class="input-wrapper">
             <input class="input-dom" placeholder="邮箱" type="text" v-model="registerData.email">
           </div>
-          <div class="wrapper">
+          <div class="wrapper-marginTop">
             <button class="button-dom full-width default-color" @click.prevent="" type="submit">申请</button>
           </div>
         </form>
@@ -167,20 +170,22 @@
   @import "../styles/variables";
   @import "../styles/mixin";
   .main-container {
+    position: relative;
     height: 100%;
-    background-color: #F7FAFC;
+    background-color: $background;
     text-align: center;
-    &:before {
+    &:after {
       content: '';
       display: inline-block;
       height: 100%;
       vertical-align: middle;
     }
   }
-  .main {
+  .main-wrapper {
     display: inline-block;
     width: 320px;
     padding: 30px;
+    background-color: #fff;
     vertical-align: middle;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     transition: all .4s ease;
@@ -188,20 +193,29 @@
       transform: translateY(-4px);
       box-shadow: 0 6px 14px rgba(0,0,0,0.2);
     }
+    .logo-wrapper {
+      margin-bottom: 16px;
+      text-align: center;
+      img {
+        width: 120px;
+      }
+    }
     .title {
       font-size: 32px;
       color: $blue;
+      cursor: default;
     }
     .sub-title {
       margin: 20px 0;
       font-size: 18px;
+      cursor: default;
     }
   }
-  .wrapper {
+  .wrapper-marginTop {
     margin-top: 18px;
-    &.misc-btn-wrapper {
-      @include clearfloat;
-    }
+  }
+  .misc-btn-wrapper {
+    @include clearfloat;
   }
   .input-group {
     padding: 1px 0;
@@ -280,7 +294,7 @@
     .input-dom {
       border-bottom: 1px solid #e8e8e8;
     }
-    .btn-wrapper {
+    .inline-btn-wrapper {
       position: relative;
       .button-dom {
         position: absolute;
