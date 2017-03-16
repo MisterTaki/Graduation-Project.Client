@@ -1,3 +1,5 @@
+<style lang="scss" src="./Home.scss"></style>
+
 <template lang="html">
   <div class="main-wrapper">
     <div class="main main-step">
@@ -41,7 +43,3 @@
     name: 'home'
   };
 </script>
-
-<style lang="scss">
-  @import "./Home";
-</style>

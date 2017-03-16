@@ -1,3 +1,5 @@
+<style scoped lang="scss" src="./Login.scss"></style>
+
 <template>
   <div class="main-container">
     <div class="main-wrapper">
@@ -165,7 +167,3 @@
     }
   };
 </script>
-
-<style scoped lang="scss">
-  @import "./Login";
-</style>

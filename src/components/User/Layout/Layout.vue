@@ -1,3 +1,5 @@
+<style scoped lang="scss" src="./Layout.scss"></style>
+
 <template lang="html">
   <div class="main-container">
     <div class="fixed-header">
@@ -48,7 +50,3 @@
     name: 'user-view'
   };
 </script>
-
-<style scoped lang="scss">
-  @import "./Layout";
-</style>
