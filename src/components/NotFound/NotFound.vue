@@ -11,9 +11,5 @@
 </script>
 
 <style scoped lang="scss">
-  @import "../../styles/variables";
-  @import "../../styles/mixin";
-  .main-container {
-
-  }
+  @import "./NotFound";
 </style>

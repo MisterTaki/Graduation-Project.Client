@@ -11,7 +11,7 @@
 </script>
 
 <style lang="scss">
-  @import './styles/reset';
+  @import '~@/styles/reset';
   #app {
     min-width: 960px;
     height: 100%;
