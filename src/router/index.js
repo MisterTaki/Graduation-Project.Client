@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Login from '@/views/Login';
-import Home from '@/views/Home';
-import NotFound from '@/views/404';
+import { Login, User, NotFound } from '@/components';
 
 Vue.use(Router);
 
@@ -15,20 +13,26 @@ export default new Router({
     },
     {
       path: '/login',
-      name: 'Login',
+      name: 'login',
       component: Login,
       meta: {
         level: 'student'
       },
     },
     {
-      path: '/:level/home',
-      name: 'Home',
-      component: Home,
+      path: '/:level',
+      name: 'user',
+      component: User.Layout,
+      children: [
+        {
+          path: 'home',
+          component: User.Home
+        }
+      ]
     },
     {
       path: '*',
-      name: '404',
+      name: 'not-found',
       component: NotFound,
     },
   ],

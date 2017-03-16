@@ -2,7 +2,7 @@
   <div class="main-container">
     <div class="main-wrapper">
       <div class="logo-wrapper">
-        <img src="../assets/images/logo_400x400.png" alt="logo">
+        <img src="../../assets/images/logo_400x400.png" alt="logo">
       </div>
       <h1 class="title">毕业设计（论文）系统</h1>
       <h2 class="sub-title">让毕设变得更方便、高效和优秀</h2>
@@ -167,8 +167,8 @@
 </script>
 
 <style scoped lang="scss">
-  @import "../styles/variables";
-  @import "../styles/mixin";
+  @import "../../styles/variables";
+  @import "../../styles/mixin";
   .main-container {
     position: relative;
     height: 100%;

@@ -6,13 +6,13 @@
 
 <script>
   export default {
-    name: 'home',
+    name: 'not-found',
   };
 </script>
 
 <style scoped lang="scss">
-  @import "../styles/variables";
-  @import "../styles/mixin";
+  @import "../../styles/variables";
+  @import "../../styles/mixin";
   .main-container {
 
   }
