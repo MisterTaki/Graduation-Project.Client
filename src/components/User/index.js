@@ -1,2 +1,2 @@
 export Layout from './Layout/Layout';
-export * as Module from './Module';
+export * as Views from './Views';

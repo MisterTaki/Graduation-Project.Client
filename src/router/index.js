@@ -26,7 +26,7 @@ export default new Router({
       children: [
         {
           path: 'home',
-          component: User.Module.Home
+          component: User.Views.Home
         }
       ]
     },
