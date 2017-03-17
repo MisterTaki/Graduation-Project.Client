@@ -20,7 +20,7 @@
             </ul>
           </div>
         </router-link>
-        <router-link to="settings" class="nav-item settings" title="进入个人设置"></router-link>
+        <router-link to="user-settings" class="nav-item settings" title="进入个人设置"></router-link>
         <router-link to="/login" class="nav-item logout" title="注销"></router-link>
       </div>
     </div>

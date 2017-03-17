@@ -1,4 +1,4 @@
-<style lang="scss" src="./Home.scss"></style>
+<style scoped lang="scss" src="./Home.scss"></style>
 
 <template lang="html">
   <div class="main-wrapper">
