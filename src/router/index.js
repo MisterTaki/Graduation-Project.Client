@@ -27,6 +27,10 @@ export default new Router({
         {
           path: 'home',
           component: User.Views.Home
+        },
+        {
+          path: 'user-settings',
+          component: User.Views.UserSettings
         }
       ]
     },

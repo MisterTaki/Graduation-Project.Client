@@ -1,0 +1,43 @@
+@import "~@/styles/mixin";
+@import "~@/styles/variables";
+
+.main-wrapper {
+  padding: 30px 20px;
+  @include clearfloat;
+}
+.main {
+  position: relative;
+  box-sizing: border-box;
+  padding: 20px 60px;
+  background-color: #fff;
+  box-shadow: 0 0 2px rgba(0,0,0,0.1);
+  transition: all .4s ease;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  }
+}
+.form + .form {
+  margin-top: 20px;
+  border-top: 1px solid rgba(0,0,0,.1);
+}
+.form-title {
+  font-size: 20px;
+  margin: 20px 0;
+}
+.edit-btn {
+  position: absolute;
+  top: -32px;
+  right: 0;
+}
+.dialog-form {
+  .tip {
+    margin-bottom: 16px;
+    font-size: 14px;
+    line-height: 24px;
+  }
+  .submit-btn {
+    width: 100%;
+    margin-top: 20px;
+  }
+}
