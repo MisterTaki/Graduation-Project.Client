@@ -12,6 +12,7 @@
 
 <style lang="scss">
   @import '~@/styles/reset';
+  @import '~@/styles/global';
   #app {
     min-width: 960px;
     height: 100%;

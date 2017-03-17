@@ -8,56 +8,51 @@
       </div>
       <h1 class="title">毕业设计（论文）系统</h1>
       <h2 class="sub-title">让毕设变得更方便、高效和优秀</h2>
-      <form class="login-form">
+      <el-form ref="loginForm" class="login-form" :model="loginForm" :rules="rules.login">
         <div class="input-group">
-          <div class="input-wrapper">
-            <input class="input-dom account" placeholder="账号" type="text" v-model="loginData.account">
-          </div>
-          <div class="input-wrapper">
-            <input class="input-dom pwd" placeholder="密码" type="password" v-model="loginData.pwd">
-          </div>
-        </div>
-        <div class="radio-group wrapper-marginTop">
-          <el-radio v-model="loginData.level" label="student">学生</el-radio>
-          <el-radio v-model="loginData.level" label="teacher">导师</el-radio>
-          <el-radio v-model="loginData.level" label="admin">管理员</el-radio>
+          <el-form-item class="input-wrapper" prop="account">
+            <el-input class="login-view--input" type="text" placeholder="账号" v-model="loginForm.account"></el-input>
+          </el-form-item>
+          <el-form-item class="input-wrapper" prop="pwd">
+            <el-input class="login-view--input" type="text" placeholder="账号" v-model="loginForm.account"></el-input>
+          </el-form-item>
         </div>
         <div class="login-btn-wrapper wrapper-marginTop">
           <button class="button-dom full-width default-color login" type="submit" @click.prevent="login">登录</button>
         </div>
-        <div class="misc-btn-wrapper wrapper-marginTop">
-          <button class="button-dom text default-color find-pwd" @click.prevent="showDialog('findPwd', '找回密码')">找回密码</button>
-          <button class="button-dom text not-account" @click.prevent="showDialog('register', '申请账号（仅限学生）')">账号不存在？</button>
-        </div>
-      </form>
+      </el-form>
+      <div class="misc-btn-wrapper wrapper-marginTop">
+        <button class="button-dom text default-color find-pwd" @click.prevent="dialog.findPwdForm=true">找回密码</button>
+        <button class="button-dom text not-account" @click.prevent="dialog.registerForm=true">账号不存在？</button>
+      </div>
     </div>
-    <el-dialog class="dialog-form" :title="dialog.title" size="tiny" top="24%" v-model="dialog.show" @close="resetData">
-      <template v-if="dialog.name === 'findPwd'">
+    <template v-if="dialog.findPwdForm">
+      <el-dialog class="dialog-form" title="找回密码" size="tiny" v-model="dialog.findPwdForm" @open="closeFindPwdForm">
         <h3 class="tip">{{findPwd.tip[findPwd.step]}}</h3>
-        <form class="form findPwd-form">
+        <el-form ref="findPwdForm" class="form findPwd-form" :model="findPwdForm" :rules="rules.findPwd">
           <template v-if="findPwd.step < 2">
-            <div class="input-wrapper">
-              <input class="input-dom" placeholder="请输入绑定的邮箱" type="text" v-model="findPwdData.boundEmail" :readonly="findPwd.step !== 0">
-            </div>
+            <el-form-item class="input-wrapper" prop="boundEmail">
+              <el-input class="login-view--input" type="text" placeholder="请输入绑定的邮箱" v-model="findPwdForm.boundEmail" :readonly="findPwd.step !== 0"></el-input>
+            </el-form-item>
           </template>
           <template v-if="findPwd.step === 1">
             <div class="inline-btn-wrapper">
               <button class="button-dom" type="button" @click.prevent="findPwd.step=0">修改</button>
             </div>
-            <div class="input-wrapper">
-              <input class="input-dom" placeholder="请输入收到的验证码" type="text" v-model="findPwdData.captcha" :readonly="findPwd.step !== 1">
-            </div>
-            <div class="inline-btn-wrapper">
+            <el-form-item class="input-wrapper" prop="captcha">
+              <el-input class="login-view--input" type="text" placeholder="请输入收到的验证码" v-model="findPwdForm.captcha" :readonly="findPwd.step !== 1"></el-input>
+            </el-form-item>
+            <!-- <div class="inline-btn-wrapper">
               <button class="button-dom" @click.prevent="">重新获取验证码</button>
-            </div>
+            </div> -->
           </template>
           <template v-if="findPwd.step === 2">
-            <div class="input-wrapper">
-              <input class="input-dom" placeholder="请设置新密码" type="password" v-model="findPwdData.newPwd">
-            </div>
-            <div class="input-wrapper">
-              <input class="input-dom" placeholder="请再次输入新密码" type="password" v-model="findPwdData.repeatPwd">
-            </div>
+            <el-form-item class="input-wrapper" prop="newPwd">
+              <el-input class="login-view--input" type="password" placeholder="请设置新密码" v-model="findPwdForm.newPwd"></el-input>
+            </el-form-item>
+            <el-form-item class="input-wrapper" prop="repeatPwd">
+              <el-input class="login-view--input" type="password" placeholder="请再次输入新密码" v-model="findPwdForm.repeatPwd"></el-input>
+            </el-form-item>
           </template>
           <template v-if="findPwd.step < 2">
             <div class="next-btn-wrapper wrapper-marginTop">
@@ -69,61 +64,140 @@
               <button class="button-dom  full-width default-color" @click.prevent="" type="submit">提交</button>
             </div>
           </template>
-        </form>
-      </template>
-      <template v-else-if="dialog.name === 'register'">
+        </el-form>
+      </el-dialog>
+    </template>
+    <template v-if="dialog.registerForm">
+      <el-dialog class="dialog-form" title="申请账号（仅限学生）" size="tiny" v-model="dialog.registerForm" @open="resetForm('registerForm')">
         <h3 class="tip">请填写本人信息：</h3>
-        <form class="form register-form">
-          <div class="input-wrapper">
-            <input class="input-dom" placeholder="姓名" type="text" v-model="registerData.name">
-          </div>
-          <div class="input-wrapper">
-            <input class="input-dom" placeholder="学号" type="text" v-model="registerData.srudentID">
-          </div>
-          <div class="input-wrapper">
-            <input class="input-dom" placeholder="身份证号" type="text" v-model="registerData.id">
-          </div>
-          <div class="input-wrapper">
-            <input class="input-dom" placeholder="邮箱" type="text" v-model="registerData.email">
-          </div>
+        <el-form ref="registerForm" class="form register-form" :model="registerForm" :rules="rules.register">
+          <el-form-item class="input-wrapper" prop="name">
+            <el-input class="login-view--input" type="text" placeholder="姓名" v-model="registerForm.name"></el-input>
+          </el-form-item>
+          <el-form-item class="input-wrapper" prop="gender">
+            <el-input class="login-view--input" type="text" placeholder="性别" v-model="registerForm.gender"></el-input>
+          </el-form-item>
+          <el-form-item class="input-wrapper" prop="studentID">
+            <el-input class="login-view--input" type="text" placeholder="学号" v-model="registerForm.studentID"></el-input>
+          </el-form-item>
+          <el-form-item class="input-wrapper" prop="class">
+            <el-input class="login-view--input" type="text" placeholder="班级" v-model="registerForm.class"></el-input>
+          </el-form-item>
+          <el-form-item class="input-wrapper" prop="academy">
+            <el-input class="login-view--input" type="text" placeholder="学院" v-model="registerForm.academy"></el-input>
+          </el-form-item>
+          <el-form-item class="input-wrapper" prop="major">
+            <el-input class="login-view--input" type="text" placeholder="专业" v-model="registerForm.major"></el-input>
+          </el-form-item>
+          <el-form-item class="input-wrapper" prop="ID">
+            <el-input class="login-view--input" type="text" placeholder="身份证号" v-model="registerForm.ID"></el-input>
+          </el-form-item>
+          <el-form-item class="input-wrapper" prop="mobile">
+            <el-input class="login-view--input" type="text" placeholder="手机" v-model="registerForm.mobile"></el-input>
+          </el-form-item>
+          <el-form-item class="input-wrapper" prop="email">
+            <el-input class="login-view--input" type="text" placeholder="邮箱" v-model="registerForm.email"></el-input>
+          </el-form-item>
           <div class="wrapper-marginTop">
             <button class="button-dom full-width default-color" @click.prevent="" type="submit">申请</button>
           </div>
-        </form>
-      </template>
-    </el-dialog>
+        </el-form>
+      </el-dialog>
+    </template>
   </div>
 </template>
 
 <script>
   import Vue from 'vue';
   import router from '@/router';
-  import { Radio, Dialog } from 'element-ui';
+  import mixins from '@/mixins';
+  import { Form, FormItem, Input, Radio, Dialog } from 'element-ui';
 
+  Vue.use(Form);
+  Vue.use(FormItem);
+  Vue.use(Input);
   Vue.use(Radio);
   Vue.use(Dialog);
 
   export default {
     name: 'login',
+    mixins: [mixins],
     data () {
       return {
-        loginData: {
+        loginForm: {
           account: '',
           pwd: '',
           level: '',
         },
-        registerData: {
+        registerForm: {
           name: '',
+          gender: '',
           studentID: '',
-          id: '',
+          class: '',
+          academy: '',
+          major: '',
+          ID: '',
           mobile: '',
           email: ''
         },
-        findPwdData: {
+        findPwdForm: {
           boundEmail: '',
           captcha: '',
           newPwd: '',
           repeatPwd: ''
+        },
+        rules: {
+          login: {
+            account: [
+              { required: true, message: '请输入账号', trigger: 'blur' }
+            ],
+            pwd: [
+              { required: true, message: '请输入密码', trigger: 'blur' }
+            ]
+          },
+          findPwd: {
+            boundEmail: [
+              { required: true, message: '请输入绑定的邮箱', trigger: 'blur' }
+            ],
+            captcha: [
+              { required: true, message: '请输入验证码', trigger: 'blur' }
+            ],
+            newPwd: [
+              { required: true, message: '请输入新密码', trigger: 'blur' }
+            ],
+            repeatPwd: [
+              { required: true, message: '请再次输入新密码', trigger: 'blur' }
+            ]
+          },
+          register: {
+            name: [
+              { required: true, message: '请输入账号', trigger: 'blur' }
+            ],
+            gender: [
+              { required: true, message: '请输入性别', trigger: 'blur' }
+            ],
+            studentID: [
+              { required: true, message: '请输入学号', trigger: 'blur' }
+            ],
+            class: [
+              { required: true, message: '请输入班级', trigger: 'blur' }
+            ],
+            academy: [
+              { required: true, message: '请输入学院', trigger: 'blur' }
+            ],
+            major: [
+              { required: true, message: '请输入专业', trigger: 'blur' }
+            ],
+            ID: [
+              { required: true, message: '请输入身份证号', trigger: 'blur' }
+            ],
+            mobile: [
+              { required: true, message: '请输入手机', trigger: 'blur' }
+            ],
+            email: [
+              { required: true, message: '请输入邮箱', trigger: 'blur' }
+            ],
+          },
         },
         findPwd: {
           step: 0, // 0:填写绑定邮箱  1：填写验证码  2：重置密码
@@ -134,35 +208,28 @@
           ],
         },
         dialog: {
-          show: false,
-          name: '',
-          title: ''
+          findPwdForm: false,
+          registerForm: false
         }
       };
     },
     methods: {
       login () {
-        router.push(`${this.loginData.level}/home`);
+        router.push(`${this.loginForm.level}/home`);
       },
-      showDialog (name, title) {
-        this.dialog.show = true;
-        this.dialog.name = name;
-        this.dialog.title = title;
-      },
-      resetData () {
-        const temp = this.loginData;
-        Object.assign(this.$data, this.$options.data());
-        this.loginData = temp;
+      closeFindPwdForm () {
+        this.resetForm('findPwdForm');
+        this.findPwd.step = 0;
       }
     },
     beforeRouteEnter (to, from, next) {
       const level = to.matched[0].meta.level;
       next((vm) => {
-        vm.$data.loginData.level = level;
+        vm.$data.loginForm.level = level;
       });
     },
     beforeRouteLeave (to, from, next) {
-      from.matched[0].meta.level = this.loginData.level;
+      from.matched[0].meta.level = this.loginForm.level;
       next();
     }
   };

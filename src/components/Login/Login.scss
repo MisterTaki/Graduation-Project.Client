@@ -57,18 +57,8 @@
     border-top: 1px solid #e8e8e8;
   }
 }
-.input-dom {
-  display: block;
+.input-wrapper {
   margin: 0;
-  padding: 0;
-  border: none;
-  outline: none;
-  position: relative;
-  width: 100%;
-  height: 50px;
-  box-sizing: border-box;
-  padding: 0 10px;
-  font-size: 14px;
 }
 .button-dom {
   position: relative;
@@ -123,7 +113,7 @@
   .form {
     margin-top: 10px;
   }
-  .input-dom {
+  .login-view--input {
     border-bottom: 1px solid #e8e8e8;
   }
   .inline-btn-wrapper {
