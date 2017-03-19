@@ -1,3 +1,4 @@
 export Login from './Login/Login';
-export * as User from './User';
+export User from './User/User';
+export * as UserViews from './UserViews';
 export NotFound from './NotFound/NotFound';
