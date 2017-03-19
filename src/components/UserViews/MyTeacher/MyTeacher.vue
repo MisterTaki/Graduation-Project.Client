@@ -14,15 +14,15 @@
         <template v-else-if="status===1">
           <div class="status">
             <h5 class="notice">已提交导师志愿名单，请耐心等待导师选择确认：）</h5>
-            <el-button class="start-btn" type="text" @click="dialog=true">查看已选择志愿</el-button>
+            <el-button class="start-btn" type="text" @click="volunteerListDialog=true">查看已选择志愿</el-button>
           </div>
-          <el-dialog class="dialog-table" title="已选择志愿" size="small" v-model="dialog">
+          <el-dialog class="volunteerList-dialog" title="已选择志愿" size="large" v-model="volunteerListDialog">
             <el-table class="my-volunteer" :data="myVolunteer" stripe border>
               <el-table-column width="100" type="index" label="志愿次序" align="center"></el-table-column>
               <el-table-column width="140" prop="name" label="姓名" align="center"></el-table-column>
-              <el-table-column prop="academy" label="学院" align="center"></el-table-column>
-              <el-table-column prop="email" label="邮箱" align="center"></el-table-column>
-              <el-table-column prop="mobile" label="手机" align="center"></el-table-column>
+              <el-table-column width="200" prop="academy" label="学院" align="center"></el-table-column>
+              <el-table-column width="250" prop="email" label="邮箱" align="center"></el-table-column>
+              <el-table-column width="150" prop="mobile" label="手机" align="center"></el-table-column>
               <el-table-column prop="topic" label="研究课题" align="center"></el-table-column>
             </el-table>
           </el-dialog>
@@ -56,8 +56,8 @@
     name: 'my-teacher',
     data () {
       return {
-        status: 0, // 0:未选择导师， 1:等待导师回复中，2:已选择完成
-        dialog: false,
+        status: 0, // 0:未选择导师，1:等待导师回复中，2:已选择完成
+        volunteerListDialog: false,
         myVolunteer: [{
           name: '王昭顺',
           academy: '计算机与通信工程',
