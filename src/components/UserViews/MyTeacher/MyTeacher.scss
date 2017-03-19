@@ -23,6 +23,15 @@
 .status {
   text-align: right;
 }
+.choose-btn {
+  display: inline-block;
+  padding: 10px 0;
+  font-size: 14px;
+  color: $blue;
+  &:hover {
+    color: $lightBlue;
+  }
+}
 .notice {
   margin: 20px 0;
   padding: 10px 0;
