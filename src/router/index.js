@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import { Login, User, NotFound } from '@/components';
+import { Login, User, UserViews, NotFound } from '@/components';
 
 Vue.use(Router);
 
@@ -22,72 +22,72 @@ export default new Router({
     {
       path: '/:level',
       name: 'user',
-      component: User.Layout,
+      component: User,
       children: [
         {
           name: 'home',
           path: 'home',
-          component: User.Views.Home
+          component: UserViews.Home
         },
         {
           name: 'notification',
           path: 'notification',
-          component: User.Views.Notification
+          component: UserViews.Notification
         },
         {
           name: 'user-settings',
           path: 'user-settings',
-          component: User.Views.UserSettings
+          component: UserViews.UserSettings
         },
         {
           name: 'publish-notice',
           path: 'publish-notice',
-          component: User.Views.PublishNotice
+          component: UserViews.PublishNotice
         },
         {
           name: 'my-teacher',
           path: 'my-teacher',
-          component: User.Views.MyTeacher
+          component: UserViews.MyTeacher
         },
         {
           name: 'choose-teacher',
           path: 'choose-teacher',
-          component: User.Views.ChooseTeacher
+          component: UserViews.ChooseTeacher
         },
         {
           name: 'my-students',
           path: 'my-students',
-          component: User.Views.MyStudents
+          component: UserViews.MyStudents
         },
         {
           name: 'submit-report',
           path: 'submit-report',
-          component: User.Views.SubmitReport
+          component: UserViews.SubmitReport
         },
         {
           name: 'review-report',
           path: 'review-report',
-          component: User.Views.ReviewReport
+          component: UserViews.ReviewReport
         },
         {
           name: 'data-share',
           path: 'data-share',
-          component: User.Views.DataShare
+          component: UserViews.DataShare
         },
         {
           name: 'reply-schedule',
           path: 'reply-schedule',
-          component: User.Views.ReplySchedule
+          component: UserViews.ReplySchedule
         },
         {
           name: 'account-manage',
           path: 'account-manage',
-          component: User.Views.AccountManage
+          component: UserViews.AccountManage
         },
         {
           name: 'system-settings',
           path: 'system-settings',
-          component: User.Views.SystemSettings
+          component: UserViews.SystemSettings
         }
       ]
     },
