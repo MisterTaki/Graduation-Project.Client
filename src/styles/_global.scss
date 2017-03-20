@@ -20,8 +20,17 @@
     font-size: 12px;
   }
 }
-.chooseTeacher-view--table label {
-  color: #99a9bf;
+.chooseTeacher-view--table,.myStudents-view--table,.myTeacher-view--table {
+  .el-form-item {
+    float: left;
+    display: block;
+    margin: 0;
+    width: 50%;
+    text-align: left;
+  }
+  label {
+    color: #99a9bf;
+  }
 }
 .el-checkbox + .el-checkbox {
   margin-left: 5px!important;
