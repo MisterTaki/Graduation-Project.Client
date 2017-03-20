@@ -34,7 +34,7 @@
               <el-table-column prop="academy" label="学院" align="center"></el-table-column>
               <el-table-column prop="email" label="邮箱" align="center"></el-table-column>
               <el-table-column prop="mobile" label="手机" align="center"></el-table-column>
-              <el-table-column prop="topic" label="课题" align="center"></el-table-column>
+              <el-table-column prop="topic" label="选择的研究课题" align="center"></el-table-column>
             </el-table>
           </div>
         </template>
