@@ -46,24 +46,33 @@
     </div>
     <el-dialog class="volunteerList-dialog" title="志愿列表" size="large" v-model="dialog.volunteerList">
       <el-table class="volunteer-list" :data="volunteersForm" stripe border>
-        <el-table-column width="120" prop="name" label="姓名" align="center"></el-table-column>
-        <el-table-column width="180" prop="academy" label="学院" align="center"></el-table-column>
+        <el-table-column width="120" prop="order" label="志愿次序" align="center"></el-table-column>
+        <el-table-column width="120" prop="name" label="导师姓名" align="center"></el-table-column>
+        <el-table-column width="180" prop="academy" label="导师学院" align="center"></el-table-column>
         <el-table-column prop="chooseTopic" label="选择的研究课题" align="center"></el-table-column>
         <el-table-column width="140" label="操作" align="center">
           <template scope="scope">
-            <el-button type="text" size="small" @click="">移除</el-button>
+            <el-button type="text" size="small" @click="removeVolunteer(scope.$index, scope.row)">移除</el-button>
           </template>
         </el-table-column>
       </el-table>
+      <div class="submitTopic-btn-wrapper">
+        <el-button v-if="volunteersForm.length !== 0" type="primary" @click="submitTopic">提交志愿</el-button>
+      </div>
     </el-dialog>
     <el-dialog class="chooseTopic-dialog" title="选择研究课题" size="tiny" v-model="dialog.chooseTopic" :close-on-click-modal=false>
       <el-form ref="chooseTopic-form" :model="chooseTopicForm">
         <el-form-item>
           <el-select v-model="chooseTopicForm.topic" placeholder="请选择研究课题" style="width: 100%">
-            <el-option v-for="item in topicList" :label="item" :value="item"></el-option>
+            <el-option v-for="item in candidateTopics" :label="item" :value="item"></el-option>
           </el-select>
         </el-form-item>
-        <el-button type="primary" style="width: 100%" @click="submitTopic">提交</el-button>
+        <el-form-item>
+          <el-select v-model="chooseTopicForm.order" placeholder="请选择此志愿为第几志愿" style="width: 100%">
+            <el-option v-for="item in candidateOrders" :label="item" :value="item"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-button type="primary" style="width: 100%" @click="addTopic">添加志愿</el-button>
       </el-form>
     </el-dialog>
   </div>
@@ -124,16 +133,25 @@
         },
         chooseTopicForm: {
           topic: '',
-          currentData: {}
+          currentData: {},
+          order: ''
         },
-        rules: {
-          chooseTopic: {
-            topic: [
-              { required: true, message: '请选择', trigger: 'blur' }
-            ]
-          }
-        },
-        topicList: [],
+        candidateTopics: [],
+        candidateOrders: ['第一志愿', '第二志愿', '第三志愿'],
+        // candidateOrders: [
+        //   {
+        //     label: '第一志愿',
+        //     value: 1
+        //   },
+        //   {
+        //     label: '第二志愿',
+        //     value: 2
+        //   },
+        //   {
+        //     label: '第三志愿',
+        //     value: 3
+        //   },
+        // ],
         volunteersForm: [],
       };
     },
@@ -144,13 +162,18 @@
       filterAcademy (value, row) {
         return row.academy === value;
       },
-      submitTopic () {
+      addTopic () {
         if (this.chooseTopicForm.topic === '') {
           Message.error('请选择研究课题');
           return;
+        } else if (this.chooseTopicForm.order === '') {
+          Message.error('请选择志愿次序');
+          return;
         }
         this.chooseTopicForm.currentData.chooseTopic = this.chooseTopicForm.topic;
+        this.chooseTopicForm.currentData.order = this.chooseTopicForm.order;
         this.volunteersForm.push(this.chooseTopicForm.currentData);
+        this.candidateOrders.splice(this.candidateOrders.indexOf(this.chooseTopicForm.order), 1);
         Message.success('已经成功添加至志愿列表，请在我的志愿列表查看');
         this.resetForm('chooseTopicForm');
         this.dialog.chooseTopic = false;
@@ -163,9 +186,20 @@
           Message.warning('已经添加过此志愿老师，请在我的志愿列表查看');
           return;
         }
-        this.topicList = row.topicList;
+        this.candidateTopics = row.topicList;
         this.dialog.chooseTopic = true;
         this.chooseTopicForm.currentData = row;
+      },
+      removeVolunteer (index, row) {
+        this.candidateOrders.push(row.order);
+        this.volunteersForm.splice(this.volunteersForm.indexOf(row), 1);
+        Message.success('移除成功');
+      },
+      submitTopic () {
+        const data = {
+          data: this.volunteersForm
+        };
+        console.log(data);
       }
     }
   };
