@@ -55,7 +55,7 @@
                 </template>
               </el-table-column>
               <el-table-column width="140" prop="name" label="姓名" align="center"></el-table-column>
-              <el-table-column prop="topic" label="选择的研究课题" align="center"></el-table-column>
+              <el-table-column prop="choosedTopic" label="选择的研究课题" align="center"></el-table-column>
             </el-table>
           </div>
         </template>
@@ -105,7 +105,8 @@
           education: '博士',
           position: '教授（博导）',
           email: 'zhswang@sohu.com',
-          mobile: '13520555528'
+          mobile: '13520555528',
+          choosedTopic: '毕业设计（论文）管理系统'
         }]
       };
     }
