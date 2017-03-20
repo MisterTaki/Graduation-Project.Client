@@ -98,7 +98,7 @@
     name: 'my-teacher',
     data () {
       return {
-        status: 1, // 0:未选择导师，1:等待导师回复中，2:已选择完成
+        status: 0, // 0:未选择导师，1:等待导师回复中，2:已选择完成
         volunteerListDialog: false,
         myVolunteers: [{
           order: '第一志愿',
