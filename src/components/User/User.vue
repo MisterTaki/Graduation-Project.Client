@@ -41,11 +41,6 @@
 </template>
 
 <script>
-  import Vue from 'vue';
-  import { Badge } from 'element-ui';
-
-  Vue.use(Badge);
-
   export default {
     name: 'user-view',
     data () {

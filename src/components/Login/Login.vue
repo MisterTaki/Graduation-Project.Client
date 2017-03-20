@@ -113,17 +113,8 @@
 </template>
 
 <script>
-  import Vue from 'vue';
   import router from '@/router';
   import mixins from '@/mixins';
-  import { Form, FormItem, Input, Radio, RadioGroup, Dialog } from 'element-ui';
-
-  Vue.use(Form);
-  Vue.use(FormItem);
-  Vue.use(Input);
-  Vue.use(RadioGroup);
-  Vue.use(Radio);
-  Vue.use(Dialog);
 
   export default {
     name: 'login',

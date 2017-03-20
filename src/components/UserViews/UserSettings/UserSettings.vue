@@ -107,17 +107,7 @@
 </template>
 
 <script>
-  import Vue from 'vue';
   import mixins from '@/mixins';
-  import { Row, Col, Form, FormItem, Input, Button, Dialog } from 'element-ui';
-
-  Vue.use(Row);
-  Vue.use(Col);
-  Vue.use(Form);
-  Vue.use(FormItem);
-  Vue.use(Input);
-  Vue.use(Button);
-  Vue.use(Dialog);
 
   export default {
     name: 'user-settings',
