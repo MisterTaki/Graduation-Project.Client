@@ -49,7 +49,7 @@
         <el-table-column width="120" prop="order" label="志愿次序" align="center"></el-table-column>
         <el-table-column width="120" prop="name" label="导师姓名" align="center"></el-table-column>
         <el-table-column width="180" prop="academy" label="导师学院" align="center"></el-table-column>
-        <el-table-column prop="chooseTopic" label="选择的研究课题" align="center"></el-table-column>
+        <el-table-column prop="choosedTopic" label="选择的研究课题" align="center"></el-table-column>
         <el-table-column width="140" label="操作" align="center">
           <template scope="scope">
             <el-button type="text" size="small" @click="removeVolunteer(scope.$index, scope.row)">移除</el-button>
@@ -63,7 +63,7 @@
     <el-dialog class="chooseTopic-dialog" title="选择研究课题" size="tiny" v-model="dialog.chooseTopic" :close-on-click-modal=false>
       <el-form ref="chooseTopic-form" :model="chooseTopicForm">
         <el-form-item>
-          <el-select v-model="chooseTopicForm.topic" placeholder="请选择研究课题" style="width: 100%">
+          <el-select v-model="chooseTopicForm.choosedTopic" placeholder="请选择研究课题" style="width: 100%">
             <el-option v-for="item in candidateTopics" :label="item" :value="item"></el-option>
           </el-select>
         </el-form-item>
@@ -132,7 +132,7 @@
           volunteerList: false
         },
         chooseTopicForm: {
-          topic: '',
+          choosedTopic: '',
           currentData: {},
           order: ''
         },
@@ -163,14 +163,14 @@
         return row.academy === value;
       },
       addTopic () {
-        if (this.chooseTopicForm.topic === '') {
+        if (this.chooseTopicForm.choosedTopic === '') {
           Message.error('请选择研究课题');
           return;
         } else if (this.chooseTopicForm.order === '') {
           Message.error('请选择志愿次序');
           return;
         }
-        this.chooseTopicForm.currentData.chooseTopic = this.chooseTopicForm.topic;
+        this.chooseTopicForm.currentData.choosedTopic = this.chooseTopicForm.choosedTopic;
         this.chooseTopicForm.currentData.order = this.chooseTopicForm.order;
         this.volunteersForm.push(this.chooseTopicForm.currentData);
         this.candidateOrders.splice(this.candidateOrders.indexOf(this.chooseTopicForm.order), 1);
