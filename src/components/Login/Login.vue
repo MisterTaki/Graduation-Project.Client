@@ -14,9 +14,14 @@
             <el-input class="login-view--input" type="text" placeholder="账号" v-model="loginForm.account"></el-input>
           </el-form-item>
           <el-form-item class="input-wrapper" prop="pwd">
-            <el-input class="login-view--input" type="text" placeholder="账号" v-model="loginForm.account"></el-input>
+            <el-input class="login-view--input" type="password" placeholder="密码" v-model="loginForm.pwd"></el-input>
           </el-form-item>
         </div>
+        <el-radio-group class="radio-group" v-model="loginForm.level">
+          <el-radio label="student">学生</el-radio>
+          <el-radio label="teacher">导师</el-radio>
+          <el-radio label="admin">管理员</el-radio>
+        </el-radio-group>
         <div class="login-btn-wrapper wrapper-marginTop">
           <button class="button-dom full-width default-color login" type="submit" @click.prevent="login">登录</button>
         </div>
@@ -111,11 +116,12 @@
   import Vue from 'vue';
   import router from '@/router';
   import mixins from '@/mixins';
-  import { Form, FormItem, Input, Radio, Dialog } from 'element-ui';
+  import { Form, FormItem, Input, Radio, RadioGroup, Dialog } from 'element-ui';
 
   Vue.use(Form);
   Vue.use(FormItem);
   Vue.use(Input);
+  Vue.use(RadioGroup);
   Vue.use(Radio);
   Vue.use(Dialog);
 
