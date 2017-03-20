@@ -4,6 +4,7 @@ export Notification from './Notification/Notification';
 export PublishNotice from './PublishNotice/PublishNotice';
 export MyTeacher from './MyTeacher/MyTeacher';
 export ChooseTeacher from './ChooseTeacher/ChooseTeacher';
+export ChooseStudents from './ChooseStudents/ChooseStudents';
 export MyStudents from './MyStudents/MyStudents';
 export SubmitReport from './SubmitReport/SubmitReport';
 export ReviewReport from './ReviewReport/ReviewReport';
