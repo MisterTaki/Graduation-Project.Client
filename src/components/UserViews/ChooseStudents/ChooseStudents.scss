@@ -1,0 +1,40 @@
+@import "~@/styles/mixin";
+@import "~@/styles/variables";
+
+.main-wrapper {
+  padding: 30px 20px;
+}
+.main {
+  position: relative;
+  box-sizing: border-box;
+  padding: 20px 60px 40px;
+  background-color: #fff;
+  transition: all .4s ease;
+  &:hover {
+    box-shadow: $hoverShadow;
+  }
+}
+.title-wrapper {
+  position: relative;
+}
+.title {
+  padding: 20px 10px 15px;
+  border-bottom: 1px solid rgba(0,0,0,.1);
+  font-size: 20px;
+  span {
+    font-size: 16px;
+  }
+}
+.studentList-btn {
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  border: none;
+}
+.studentList-wrapper {
+  margin-top: 30px;
+}
+.submitStudents-btn-wrapper {
+  margin-top: 20px;
+  text-align: right;
+}
