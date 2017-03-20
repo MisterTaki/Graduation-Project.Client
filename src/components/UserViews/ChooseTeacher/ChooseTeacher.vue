@@ -45,10 +45,33 @@
       </div>
     </div>
     <el-dialog class="volunteerList-dialog" title="志愿列表" size="large" v-model="dialog.volunteerList">
-      <el-table class="volunteer-list" :data="volunteersForm" stripe border>
+      <el-table class="volunteer-list chooseTeacher-view--table" :data="volunteersForm" stripe border>
+        <el-table-column type="expand">
+          <template scope="props">
+            <el-form label-position="left" label-width="100px">
+              <el-form-item label="学院：">
+                <span>{{ props.row.academy }}</span>
+              </el-form-item>
+              <el-form-item label="性别：">
+                <span>{{ props.row.gender }}</span>
+              </el-form-item>
+              <el-form-item label="学历：">
+                <span>{{ props.row.education }}</span>
+              </el-form-item>
+              <el-form-item label="职位职称：">
+                <span>{{ props.row.position }}</span>
+              </el-form-item>
+              <el-form-item label="邮箱：">
+                <span>{{ props.row.email }}</span>
+              </el-form-item>
+              <el-form-item label="手机：">
+                <span>{{ props.row.mobile }}</span>
+              </el-form-item>
+            </el-form>
+          </template>
+        </el-table-column>
         <el-table-column width="120" prop="order" label="志愿次序" align="center"></el-table-column>
         <el-table-column width="120" prop="name" label="导师姓名" align="center"></el-table-column>
-        <el-table-column width="180" prop="academy" label="导师学院" align="center"></el-table-column>
         <el-table-column prop="choosedTopic" label="选择的研究课题" align="center"></el-table-column>
         <el-table-column width="140" label="操作" align="center">
           <template scope="scope">
