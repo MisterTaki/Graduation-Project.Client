@@ -29,11 +29,32 @@
         </template>
         <template v-else-if="status===2">
           <div class="status">
-            <el-table class="myTeacher-table" :data="myTeacher" stripe border>
-              <el-table-column prop="name" label="姓名" align="center"></el-table-column>
-              <el-table-column prop="academy" label="学院" align="center"></el-table-column>
-              <el-table-column prop="email" label="邮箱" align="center"></el-table-column>
-              <el-table-column prop="mobile" label="手机" align="center"></el-table-column>
+            <el-table class="myTeacher-table myTeacher-view--table" :data="myTeacher" stripe border>
+              <el-table-column type="expand">
+                <template scope="props">
+                  <el-form label-position="left" label-width="100px">
+                    <el-form-item label="学院：">
+                      <span>{{ props.row.academy }}</span>
+                    </el-form-item>
+                    <el-form-item label="性别：">
+                      <span>{{ props.row.gender }}</span>
+                    </el-form-item>
+                    <el-form-item label="学历：">
+                      <span>{{ props.row.education }}</span>
+                    </el-form-item>
+                    <el-form-item label="职位职称：">
+                      <span>{{ props.row.position }}</span>
+                    </el-form-item>
+                    <el-form-item label="邮箱：">
+                      <span>{{ props.row.email }}</span>
+                    </el-form-item>
+                    <el-form-item label="手机：">
+                      <span>{{ props.row.mobile }}</span>
+                    </el-form-item>
+                  </el-form>
+                </template>
+              </el-table-column>
+              <el-table-column width="140" prop="name" label="姓名" align="center"></el-table-column>
               <el-table-column prop="topic" label="选择的研究课题" align="center"></el-table-column>
             </el-table>
           </div>
@@ -56,7 +77,7 @@
     name: 'my-teacher',
     data () {
       return {
-        status: 0, // 0:未选择导师，1:等待导师回复中，2:已选择完成
+        status: 2, // 0:未选择导师，1:等待导师回复中，2:已选择完成
         volunteerListDialog: false,
         myVolunteer: [{
           name: '王昭顺',
@@ -79,10 +100,12 @@
         }],
         myTeacher: [{
           name: '王昭顺',
+          gender: '男',
           academy: '计算机与通信工程',
+          education: '博士',
+          position: '教授（博导）',
           email: 'zhswang@sohu.com',
-          mobile: '13520555528',
-          topic: '毕业设计（论文）管理系统'
+          mobile: '13520555528'
         }]
       };
     }
