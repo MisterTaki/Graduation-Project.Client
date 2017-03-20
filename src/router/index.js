@@ -50,6 +50,11 @@ export default new Router({
           component: UserViews.MyTeacher
         },
         {
+          name: 'choose-students',
+          path: 'choose-students',
+          component: UserViews.ChooseStudents
+        },
+        {
           name: 'choose-teacher',
           path: 'choose-teacher',
           component: UserViews.ChooseTeacher
