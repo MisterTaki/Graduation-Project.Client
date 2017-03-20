@@ -38,7 +38,7 @@
             <el-table-column prop="choosedTopic" label="选择的研究课题" align="center"></el-table-column>
             <el-table-column width="140" label="操作" align="center">
               <template scope="scope">
-                <el-button class="agree-btn" type="text" size="small" @click="addStudent(scope.$index, scope.row)">添加至学生列表</el-button>
+                <el-button type="text" size="small" @click="addStudent(scope.$index, scope.row)">添加至学生列表</el-button>
               </template>
             </el-table-column>
           </el-table>
