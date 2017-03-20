@@ -44,7 +44,7 @@
                 </template>
               </el-table-column>
               <el-table-column width="140" prop="name" label="姓名" align="center"></el-table-column>
-              <el-table-column prop="topic" label="选择的研究课题" align="center"></el-table-column>
+              <el-table-column prop="choosedTopic" label="选择的研究课题" align="center"></el-table-column>
             </el-table>
           </div>
         </template>
@@ -68,7 +68,7 @@
             academy: '计算机与通信工程',
             email: 'ustb_gaoqi@163.com',
             mobile: '15652063671',
-            topic: '毕业设计（论文）管理系统'
+            choosedTopic: '毕业设计（论文）管理系统'
           },
           {
             name: '高琦',
@@ -78,7 +78,7 @@
             academy: '计算机与通信工程',
             email: 'ustb_gaoqi@163.com',
             mobile: '15652063671',
-            topic: '毕业设计（论文）管理系统'
+            choosedTopic: '毕业设计（论文）管理系统'
           },
         ],
       };
