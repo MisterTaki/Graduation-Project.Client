@@ -12,22 +12,22 @@
           <el-table-column type="expand">
             <template scope="props">
               <el-form label-position="left" label-width="100px">
-                <el-form-item class="form-item" label="导师姓名：">
+                <el-form-item label="导师姓名：">
                   <span>{{ props.row.name }}</span>
                 </el-form-item>
-                <el-form-item class="form-item" label="性别：">
+                <el-form-item label="性别：">
                   <span>{{ props.row.gender }}</span>
                 </el-form-item>
-                <el-form-item class="form-item" label="学历：">
+                <el-form-item label="学历：">
                   <span>{{ props.row.education }}</span>
                 </el-form-item>
-                <el-form-item class="form-item" label="职位职称：">
+                <el-form-item label="职位职称：">
                   <span>{{ props.row.position }}</span>
                 </el-form-item>
-                <el-form-item class="form-item" label="邮箱：">
+                <el-form-item label="邮箱：">
                   <span>{{ props.row.email }}</span>
                 </el-form-item>
-                <el-form-item class="form-item" label="手机：">
+                <el-form-item label="手机：">
                   <span>{{ props.row.mobile }}</span>
                 </el-form-item>
               </el-form>
@@ -35,7 +35,7 @@
           </el-table-column>
           <el-table-column width="120" prop="name" label="姓名" align="center"></el-table-column>
           <el-table-column width="180" prop="academy" :filters="academyList" :filter-method="filterAcademy" label="学院" align="center"></el-table-column>
-          <el-table-column prop="topicList" :formatter="formatterTopic" label="研究课题" align="center"></el-table-column>
+          <el-table-column prop="topicList" :formatter="formatterTopic" label="提供的研究课题" align="center"></el-table-column>
           <el-table-column width="140" label="操作" align="center">
             <template scope="scope">
               <el-button type="text" size="small" @click="addVolunteer(scope.$index, scope.row)">添加至志愿列表</el-button>
