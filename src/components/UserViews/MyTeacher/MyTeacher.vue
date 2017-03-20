@@ -17,13 +17,34 @@
             <el-button class="start-btn" type="text" @click="volunteerListDialog=true">查看已选择志愿</el-button>
           </div>
           <el-dialog class="volunteerList-dialog" title="已选择志愿" size="large" v-model="volunteerListDialog">
-            <el-table class="my-volunteer" :data="myVolunteer" stripe border>
-              <el-table-column width="100" type="index" label="志愿次序" align="center"></el-table-column>
+            <el-table class="myVolunteer-table myTeacher-view--table" :data="myVolunteers" stripe border>
+              <el-table-column type="expand">
+                <template scope="props">
+                  <el-form label-position="left" label-width="100px">
+                    <el-form-item label="学院：">
+                      <span>{{ props.row.academy }}</span>
+                    </el-form-item>
+                    <el-form-item label="性别：">
+                      <span>{{ props.row.gender }}</span>
+                    </el-form-item>
+                    <el-form-item label="学历：">
+                      <span>{{ props.row.education }}</span>
+                    </el-form-item>
+                    <el-form-item label="职位职称：">
+                      <span>{{ props.row.position }}</span>
+                    </el-form-item>
+                    <el-form-item label="邮箱：">
+                      <span>{{ props.row.email }}</span>
+                    </el-form-item>
+                    <el-form-item label="手机：">
+                      <span>{{ props.row.mobile }}</span>
+                    </el-form-item>
+                  </el-form>
+                </template>
+              </el-table-column>
+              <el-table-column width="140" prop="order" label="志愿次序" align="center"></el-table-column>
               <el-table-column width="140" prop="name" label="姓名" align="center"></el-table-column>
-              <el-table-column width="200" prop="academy" label="学院" align="center"></el-table-column>
-              <el-table-column width="250" prop="email" label="邮箱" align="center"></el-table-column>
-              <el-table-column width="150" prop="mobile" label="手机" align="center"></el-table-column>
-              <el-table-column prop="topic" label="研究课题" align="center"></el-table-column>
+              <el-table-column prop="choosedTopic" label="选择的研究课题" align="center"></el-table-column>
             </el-table>
           </el-dialog>
         </template>
@@ -77,26 +98,38 @@
     name: 'my-teacher',
     data () {
       return {
-        status: 2, // 0:未选择导师，1:等待导师回复中，2:已选择完成
+        status: 1, // 0:未选择导师，1:等待导师回复中，2:已选择完成
         volunteerListDialog: false,
-        myVolunteer: [{
+        myVolunteers: [{
+          order: '第一志愿',
           name: '王昭顺',
+          gender: '男',
           academy: '计算机与通信工程',
+          education: '博士',
+          position: '教授（博导）',
           email: 'zhswang@sohu.com',
           mobile: '13520555528',
-          topic: '毕业设计（论文）管理系统'
+          choosedTopic: '毕业设计（论文）管理系统'
         }, {
+          order: '第二志愿',
           name: '王昭顺',
+          gender: '男',
           academy: '计算机与通信工程',
+          education: '博士',
+          position: '教授（博导）',
           email: 'zhswang@sohu.com',
           mobile: '13520555528',
-          topic: '毕业设计（论文）管理系统'
+          choosedTopic: '毕业设计（论文）管理系统'
         }, {
+          order: '第三志愿',
           name: '王昭顺',
+          gender: '男',
           academy: '计算机与通信工程',
+          education: '博士',
+          position: '教授（博导）',
           email: 'zhswang@sohu.com',
           mobile: '13520555528',
-          topic: '毕业设计（论文）管理系统'
+          choosedTopic: '毕业设计（论文）管理系统'
         }],
         myTeacher: [{
           name: '王昭顺',
