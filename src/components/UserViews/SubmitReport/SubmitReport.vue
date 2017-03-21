@@ -8,7 +8,7 @@
           <h2 class="title">提交报告</h2>
           <el-button class="upload-btn" type="text" @click="dialog.upload=true">上传<i class="el-icon-upload2 el-icon--right"></i></el-button>
         </div>
-        <h5 class="notice">同学你好，现在是提交“{{notice[status]}}”环节，请点击右上角上传按钮进行提交</h5>
+        <h5 class="notice">同学你好，现在是提交“{{notice[status]}}”环节，请点击右上角上传按钮进行提交：）</h5>
         <el-dialog class="upload-dialog" title="报告上传提交" size="small" v-model="dialog.upload">
           <el-upload ref="upload" class="upload submitReport-view--upload" action="//jsonplaceholder.typicode.com/posts/" drag :before-upload="beforeUpload" :on-success="submitSuccess">
             <i class="el-icon-upload"></i>
