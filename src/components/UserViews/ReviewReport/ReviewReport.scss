@@ -25,3 +25,14 @@
 .reply-btn {
   color: $success;
 }
+.reply-title {
+  font-size: 14px;
+  line-height: 28px;
+  & + & {
+    margin-bottom: 14px;
+  }
+}
+.btn-group {
+  margin-top: 20px;
+  text-align: right;
+}
