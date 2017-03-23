@@ -20,7 +20,7 @@
     font-size: 12px;
   }
 }
-.chooseTeacher-view--table,.myStudents-view--table,.myTeacher-view--table {
+.chooseTeacher-view--table, .myStudents-view--table, .myTeacher-view--table {
   .el-form-item {
     float: left;
     display: block;
@@ -31,6 +31,9 @@
   label {
     color: #99a9bf;
   }
+}
+.publishNotice-view--table label {
+  color: #99a9bf;
 }
 .submitReport-view--upload, .dataShare-view--upload {
   .el-upload-list {
