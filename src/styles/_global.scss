@@ -20,6 +20,9 @@
     font-size: 12px;
   }
 }
+.login-view--formItem .el-form-item__content {
+  line-height: 1;
+}
 .chooseTeacher-view--table, .myStudents-view--table, .myTeacher-view--table {
   .el-form-item {
     float: left;
