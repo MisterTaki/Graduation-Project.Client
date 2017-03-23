@@ -10,10 +10,10 @@
       <h2 class="sub-title">让毕设变得更方便、高效和优秀</h2>
       <el-form ref="loginForm" class="login-form" :model="loginForm" :rules="rules.login">
         <div class="input-group">
-          <el-form-item class="input-wrapper" prop="account">
+          <el-form-item class="input-wrapper login-view--formItem" prop="account">
             <el-input class="login-view--input" type="text" placeholder="账号" v-model="loginForm.account"></el-input>
           </el-form-item>
-          <el-form-item class="input-wrapper" prop="pwd">
+          <el-form-item class="input-wrapper login-view--formItem" prop="pwd">
             <el-input class="login-view--input" type="password" placeholder="密码" v-model="loginForm.pwd"></el-input>
           </el-form-item>
         </div>
