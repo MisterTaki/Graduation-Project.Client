@@ -17,7 +17,7 @@
             <el-button class="start-btn" type="text" @click="volunteerListDialog=true">查看已选择志愿</el-button>
           </div>
           <el-dialog class="volunteerList-dialog" title="已选择志愿" size="large" v-model="volunteerListDialog">
-            <el-table class="myVolunteer-table myTeacher-view--table" :data="myVolunteers" stripe border>
+            <el-table class="myVolunteer-table myTeacher-view--table" :data="myVolunteers" border>
               <el-table-column type="expand">
                 <template scope="props">
                   <el-form label-position="left" label-width="100px">
@@ -50,7 +50,7 @@
         </template>
         <template v-else-if="status===2">
           <div class="status">
-            <el-table class="myTeacher-table myTeacher-view--table" :data="myTeacher" stripe border>
+            <el-table class="myTeacher-table myTeacher-view--table" :data="myTeacher" border>
               <el-table-column type="expand">
                 <template scope="props">
                   <el-form label-position="left" label-width="100px">

@@ -20,7 +20,7 @@
       <div class="record-wrapper">
         <h2 class="title">提交记录</h2>
         <div class="recordList-wrapper">
-          <el-table class="record-list" :data="recordsData" stripe border>
+          <el-table class="record-list" :data="recordsData" border>
             <el-table-column type="index" label="序号" width="70" align="center"></el-table-column>
             <el-table-column width="120" prop="time" label="提交时间" align="center"></el-table-column>
             <el-table-column prop="name" label="提交的文件名称" align="center"></el-table-column>

@@ -8,7 +8,7 @@
         <el-button class="volunteerList-btn" type="text" @click="dialog.volunteerList=true">我的志愿列表<i class="el-icon-document el-icon--right"></i></el-button>
       </div>
       <div class="teacherList-wrapper">
-        <el-table class="teacher-list chooseTeacher-view--table" :data="teachersData" stripe border>
+        <el-table class="teacher-list chooseTeacher-view--table" :data="teachersData" border>
           <el-table-column type="expand">
             <template scope="props">
               <el-form label-position="left" label-width="100px">
@@ -45,7 +45,7 @@
       </div>
     </div>
     <el-dialog class="volunteerList-dialog" title="志愿列表" size="large" v-model="dialog.volunteerList">
-      <el-table class="volunteer-list chooseTeacher-view--table" :data="volunteersForm" stripe border>
+      <el-table class="volunteer-list chooseTeacher-view--table" :data="volunteersForm" border>
         <el-table-column type="expand">
           <template scope="props">
             <el-form label-position="left" label-width="100px">

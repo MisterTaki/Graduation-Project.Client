@@ -18,7 +18,7 @@
         </template>
         <template v-else-if="status===2">
           <div class="status">
-            <el-table class="myStudents-table myStudents-view--table" :data="myStudents" stripe border>
+            <el-table class="myStudents-table myStudents-view--table" :data="myStudents" border>
               <el-table-column type="expand">
                 <template scope="props">
                   <el-form label-position="left" label-width="100px">

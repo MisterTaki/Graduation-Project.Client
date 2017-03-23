@@ -9,7 +9,7 @@
       </div>
       <h5 v-if="dataList.length === 0" class="notice">还没有人上传资料进行分享，点击右上角上传按钮进行资料分享吧：）</h5>
       <div v-else class="dataList-wrapper">
-        <el-table class="data-list" :data="dataList" stripe border>
+        <el-table class="data-list" :data="dataList" border>
           <el-table-column type="index" label="序号" width="70" align="center"></el-table-column>
           <el-table-column prop="fileName" label="文件" align="center"></el-table-column>
           <el-table-column width="120" prop="fileSize" label="大小" align="center"></el-table-column>

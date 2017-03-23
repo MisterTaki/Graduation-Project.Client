@@ -5,7 +5,7 @@
     <div class="main">
       <h2 class="title">报告审阅</h2>
       <div class="reportList-wrapper">
-        <el-table class="report-list" :data="reportsData" stripe border>
+        <el-table class="report-list" :data="reportsData" border>
           <el-table-column type="index" label="序号" width="70" align="center"></el-table-column>
           <el-table-column width="120" prop="submitTime" label="提交时间" align="center"></el-table-column>
           <el-table-column width="120" prop="studentName" label="提交学生" align="center"></el-table-column>

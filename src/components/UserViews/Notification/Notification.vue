@@ -5,7 +5,7 @@
     <div class="main">
       <h2 class="title">所有通知：</h2>
       <div class="notification-wrapper">
-        <el-table class="notification-table" :data="notification" stripe border>
+        <el-table class="notification-table" :data="notification" border>
           <el-table-column type="index" label="序号" width="70" align="center"></el-table-column>
           <el-table-column prop="title" label="标题" width="180" align="center"></el-table-column>
           <el-table-column prop="content" label="内容" align="center"></el-table-column>
