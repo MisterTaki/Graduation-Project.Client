@@ -31,6 +31,9 @@
                     <el-form-item label="班级：">
                       <span>{{ props.row.class }}</span>
                     </el-form-item>
+                    <el-form-item label="专业：">
+                      <span>{{ props.row.major }}</span>
+                    </el-form-item>
                     <el-form-item label="学院：">
                       <span>{{ props.row.academy }}</span>
                     </el-form-item>
@@ -65,6 +68,7 @@
             studentID: '41355025',
             gender: '男',
             class: '计1301',
+            major: '计算机科学与技术',
             academy: '计算机与通信工程',
             email: 'ustb_gaoqi@163.com',
             mobile: '15652063671',
@@ -75,6 +79,7 @@
             studentID: '41355025',
             gender: '男',
             class: '计1301',
+            major: '计算机科学与技术',
             academy: '计算机与通信工程',
             email: 'ustb_gaoqi@163.com',
             mobile: '15652063671',

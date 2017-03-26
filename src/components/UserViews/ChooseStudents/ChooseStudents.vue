@@ -22,6 +22,9 @@
                   <el-form-item label="班级：">
                     <span>{{ props.row.class }}</span>
                   </el-form-item>
+                  <el-form-item label="专业：">
+                    <span>{{ props.row.major }}</span>
+                  </el-form-item>
                   <el-form-item label="学院：">
                     <span>{{ props.row.academy }}</span>
                   </el-form-item>
@@ -46,7 +49,7 @@
       </div>
     </div>
     <el-dialog class="studentList-dialog" title="学生列表" size="large" v-model="dialog.studentList">
-      <el-table class="student-list myStudents-view--table" :data="studentsForm" stripe border>
+      <el-table class="student-list myStudents-view--table" :data="studentsForm" border>
         <el-table-column type="expand">
           <template scope="props">
             <el-form label-position="left" label-width="100px">
@@ -58,6 +61,9 @@
               </el-form-item>
               <el-form-item label="班级：">
                 <span>{{ props.row.class }}</span>
+              </el-form-item>
+              <el-form-item label="专业：">
+                <span>{{ props.row.major }}</span>
               </el-form-item>
               <el-form-item label="学院：">
                 <span>{{ props.row.academy }}</span>
@@ -99,6 +105,7 @@
             studentID: '41355025',
             gender: '男',
             class: '计1301',
+            major: '计算机科学与技术',
             academy: '计算机与通信工程',
             email: 'ustb_gaoqi@163.com',
             mobile: '15652063671',
@@ -109,6 +116,7 @@
             studentID: '41355025',
             gender: '男',
             class: '计1301',
+            major: '计算机科学与技术',
             academy: '计算机与通信工程',
             email: 'ustb_gaoqi@163.com',
             mobile: '15652063671',

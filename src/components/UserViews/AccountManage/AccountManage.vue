@@ -128,7 +128,7 @@
         </div>
       </div>
     </div>
-    <el-dialog class="addAccountForm-dialog" title="添加账号" size="small" v-model="dialog.addAccountForm" @open="resetForm('addAccountForm')">
+    <el-dialog class="addAccountForm-dialog" title="添加账号" size="small" v-model="dialog.addAccountForm" @close="resetForm('addAccountForm')" :close-on-click-modal=false>
       <h3 class="tip">请填写账号信息：</h3>
       <el-form ref="addStudentAccountForm" class="form addStudentAccount-form" :model="addAccountForm.student" :rules="rules.addStudentAccount">
         <el-form-item class="input-wrapper" prop="name">
@@ -159,8 +159,8 @@
           <el-input type="text" placeholder="邮箱" v-model="addAccountForm.student.email"></el-input>
         </el-form-item>
         <div class="form-btn-group">
-          <el-button type="primary" @click="submitNotice">立即发布</el-button>
-          <el-button @click="dialog.editNotice=false">取消</el-button>
+          <el-button type="primary" @click="submitStudentAccount">立即添加</el-button>
+          <el-button @click="dialog.addAccountForm=false">取消</el-button>
         </div>
       </el-form>
     </el-dialog>

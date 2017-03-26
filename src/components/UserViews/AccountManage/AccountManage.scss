@@ -1,2 +1,35 @@
 @import "~@/styles/mixin";
 @import "~@/styles/variables";
+
+.main-wrapper {
+  padding: 30px 20px;
+}
+.main {
+  position: relative;
+  box-sizing: border-box;
+  padding: 20px 60px 40px;
+  background-color: #fff;
+  transition: all .4s ease;
+  &:hover {
+    box-shadow: $hoverShadow;
+  }
+}
+.btn-group {
+  position: absolute;
+  top: 20px;
+  right: 0;
+}
+.search-input {
+  width: 220px;
+  margin-right: 14px;
+}
+.tabs-wrapper {
+  position: relative;
+  padding-top: 10px;
+}
+.remove-btn {
+  color: $danger;
+}
+.form-btn-group {
+  text-align: right;
+}
