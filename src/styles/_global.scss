@@ -1,3 +1,5 @@
+@import "./variables";
+
 .login-view--input {
   input {
     display: block;
@@ -20,27 +22,54 @@
     font-size: 12px;
   }
 }
-.login-view--formItem .el-form-item__content {
-  line-height: 1;
+.accountManage-view--input {
+  input {
+    height: 28px;
+    &:hover {
+      border-color: $blue;
+    }
+  }
+  .el-input__icon {
+    &:hover {
+      color: $blue;
+    }
+  }
 }
-.chooseTeacher-view--table, .myStudents-view--table, .myTeacher-view--table {
+.login-view--formItem {
+  .el-form-item__content {
+    line-height: 1;
+  }
+}
+.chooseTeacher-view--table, .myStudents-view--table, .myTeacher-view--table, .accountManage-view--table {
   .el-form-item {
     float: left;
     display: block;
     margin: 0;
     width: 50%;
+    box-sizing: border-box;
+    padding-right: 10px;
     text-align: left;
   }
   label {
     color: #99a9bf;
   }
 }
-.publishNotice-view--table label {
-  color: #99a9bf;
+.publishNotice-view--table {
+  label {
+    color: #99a9bf;
+  }
 }
 .submitReport-view--upload, .dataShare-view--upload {
   .el-upload-list {
     margin-top: 20px;
+  }
+}
+.accountManage-view--tabs {
+  .el-tabs__item {
+    height: 50px;
+    padding: 0 24px;
+    font-size: 16px;
+    line-height: 50px;
   }
 }
 .el-checkbox + .el-checkbox {
