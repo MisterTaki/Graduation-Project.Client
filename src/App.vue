@@ -13,6 +13,7 @@
 <style lang="scss">
   @import '~@/styles/reset';
   @import '~@/styles/global';
+  @import '~@/styles/font-awesome';
   #app {
     min-width: 960px;
     height: 100%;
