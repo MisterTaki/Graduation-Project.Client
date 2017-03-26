@@ -44,10 +44,10 @@
           <el-form-item label="公告备注" prop="remark">
             <el-input v-model="noticeForm.remark"></el-input>
           </el-form-item>
-          <el-form-item>
+          <div class="btn-group">
             <el-button type="primary" @click="submitNotice">立即发布</el-button>
             <el-button @click="dialog.editNotice=false">取消</el-button>
-          </el-form-item>
+          </div>
         </el-form>
       </el-dialog>
     </div>
