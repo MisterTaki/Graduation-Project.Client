@@ -305,7 +305,7 @@
         rules: {
           addStudentAccount: {
             name: [
-              { required: true, message: '请输入账号', trigger: 'blur' }
+              { required: true, message: '请输入姓名', trigger: 'blur' }
             ],
             gender: [
               { required: true, message: '请输入性别', trigger: 'blur' }

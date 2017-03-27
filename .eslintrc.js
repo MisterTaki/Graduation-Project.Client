@@ -4,7 +4,7 @@ module.exports = {
   root: true,
   parser: 'babel-eslint',
   parserOptions: {
-    "ecmaVersion": 6,
+    ecmaVersion: 6,
     sourceType: 'module'
   },
   env: {
@@ -42,5 +42,6 @@ module.exports = {
     "max-len": 0,
     "no-param-reassign": 0,
     "space-before-function-paren": ["error", "always"],
+    "linebreak-style": 0
   }
 }
