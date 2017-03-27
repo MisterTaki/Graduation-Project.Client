@@ -25,6 +25,9 @@
 .accountManage-view--input {
   input {
     height: 28px;
+    border: none;
+    border-bottom: 1px solid #bfcbd9;
+    border-radius: 0;
     &:hover {
       border-color: $blue;
     }
