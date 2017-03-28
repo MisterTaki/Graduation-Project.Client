@@ -16,7 +16,7 @@ export default new Router({
       name: 'login',
       component: Login,
       meta: {
-        level: 'student'
+        identity: 'student'
       },
     },
     {
