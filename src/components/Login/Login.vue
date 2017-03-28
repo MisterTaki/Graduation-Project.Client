@@ -17,7 +17,7 @@
             <el-input class="login-view--input" type="password" placeholder="密码" v-model="loginForm.pwd"></el-input>
           </el-form-item>
         </div>
-        <el-radio-group class="radio-group" v-model="loginForm.level">
+        <el-radio-group class="radio-group" v-model="loginForm.identity">
           <el-radio label="student">学生</el-radio>
           <el-radio label="teacher">导师</el-radio>
           <el-radio label="admin">管理员</el-radio>
@@ -124,7 +124,7 @@
         loginForm: {
           account: '',
           pwd: '',
-          level: '',
+          identity: '',
         },
         registerForm: {
           name: '',
@@ -212,7 +212,7 @@
     },
     methods: {
       login () {
-        router.push(`${this.loginForm.level}/home`);
+        router.push(`${this.loginForm.identity}/home`);
       },
       closeFindPwdForm () {
         this.resetForm('findPwdForm');
@@ -220,13 +220,13 @@
       }
     },
     beforeRouteEnter (to, from, next) {
-      const level = to.matched[0].meta.level;
+      const identity = to.matched[0].meta.identity;
       next((vm) => {
-        vm.$data.loginForm.level = level;
+        vm.$data.loginForm.identity = identity;
       });
     },
     beforeRouteLeave (to, from, next) {
-      from.matched[0].meta.level = this.loginForm.level;
+      from.matched[0].meta.identity = this.loginForm.identity;
       next();
     }
   };
