@@ -4,7 +4,7 @@
   <div class="main-wrapper">
     <div class="main">
       <div class="tabs-wrapper">
-        <el-tabs class="tabs accountManage-view--tabs" :value="activeTab" type="card">
+        <el-tabs class="tabs accountManage-view--tabs" value="student" type="card">
           <el-tab-pane label="学生账号" name="student">
             <div class="search-wrapper">
               <el-input class="search-input accountManage-view--input" placeholder="按学号搜索账号信息" type="text" icon="search" v-model="searchInput" @keyup.enter.native="searchSubmit" :on-icon-click="searchSubmit">
@@ -45,8 +45,8 @@
               <el-table-column prop="academy" :filters="academyOptions" :filter-method="filterAcademy" label="学院" align="center"></el-table-column>
               <el-table-column width="140" label="操作" align="center">
                 <template scope="scope">
-                  <el-button class="edit-btn" type="text" size="small" @click="editStudentAccount(scope.$index, scope.row)">编辑</el-button>
-                  <el-button class="remove-btn" type="text" size="small" @click="removeStudentAccount(scope.$index, scope.row)">删除</el-button>
+                  <el-button class="edit-btn" type="text" size="small" @click="updateAccount(scope.$index, scope.row, 'student')">编辑</el-button>
+                  <el-button class="remove-btn" type="text" size="small" @click="removeAccount(scope.$index, scope.row, 'student')">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -93,8 +93,8 @@
               <el-table-column prop="academy" :filters="academyOptions" :filter-method="filterAcademy" label="学院" align="center"></el-table-column>
               <el-table-column width="140" label="操作" align="center">
                 <template scope="scope">
-                  <el-button class="edit-btn" type="text" size="small" @click="editTeacherAccount(scope.$index, scope.row)">编辑</el-button>
-                  <el-button class="remove-btn" type="text" size="small" @click="removeTeacherAccount(scope.$index, scope.row)">删除</el-button>
+                  <el-button class="edit-btn" type="text" size="small" @click="updateAccount(scope.$index, scope.row, 'teacher')">编辑</el-button>
+                  <el-button class="remove-btn" type="text" size="small" @click="removeAccount(scope.$index, scope.row, 'teacher')">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -132,8 +132,8 @@
               <el-table-column prop="academy" :filters="academyOptions" :filter-method="filterAcademy" label="学院" align="center"></el-table-column>
               <el-table-column width="140" label="操作" align="center">
                 <template scope="scope">
-                  <el-button class="edit-btn" type="text" size="small" @click="editTeacherAccount(scope.$index, scope.row)">编辑</el-button>
-                  <el-button class="remove-btn" type="text" size="small" @click="removeTeacherAccount(scope.$index, scope.row)">删除</el-button>
+                  <el-button class="edit-btn" type="text" size="small" @click="updateAccount(scope.$index, scope.row, 'admin')">编辑</el-button>
+                  <el-button class="remove-btn" type="text" size="small" @click="removeAccount(scope.$index, scope.row, 'admin')">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -144,26 +144,26 @@
             添加账号<i class="el-icon-plus el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item class="dropdown-item" @click.native="dialog.addStudentAccount=true">学生账号</el-dropdown-item>
-            <el-dropdown-item class="dropdown-item" @click.native="dialog.addTeacherAccount=true">导师账号</el-dropdown-item>
-            <el-dropdown-item class="dropdown-item" @click.native="dialog.addAdminAccount=true">管理员账号</el-dropdown-item>
+            <el-dropdown-item class="dropdown-item" @click.native="addAccount('student')">学生账号</el-dropdown-item>
+            <el-dropdown-item class="dropdown-item" @click.native="addAccount('teacher')">导师账号</el-dropdown-item>
+            <el-dropdown-item class="dropdown-item" @click.native="addAccount('admin')">管理员账号</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
     </div>
-    <template v-if="dialog.addStudentAccount">
-      <el-dialog class="addAccountForm-dialog" title="添加学生账号" size="large" v-model="dialog.addStudentAccount" @open="resetForm('addAccountForm.student')" :close-on-click-modal=false>
-        <h3 class="tip">请填写账号信息：</h3>
-        <el-form ref="addStudentAccountForm" class="addAccount-form" :model="addAccountForm.student" :rules="rules.addStudentAccount" label-width="100px" label-position="right">
+    <template v-if="dialog.studentAccount">
+      <el-dialog class="accountForm-dialog" title="学生账号" size="large" v-model="dialog.studentAccount" :close-on-click-modal=false>
+        <h3 class="tip">账号信息：</h3>
+        <el-form ref="studentAccountForm" class="addAccount-form" :model="studentAccountForm" :rules="rules.studentAccount" label-width="100px" label-position="right">
           <el-row>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="name" label="姓名">
-                <el-input type="text" v-model="addAccountForm.student.name"></el-input>
+                <el-input type="text" v-model="studentAccountForm.name"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="gender" label="性别">
-                <el-select style="width: 100%;" v-model="addAccountForm.student.gender" placeholder="请选择">
+                <el-select style="width: 100%;" v-model="studentAccountForm.gender" placeholder="请选择">
                   <el-option label="男" value="男"> </el-option>
                   <el-option label="女" value="女"> </el-option>
                 </el-select>
@@ -173,19 +173,19 @@
           <el-row>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="studentID" label="学号">
-                <el-input type="text" v-model="addAccountForm.student.studentID"></el-input>
+                <el-input type="text" v-model="studentAccountForm.studentID"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="class" label="班级">
-                <el-input type="text" v-model="addAccountForm.student.class"></el-input>
+                <el-input type="text" v-model="studentAccountForm.class"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="academy" label="学院">
-                <el-select style="width: 100%;" v-model="addAccountForm.student.academy" placeholder="请选择">
+                <el-select style="width: 100%;" v-model="studentAccountForm.academy" placeholder="请选择">
                   <el-option
                     v-for="item in academyOptions"
                     :label="item.label"
@@ -196,49 +196,54 @@
             </el-col>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="major" label="专业">
-                <el-input type="text" v-model="addAccountForm.student.major"></el-input>
+                <el-input type="text" v-model="studentAccountForm.major"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="ID" label="身份证号">
-                <el-input type="text" v-model="addAccountForm.student.ID"></el-input>
+                <el-input type="text" v-model="studentAccountForm.ID"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="mobile" label="手机">
-                <el-input type="text" v-model="addAccountForm.student.mobile"></el-input>
+                <el-input type="text" v-model="studentAccountForm.mobile"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="email" label="邮箱">
-                <el-input type="text" v-model="addAccountForm.student.email"></el-input>
+                <el-input type="text" v-model="studentAccountForm.email"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <div class="form-btn-group">
-            <el-button type="primary" @click="submitStudentAccount">立即添加</el-button>
-            <el-button @click="dialog.addStudentAccount=false">取消</el-button>
+            <template v-if="dialog.status == 'add'">
+              <el-button type="primary" @click="submitAdd('student')">立即添加</el-button>
+            </template>
+            <template v-else-if="dialog.status == 'update'">
+              <el-button type="primary" @click="submitUpdate('student')">立即保存</el-button>
+            </template>
+            <el-button @click="dialog.studentAccount=false">取消</el-button>
           </div>
         </el-form>
       </el-dialog>
     </template>
-    <template v-if="dialog.addTeacherAccount">
-      <el-dialog class="addAccountForm-dialog" title="添加导师账号" size="large" v-model="dialog.addTeacherAccount" @open="resetForm('addAccountForm.teacher')" :close-on-click-modal=false>
-        <h3 class="tip">请填写账号信息：</h3>
-        <el-form ref="addTeacherAccountForm" class="addAccount-form" :model="addAccountForm.teacher" :rules="rules.addTeacherAccount" label-width="100px" label-position="right">
+    <template v-if="dialog.teacherAccount">
+      <el-dialog class="accountForm-dialog" title="导师账号" size="large" v-model="dialog.teacherAccount" :close-on-click-modal=false>
+        <h3 class="tip">账号信息：</h3>
+        <el-form ref="teacherAccountForm" class="addAccount-form" :model="teacherAccountForm" :rules="rules.teacherAccount" label-width="100px" label-position="right">
           <el-row>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="name" label="姓名">
-                <el-input type="text" v-model="addAccountForm.teacher.name"></el-input>
+                <el-input type="text" v-model="teacherAccountForm.name"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="gender" label="性别">
-                <el-select style="width: 100%;" v-model="addAccountForm.teacher.gender" placeholder="请选择">
+                <el-select style="width: 100%;" v-model="teacherAccountForm.gender" placeholder="请选择">
                   <el-option label="男" value="男"> </el-option>
                   <el-option label="女" value="女"> </el-option>
                 </el-select>
@@ -248,24 +253,24 @@
           <el-row>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="teacherID" label="工号">
-                <el-input type="text" v-model="addAccountForm.teacher.teacherID"></el-input>
+                <el-input type="text" v-model="teacherAccountForm.teacherID"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="education" label="学历">
-                <el-input type="text" v-model="addAccountForm.teacher.education"></el-input>
+                <el-input type="text" v-model="teacherAccountForm.education"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="position" label="职位职称">
-                <el-input type="text" v-model="addAccountForm.teacher.position"></el-input>
+                <el-input type="text" v-model="teacherAccountForm.position"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="academy" label="学院">
-                <el-select style="width: 100%;" v-model="addAccountForm.teacher.academy" placeholder="请选择">
+                <el-select style="width: 100%;" v-model="teacherAccountForm.academy" placeholder="请选择">
                   <el-option
                     v-for="item in academyOptions"
                     :label="item.label"
@@ -278,42 +283,47 @@
           <el-row>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="ID" label="身份证号">
-                <el-input type="text" v-model="addAccountForm.student.ID"></el-input>
+                <el-input type="text" v-model="teacherAccountForm.ID"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="mobile" label="手机">
-                <el-input type="text" v-model="addAccountForm.student.mobile"></el-input>
+                <el-input type="text" v-model="teacherAccountForm.mobile"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="email" label="邮箱">
-                <el-input type="text" v-model="addAccountForm.student.email"></el-input>
+                <el-input type="text" v-model="teacherAccountForm.email"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <div class="form-btn-group">
-            <el-button type="primary" @click="submitStudentAccount">立即添加</el-button>
-            <el-button @click="dialog.addTeacherAccount=false">取消</el-button>
+            <template v-if="dialog.status == 'add'">
+              <el-button type="primary" @click="submitAdd('teacher')">立即添加</el-button>
+            </template>
+            <template v-else-if="dialog.status == 'update'">
+              <el-button type="primary" @click="submitUpdate('teacher')">立即保存</el-button>
+            </template>
+            <el-button @click="dialog.teacherAccount=false">取消</el-button>
           </div>
         </el-form>
       </el-dialog>
     </template>
-    <template v-if="dialog.addAdminAccount">
-      <el-dialog class="addAccountForm-dialog" title="添加管理员账号" size="large" v-model="dialog.addAdminAccount" @open="resetForm('addAccountForm.admin')" :close-on-click-modal=false>
-        <h3 class="tip">请填写账号信息：</h3>
-        <el-form ref="addAdminAccountForm" class="addAccount-form" :model="addAccountForm.admin" :rules="rules.addAdminAccount" label-width="100px" label-position="right">
+    <template v-if="dialog.adminAccount">
+      <el-dialog class="accountForm-dialog" title="管理员账号" size="large" v-model="dialog.adminAccount" :close-on-click-modal=false>
+        <h3 class="tip">账号信息：</h3>
+        <el-form ref="adminAccountForm" class="addAccount-form" :model="adminAccountForm" :rules="rules.adminAccount" label-width="100px" label-position="right">
           <el-row>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="name" label="姓名">
-                <el-input type="text" v-model="addAccountForm.admin.name"></el-input>
+                <el-input type="text" v-model="adminAccountForm.name"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="gender" label="性别">
-                <el-select style="width: 100%;" v-model="addAccountForm.admin.gender" placeholder="请选择">
+                <el-select style="width: 100%;" v-model="adminAccountForm.gender" placeholder="请选择">
                   <el-option label="男" value="男"> </el-option>
                   <el-option label="女" value="女"> </el-option>
                 </el-select>
@@ -323,12 +333,12 @@
           <el-row>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="adminID" label="工号">
-                <el-input type="text" v-model="addAccountForm.admin.adminID"></el-input>
+                <el-input type="text" v-model="adminAccountForm.adminID"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="level" label="级别">
-                <el-select style="width: 100%;" v-model="addAccountForm.admin.level" placeholder="请选择">
+                <el-select style="width: 100%;" v-model="adminAccountForm.level" placeholder="请选择">
                   <el-option label="普通" value="普通"> </el-option>
                   <el-option label="超级" value="超级"> </el-option>
                 </el-select>
@@ -338,25 +348,30 @@
           <el-row>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="ID" label="身份证号">
-                <el-input type="text" v-model="addAccountForm.admin.ID"></el-input>
+                <el-input type="text" v-model="adminAccountForm.ID"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="mobile" label="手机">
-                <el-input type="text" v-model="addAccountForm.admin.mobile"></el-input>
+                <el-input type="text" v-model="adminAccountForm.mobile"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item class="input-wrapper" prop="email" label="邮箱">
-                <el-input type="text" v-model="addAccountForm.admin.email"></el-input>
+                <el-input type="text" v-model="adminAccountForm.email"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <div class="form-btn-group">
-            <el-button type="primary" @click="submitStudentAccount">立即添加</el-button>
-            <el-button @click="dialog.addAdminAccount=false">取消</el-button>
+            <template v-if="dialog.status == 'add'">
+              <el-button type="primary" @click="submitAdd('admin')">立即添加</el-button>
+            </template>
+            <template v-else-if="dialog.status == 'update'">
+              <el-button type="primary" @click="submitUpdate('admin')">立即保存</el-button>
+            </template>
+            <el-button @click="dialog.adminAccount=false">取消</el-button>
           </div>
         </el-form>
       </el-dialog>
@@ -373,7 +388,6 @@
     mixins: [mixins],
     data () {
       return {
-        activeTab: 'student',
         academyOptions: [
           {
             text: '经济与管理',
@@ -463,46 +477,45 @@
         ],
         searchInput: '',
         dialog: {
-          addStudentAccount: false,
-          addTeacherAccount: false,
-          addAdminAccount: false,
-          searchResult: false
+          studentAccount: false,
+          teacherAccount: false,
+          adminAccount: false,
+          searchResult: false,
+          status: ''
         },
-        addAccountForm: {
-          student: {
-            name: '',
-            studentID: '',
-            ID: '',
-            gender: '',
-            class: '',
-            academy: '',
-            email: '',
-            mobile: ''
-          },
-          teacher: {
-            name: '',
-            teacherID: '',
-            ID: '',
-            gender: '',
-            academy: '',
-            education: '',
-            position: '',
-            email: '',
-            mobile: ''
-          },
-          admin: {
-            name: '',
-            adminID: '',
-            ID: '',
-            gender: '',
-            level: '',
-            academy: '',
-            email: '',
-            mobile: ''
-          }
+        studentAccountForm: {
+          name: '',
+          studentID: '',
+          ID: '',
+          gender: '',
+          class: '',
+          academy: '',
+          email: '',
+          mobile: ''
+        },
+        teacherAccountForm: {
+          name: '',
+          teacherID: '',
+          ID: '',
+          gender: '',
+          academy: '',
+          education: '',
+          position: '',
+          email: '',
+          mobile: ''
+        },
+        adminAccountForm: {
+          name: '',
+          adminID: '',
+          ID: '',
+          gender: '',
+          level: '',
+          academy: '',
+          email: '',
+          mobile: ''
         },
         rules: {
-          addStudentAccount: {
+          studentAccount: {
             name: [
               { required: true, message: '请输入姓名', trigger: 'blur' }
             ],
@@ -531,7 +544,7 @@
               { required: true, message: '请输入邮箱', trigger: 'blur' }
             ],
           },
-          addTeacherAccount: {
+          teacherAccount: {
             name: [
               { required: true, message: '请输入姓名', trigger: 'blur' }
             ],
@@ -560,7 +573,7 @@
               { required: true, message: '请输入邮箱', trigger: 'blur' }
             ],
           },
-          addAdminAccount: {
+          adminAccount: {
             name: [
               { required: true, message: '请输入姓名', trigger: 'blur' }
             ],
@@ -583,7 +596,7 @@
               { required: true, message: '请输入邮箱', trigger: 'blur' }
             ],
           }
-        },
+        }
       };
     },
     methods: {
@@ -592,6 +605,50 @@
       },
       searchSubmit () {
         Message.success('搜索成功');
+      },
+      addAccount (identity) {
+        this.dialog.status = 'add';
+        switch (identity) {
+          case 'student':
+            this.resetForm('studentAccountForm');
+            this.dialog.studentAccount = true;
+            break;
+          case 'teacher':
+            this.resetForm('teacherAccountForm');
+            this.dialog.teacherAccount = true;
+            break;
+          case 'admin':
+            this.resetForm('adminAccountForm');
+            this.dialog.adminAccount = true;
+            break;
+          default:
+
+        }
+      },
+      updateAccount (index, data, identity) {
+        this.dialog.status = 'update';
+        switch (identity) {
+          case 'student':
+            this.studentAccountForm = data;
+            this.dialog.studentAccount = true;
+            break;
+          case 'teacher':
+            this.teacherAccountForm = data;
+            this.dialog.teacherAccount = true;
+            break;
+          case 'admin':
+            this.adminAccountForm = data;
+            this.dialog.adminAccount = true;
+            break;
+          default:
+
+        }
+      },
+      submitUpdate (identity) {
+        console.log(identity);
+      },
+      submitAdd (identity) {
+        console.log(identity);
       }
     }
   };
