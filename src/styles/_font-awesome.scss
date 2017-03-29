@@ -1,4 +1,8 @@
-@import "~@/assets/font-awesome/scss/font-awesome";
+//改写默认值
+$fa-font-path: "../node_modules/font-awesome/fonts";
+$fa-css-prefix: el-icon-fa;
+
+@import "../../node_modules/font-awesome/scss/font-awesome";
 
 [class^="el-icon-fa"], [class*=" el-icon-fa"] {
   display: inline-block;
