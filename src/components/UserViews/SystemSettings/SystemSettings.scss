@@ -1,2 +1,31 @@
 @import "~@/styles/mixin";
 @import "~@/styles/variables";
+
+.main-wrapper {
+  padding: 30px 20px;
+}
+.main {
+  position: relative;
+  box-sizing: border-box;
+  padding: 20px 60px 40px;
+  background-color: #fff;
+  transition: all .4s ease;
+  &:hover {
+    box-shadow: $hoverShadow;
+  }
+}
+.title {
+  padding: 20px 10px 15px;
+  border-bottom: 1px solid rgba(0,0,0,.1);
+  font-size: 20px;
+}
+.settingsForm-wrapper {
+  margin-top: 30px;
+  padding-right: 20px;
+}
+.date-picker {
+  width: 100%;
+}
+.form-btn-group {
+  text-align: right;
+}
