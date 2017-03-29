@@ -606,6 +606,9 @@
       searchSubmit () {
         Message.success('搜索成功');
       },
+      removeAccount (index, data, identity) {
+        console.log(identity);
+      },
       addAccount (identity) {
         this.dialog.status = 'add';
         switch (identity) {

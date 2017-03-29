@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import { Login, User, UserViews, NotFound } from '@/components';
+import { Login, User, NotFound } from '@/components';
 
 Vue.use(Router);
 
@@ -22,77 +22,77 @@ export default new Router({
     {
       path: '/:identity',
       name: 'user',
-      component: User,
+      component: User.View,
       children: [
         {
           name: 'home',
           path: 'home',
-          component: UserViews.Common.Home
+          component: User.Common.Home
         },
         {
           name: 'notification',
           path: 'notification',
-          component: UserViews.Common.Notification
+          component: User.Common.Notification
         },
         {
           name: 'user-settings',
           path: 'user-settings',
-          component: UserViews.Common.UserSettings
+          component: User.Common.UserSettings
         },
         {
           name: 'data-share',
           path: 'data-share',
-          component: UserViews.Common.DataShare
+          component: User.Common.DataShare
         },
         {
           name: 'my-teacher',
           path: 'my-teacher',
-          component: UserViews.Student.MyTeacher
+          component: User.Student.MyTeacher
         },
         {
           name: 'choose-teacher',
           path: 'choose-teacher',
-          component: UserViews.Student.ChooseTeacher
+          component: User.Student.ChooseTeacher
         },
         {
           name: 'submit-report',
           path: 'submit-report',
-          component: UserViews.Student.SubmitReport
+          component: User.Student.SubmitReport
         },
         {
           name: 'choose-students',
           path: 'choose-students',
-          component: UserViews.Teacher.ChooseStudents
+          component: User.Teacher.ChooseStudents
         },
         {
           name: 'my-students',
           path: 'my-students',
-          component: UserViews.Teacher.MyStudents
+          component: User.Teacher.MyStudents
         },
         {
           name: 'review-report',
           path: 'review-report',
-          component: UserViews.Teacher.ReviewReport
+          component: User.Teacher.ReviewReport
         },
         {
           name: 'reply-schedule',
           path: 'reply-schedule',
-          component: UserViews.Admin.ReplySchedule
+          component: User.Admin.ReplySchedule
         },
         {
           name: 'account-manage',
           path: 'account-manage',
-          component: UserViews.Admin.AccountManage
+          component: User.Admin.AccountManage
         },
         {
           name: 'publish-notice',
           path: 'publish-notice',
-          component: UserViews.Admin.PublishNotice
+          component: User.Admin.PublishNotice
         },
         {
           name: 'system-settings',
           path: 'system-settings',
-          component: UserViews.Admin.SystemSettings
+          component: User.Admin.SystemSettings
         }
       ]
     },
