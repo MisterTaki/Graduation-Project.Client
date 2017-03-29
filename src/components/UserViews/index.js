@@ -1,14 +1,4 @@
-export Home from './Home/Home';
-export UserSettings from './UserSettings/UserSettings';
-export Notification from './Notification/Notification';
-export PublishNotice from './PublishNotice/PublishNotice';
-export MyTeacher from './MyTeacher/MyTeacher';
-export ChooseTeacher from './ChooseTeacher/ChooseTeacher';
-export ChooseStudents from './ChooseStudents/ChooseStudents';
-export MyStudents from './MyStudents/MyStudents';
-export SubmitReport from './SubmitReport/SubmitReport';
-export ReviewReport from './ReviewReport/ReviewReport';
-export DataShare from './DataShare/DataShare';
-export ReplySchedule from './ReplySchedule/ReplySchedule';
-export AccountManage from './AccountManage/AccountManage';
-export SystemSettings from './SystemSettings/SystemSettings';
+export * as Common from './Common';
+export * as Student from './Student';
+export * as Teacher from './Teacher';
+export * as Admin from './Admin';

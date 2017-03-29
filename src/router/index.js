@@ -20,79 +20,79 @@ export default new Router({
       },
     },
     {
-      path: '/:level',
+      path: '/:identity',
       name: 'user',
       component: User,
       children: [
         {
           name: 'home',
           path: 'home',
-          component: UserViews.Home
+          component: UserViews.Common.Home
         },
         {
           name: 'notification',
           path: 'notification',
-          component: UserViews.Notification
+          component: UserViews.Common.Notification
         },
         {
           name: 'user-settings',
           path: 'user-settings',
-          component: UserViews.UserSettings
-        },
-        {
-          name: 'publish-notice',
-          path: 'publish-notice',
-          component: UserViews.PublishNotice
-        },
-        {
-          name: 'my-teacher',
-          path: 'my-teacher',
-          component: UserViews.MyTeacher
-        },
-        {
-          name: 'choose-students',
-          path: 'choose-students',
-          component: UserViews.ChooseStudents
-        },
-        {
-          name: 'choose-teacher',
-          path: 'choose-teacher',
-          component: UserViews.ChooseTeacher
-        },
-        {
-          name: 'my-students',
-          path: 'my-students',
-          component: UserViews.MyStudents
-        },
-        {
-          name: 'submit-report',
-          path: 'submit-report',
-          component: UserViews.SubmitReport
-        },
-        {
-          name: 'review-report',
-          path: 'review-report',
-          component: UserViews.ReviewReport
+          component: UserViews.Common.UserSettings
         },
         {
           name: 'data-share',
           path: 'data-share',
-          component: UserViews.DataShare
+          component: UserViews.Common.DataShare
+        },
+        {
+          name: 'my-teacher',
+          path: 'my-teacher',
+          component: UserViews.Student.MyTeacher
+        },
+        {
+          name: 'choose-teacher',
+          path: 'choose-teacher',
+          component: UserViews.Student.ChooseTeacher
+        },
+        {
+          name: 'submit-report',
+          path: 'submit-report',
+          component: UserViews.Student.SubmitReport
+        },
+        {
+          name: 'choose-students',
+          path: 'choose-students',
+          component: UserViews.Teacher.ChooseStudents
+        },
+        {
+          name: 'my-students',
+          path: 'my-students',
+          component: UserViews.Teacher.MyStudents
+        },
+        {
+          name: 'review-report',
+          path: 'review-report',
+          component: UserViews.Teacher.ReviewReport
         },
         {
           name: 'reply-schedule',
           path: 'reply-schedule',
-          component: UserViews.ReplySchedule
+          component: UserViews.Admin.ReplySchedule
         },
         {
           name: 'account-manage',
           path: 'account-manage',
-          component: UserViews.AccountManage
+          component: UserViews.Admin.AccountManage
+        },
+        {
+          name: 'publish-notice',
+          path: 'publish-notice',
+          component: UserViews.Admin.PublishNotice
         },
         {
           name: 'system-settings',
           path: 'system-settings',
-          component: UserViews.SystemSettings
+          component: UserViews.Admin.SystemSettings
         }
       ]
     },
