@@ -42,6 +42,17 @@ module.exports = {
         options: vueLoaderConfig
       },
       {
+        test: /iview.src.*?js$/,
+        loader: 'babel-loader',
+        include: resolve('node_modules')
+      },
+      {
+        test: /iview.src.*?vue$/,
+        loader: 'vue-loader',
+        options: vueLoaderConfig,
+        include: resolve('node_modules')
+      },
+      {
         test: /\.js$/,
         loader: 'babel-loader',
         include: [resolve('src'), resolve('test')]
