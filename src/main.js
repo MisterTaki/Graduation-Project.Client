@@ -2,10 +2,11 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import { Row, Col, Dialog, Upload, Button, Table, Tabs, TabPane, TableColumn, Form, FormItem, Select, Option, Input, Radio, RadioGroup, Badge, Step, Steps, Dropdown, DropdownMenu, DropdownItem, datePicker } from 'element-ui';
+import loadingBar from '../node_modules/iview/src/components/loading-bar';
 import App from './App';
 import router from './router';
 
-// 按需引入element-ui组件
+// 按需引入第三方组件
 Vue.use(Row);
 Vue.use(Col);
 Vue.use(Dialog);
@@ -29,6 +30,9 @@ Vue.use(Dropdown);
 Vue.use(DropdownMenu);
 Vue.use(DropdownItem);
 Vue.use(datePicker);
+
+// 按需引入全局方法
+Vue.prototype.$Loading = loadingBar;
 
 Vue.config.productionTip = false;
 
