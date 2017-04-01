@@ -16,9 +16,11 @@
     "axios": "^0.15.3",
     "element-ui": "^1.2.4",
     "font-awesome": "^4.7.0",
+    "iview": "^2.0.0-rc.8",
     "vue": "^2.2.2",
     "vue-router": "^2.2.0",
-    "vuex": "^2.2.1"
+    "vuex": "^2.2.1",
+    "vuex-router-sync": "^4.1.2"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",
