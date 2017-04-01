@@ -14,7 +14,6 @@
   @import '~@/styles/reset';
   @import '~@/styles/global';
   @import '~@/styles/font-awesome';
-  @import '~@/styles/loading-bar';
 
   #app {
     min-width: 960px;
