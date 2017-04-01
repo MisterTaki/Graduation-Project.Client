@@ -1,10 +1,13 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
+import Vuex from 'vuex';
+import { sync } from 'vuex-router-sync';
 import { Row, Col, Dialog, Upload, Button, Table, Tabs, TabPane, TableColumn, Form, FormItem, Select, Option, Input, Radio, RadioGroup, Badge, Step, Steps, Dropdown, DropdownMenu, DropdownItem, datePicker } from 'element-ui';
-import loadingBar from '../node_modules/iview/src/components/loading-bar';
+import { Common } from '@/components';
 import App from './App';
 import router from './router';
+import store from './store';
 
 // 按需引入第三方组件
 Vue.use(Row);
@@ -31,15 +34,24 @@ Vue.use(DropdownMenu);
 Vue.use(DropdownItem);
 Vue.use(datePicker);
 
-// 按需引入全局方法
-Vue.prototype.$Loading = loadingBar;
+Vue.config.productionTip = false; // Set this to false to prevent the production tip on Vue startup.
+Vue.use(Vuex); // use Vuex.
+sync(store, router); // use vuex-router-sync.
 
-Vue.config.productionTip = false;
+router.beforeEach((to, from, next) => {
+  Common.LoadingBar.start();
+  next();
+});
+
+router.afterEach(() => {
+  Common.LoadingBar.finish();
+});
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App },
 });
