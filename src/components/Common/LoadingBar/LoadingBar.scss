@@ -1,0 +1,19 @@
+@import "~@/styles/variables";
+
+.loading-bar {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2000;
+  &-inner {
+    transition: width 0.2s linear;
+    &-color-primary {
+      background-color: $blue;
+    }
+    &-failed-color-error {
+      background-color: $danger;
+    }
+  }
+}
