@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import { Login, User, NotFound } from '@/components';
+import * as Views from '@/views';
+import { User } from '@/components';
 
 Vue.use(Router);
 
@@ -14,7 +15,7 @@ export default new Router({
     {
       path: '/login',
       name: 'login',
-      component: Login,
+      component: Views.Login,
       meta: {
         identity: 'student'
       },
@@ -22,7 +23,7 @@ export default new Router({
     {
       path: '/:identity',
       name: 'user',
-      component: User.View,
+      component: Views.User,
       children: [
         {
           name: 'home',
@@ -99,7 +100,7 @@ export default new Router({
     {
       path: '*',
       name: 'not-found',
-      component: NotFound,
+      component: Views.NotFound,
     },
   ],
 });
