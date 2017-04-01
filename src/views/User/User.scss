@@ -1,0 +1,11 @@
+@import "~@/styles/mixin";
+@import "~@/styles/variables";
+
+.main-container {
+  position: relative;
+  min-height: 100%;
+  box-sizing: border-box;
+  padding-top: 70px;
+  margin-left: 100px;
+  background-color: $background;
+}
