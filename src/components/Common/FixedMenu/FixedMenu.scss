@@ -23,6 +23,9 @@
   color: #fff;
   text-align: center;
   line-height: 36px;
+  &.router-link-active {
+    background-color: $darkBlue;
+  }
   &:hover {
     background-color: $lightBlue;
   }
@@ -33,9 +36,6 @@
     left: 0;
     width: 100%;
     height: 40px;
-  }
-  &.active {
-    background-color: $darkBlue;
   }
   &.home:before {
     background: url(~@/assets/images/icon-home_26x26.png) no-repeat center bottom;
