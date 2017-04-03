@@ -41,7 +41,6 @@ module.exports = {
     "func-names": 0,
     "max-len": 0,
     "no-param-reassign": 0,
-    "space-before-function-paren": ["error", "always"],
-    "linebreak-style": 0
+    "space-before-function-paren": ["error", "always"]
   }
 }

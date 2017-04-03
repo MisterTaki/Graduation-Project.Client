@@ -1,7 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
-import Vuex from 'vuex';
 import { sync } from 'vuex-router-sync';
 import { Row, Col, Dialog, Upload, Button, Table, Tabs, TabPane, TableColumn, Form, FormItem, Select, Option, Input, Radio, RadioGroup, Badge, Step, Steps, Dropdown, DropdownMenu, DropdownItem, datePicker } from 'element-ui';
 import { Common } from '@/components';
@@ -9,7 +8,7 @@ import App from './App';
 import router from './router';
 import store from './store';
 
-// 按需引入第三方组件
+// add third-party's components;
 Vue.use(Row);
 Vue.use(Col);
 Vue.use(Dialog);
@@ -35,7 +34,7 @@ Vue.use(DropdownItem);
 Vue.use(datePicker);
 
 Vue.config.productionTip = false; // Set this to false to prevent the production tip on Vue startup.
-Vue.use(Vuex); // use Vuex.
+
 sync(store, router); // use vuex-router-sync.
 
 router.beforeEach((to, from, next) => {

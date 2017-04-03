@@ -1,12 +1,13 @@
 import { Common } from '@/components';
-import * as types from '../types';
+
+const TOGGLE_LOADING = 'global/TOGGLE_LOADING';
 
 export default {
   state: {
     loading: 'finish',
   },
   mutations: {
-    [types.TOGGLE_LOADING] (state, payload) {
+    [TOGGLE_LOADING] (state, payload) {
       switch (payload.status) {
         case 'start':
           Common.LoadingBar.start();
