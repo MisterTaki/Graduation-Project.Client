@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Notification } from 'element-ui';
 
 const http = axios.create({
-  baseURL: 'https://graduation-project.com/api/v1',
+  baseURL: 'https://api.graduation-project.com/v1/',
 });
 Vue.prototype.$http = http; // add $http method.
 
@@ -11,32 +11,32 @@ const methods = ['get', 'post', 'delete', 'put'];
 class Client {
   constructor () {
     methods.forEach((method) => {
-      this[method] = (url, { params, data } = {}, cb, errorCb) => {
-        Vue.$store.commit('global/TOGGLE_LOADING', 'start');
-        Vue.$http({
-          method,
-          url,
-          params,
-          data
-        }).then((res) => {
-          if (res.data.status === 200) {
+      this[method] = async (url, { params, data } = {}) => {
+        try {
+          Vue.$store.commit('global/TOGGLE_LOADING', 'start');
+          const response = await Vue.$http[method]({
+            url,
+            params,
+            data
+          });
+          if (response.data.status === 200) {
             Vue.$store.commit('global/TOGGLE_LOADING', 'finish');
-            cb(res);
+            return response.data;
           }
-          Vue.$store.commit('global/TOGGLE_LOADING', 'error');
           Notification.error({
             title: '出错啦',
-            message: `服务器错误：${res.status}, ${res.statusText}`
+            message: `服务器错误：${response.status}, ${response.statusText}`
           });
-          if (errorCb()) errorCb(res);
-        }).catch((err) => {
           Vue.$store.commit('global/TOGGLE_LOADING', 'error');
+          throw new Error(response.data);
+        } catch (error) {
           Notification.error({
             title: '出错啦',
-            message: `网络请求错误：${err.status}, ${err.statusText}`
+            message: `网络请求错误：${error.status}, ${error.statusText}`
           });
-          if (errorCb()) errorCb(err);
-        });
+          Vue.$store.commit('global/TOGGLE_LOADING', 'error');
+          throw new Error(error);
+        }
       };
     });
   }
