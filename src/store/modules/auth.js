@@ -1,4 +1,5 @@
-import { auth } from '../../apis';
+import { client } from '../../utils';
+import apiMap from '../../api';
 
 const LOGIN = 'auth/LOGIN';
 // const LOGOUT = 'auth/LOGOUT';
@@ -11,12 +12,8 @@ export default {
     info: {}
   },
   actions: {
-    [LOGIN] ({ commit }, { data }) {
-      auth.login(data, (res) => {
-        commit('auth/LOGIN', res.data);
-      }, () => {
-        commit('auth/LOGIN');
-      });
+    async [LOGIN] ({ commit }, { data }) {
+      commit('auth/LOGIN', await client.post(apiMap.login, { data }));
     }
   },
   mutations: {
