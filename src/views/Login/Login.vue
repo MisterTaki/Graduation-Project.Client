@@ -212,7 +212,9 @@
     },
     methods: {
       login () {
-        router.push(`${this.loginForm.identity}/home`);
+        this.$store.dispatch('auth/LOGIN', this.loginForm).then(() => {
+          router.push(`${this.loginForm.identity}/home`);
+        });
       },
       openFindPwdForm () {
         this.resetForm('findPwdForm');
