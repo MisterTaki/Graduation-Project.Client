@@ -1,7 +1,7 @@
 {
-  "name": "graduation-project",
+  "name": "graduation-project [client]",
   "version": "1.0.0",
-  "description": "A Graduation-Project Management System",
+  "description": "A Graduation-Project Management System [Client]",
   "author": "MisterTaki <ustb_gaoqi@163.com>",
   "private": true,
   "scripts": {

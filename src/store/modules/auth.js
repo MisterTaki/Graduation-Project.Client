@@ -13,7 +13,7 @@ export default {
   },
   actions: {
     async [LOGIN] ({ commit }, { data }) {
-      commit('auth/LOGIN', await client.post(apiMap.login, { data }));
+      commit(LOGIN, await client.post(apiMap.login, { data }));
     }
   },
   mutations: {
