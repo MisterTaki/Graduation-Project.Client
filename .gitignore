@@ -1,6 +1,7 @@
 .idea
 .DS_Store
 .tern-project
+.vscode
 node_modules/
 dist/
 npm-debug.log
