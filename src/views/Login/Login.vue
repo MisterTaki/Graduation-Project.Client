@@ -212,7 +212,9 @@
     },
     methods: {
       login () {
-        this.$store.dispatch('auth/LOGIN', this.loginForm).then(() => {
+        this.$store.dispatch('auth/LOGIN', {
+          data: this.loginForm
+        }).then(() => {
           router.push(`${this.loginForm.identity}/home`);
         });
       },
