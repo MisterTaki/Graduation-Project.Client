@@ -1,5 +1,5 @@
 import { client } from '../../utils';
-// import apiMap from '../../api';
+import apiMap from '../../api';
 
 const LOGIN = 'auth/LOGIN';
 // const LOGOUT = 'auth/LOGOUT';
@@ -13,13 +13,12 @@ export default {
   },
   actions: {
     async [LOGIN] ({ commit }, { data }) {
-      commit(LOGIN, await client.post('http://localhost:3000/v1/auth/login', { data }));
+      commit(LOGIN, await client.post(apiMap.login, { data }));
     }
   },
   mutations: {
     [LOGIN] (state, { data }) {
       state.info = data;
-      console.log(data);
     },
     [SET_USER] (state, { user }) {
       state.user = user;

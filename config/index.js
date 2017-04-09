@@ -28,11 +28,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      'https://api.graduation-project.com/v1': {
+      '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true,
         pathRewrite: {
-          'https://api.graduation-project.com/v1': ''
+          '^/api': ''
         }
       }
     },
