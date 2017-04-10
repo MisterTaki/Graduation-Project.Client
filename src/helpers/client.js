@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { Notification } from 'element-ui';
 import { Common } from '@/components';
+import config from '../config';
 
 const $http = axios.create({
-  baseURL: '/api/v1'
+  baseURL: config.baseURL
 });
 
 const methods = ['get', 'post', 'delete', 'put'];
@@ -24,7 +25,7 @@ class Client {
         } catch (error) {
           Notification.error({
             title: '出错啦',
-            message: `错误信息：${error.response.status}，${error.response.statusText}`
+            message: `错误信息：${error.response.status}，${error.response.data.message || '服务器开小差了'}`
           });
           Common.LoadingBar.error();
           throw new Error(error);

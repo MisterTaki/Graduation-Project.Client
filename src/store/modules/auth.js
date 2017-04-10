@@ -1,4 +1,4 @@
-import { client } from '../../utils';
+import { client } from '../../helpers';
 import apiMap from '../../api';
 
 const LOGIN = 'auth/LOGIN';
