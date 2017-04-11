@@ -13,6 +13,10 @@ class Client {
     methods.forEach((method) => {
       this[method] = async (url, { params, data } = {}) => {
         Common.LoadingBar.start();
+        const token = window.localStorage.getItem('token');
+        if (token) {
+          $http.defaults.headers.common.Authorization = token;
+        }
         try {
           const response = await $http({
             method,
@@ -31,34 +35,6 @@ class Client {
           throw new Error(error);
         }
       };
-      // this[method] = (url, { params, data } = {}) => new Promise((resolve, reject) => {
-      //   Common.LoadingBar.start();
-      //   $http({
-      //     method,
-      //     url,
-      //     params,
-      //     data
-      //   }).then((response) => {
-      //     if (response.status === 200) {
-      //       Common.LoadingBar.finish();
-      //       resolve(response);
-      //     } else {
-      //       Notification.error({
-      //         title: '出错啦',
-      //         message: '服务器开小差了，请稍后重试'
-      //       });
-      //       Common.LoadingBar.error();
-      //       reject(`Error: Request failed with status code ${response.status}`);
-      //     }
-      //   }).catch((error) => {
-      //     Notification.error({
-      //       title: '出错啦',
-      //       message: `网络请求错误：${error.status}, ${error.statusText}`
-      //     });
-      //     Common.LoadingBar.error();
-      //     reject(error);
-      //   });
-      // });
     });
   }
 }

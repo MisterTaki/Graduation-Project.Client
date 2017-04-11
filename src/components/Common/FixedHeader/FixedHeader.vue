@@ -20,14 +20,23 @@
         </div>
       </router-link>
       <router-link to="user-settings" class="nav-item settings" title="进入个人设置"></router-link>
-      <router-link to="/login" class="nav-item logout" title="注销"></router-link>
+      <div @click="logout" class="nav-item logout" title="注销"></div>
     </div>
   </div>
 </template>
 
 <script>
+  import router from '@/router';
+
   export default {
     name: 'fixed-header',
-    props: ['userName']
+    props: ['userName'],
+    methods: {
+      logout () {
+        this.$store.dispatch('auth/LOGOUT').then(() => {
+          router.push('/login');
+        });
+      }
+    }
   };
 </script>
