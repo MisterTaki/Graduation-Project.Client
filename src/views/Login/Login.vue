@@ -83,7 +83,7 @@
             <el-input class="login-view--input" type="text" placeholder="性别" v-model="registerForm.gender"></el-input>
           </el-form-item>
           <el-form-item class="input-wrapper" prop="studentID">
-            <el-input class="login-view--input" type="text" placeholder="学号" v-model="registerForm.studentID"></el-input>
+            <el-input class="login-view--input" type="text" placeholder="学号" v-model="registerForm.account"></el-input>
           </el-form-item>
           <el-form-item class="input-wrapper" prop="class">
             <el-input class="login-view--input" type="text" placeholder="班级" v-model="registerForm.class"></el-input>
@@ -104,7 +104,7 @@
             <el-input class="login-view--input" type="text" placeholder="邮箱" v-model="registerForm.email"></el-input>
           </el-form-item>
           <div class="wrapper-marginTop">
-            <button class="button-dom full-width default-color" @click.prevent="" type="submit">申请</button>
+            <button class="button-dom full-width default-color" @click.prevent="register" type="submit">申请</button>
           </div>
         </el-form>
       </el-dialog>
@@ -129,7 +129,7 @@
         registerForm: {
           name: '',
           gender: '',
-          studentID: '',
+          account: '',
           class: '',
           academy: '',
           major: '',
@@ -173,7 +173,7 @@
             gender: [
               { required: true, message: '请输入性别', trigger: 'blur' }
             ],
-            studentID: [
+            account: [
               { required: true, message: '请输入学号', trigger: 'blur' }
             ],
             class: [
@@ -216,6 +216,13 @@
           data: this.loginForm
         }).then(() => {
           router.push(`${this.loginForm.identity}/home`);
+        });
+      },
+      register () {
+        this.$store.dispatch('user/REGISTER_STUDENT', {
+          data: this.registerForm
+        }).then(() => {
+          console.log(this.$store.state.user.registerInfo);
         });
       },
       openFindPwdForm () {

@@ -30,7 +30,7 @@ export default {
   mutations: {
     [LOGIN] (state, { data }) {
       window.localStorage.setItem('token', data.token);
-      state = data.token;
+      state.token = data.token;
     },
     [LOGOUT] (state) {
       window.localStorage.setItem('token', '');
