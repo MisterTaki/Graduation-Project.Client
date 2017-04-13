@@ -18,7 +18,8 @@ function getToken () {
 export default {
   state: {
     token: getToken(),
-    userName: ''
+    userName: '',
+    identity: ''
   },
   actions: {
     async [LOGIN] ({ commit }, data) {
@@ -33,6 +34,7 @@ export default {
       window.localStorage.setItem('token', token);
       state.token = token;
       state.userName = userInfo.name;
+      state.identity = userInfo.identity;
     },
     [LOGOUT] (state) {
       window.localStorage.setItem('token', '');
