@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Notification } from 'element-ui';
-import { Common } from '@/components';
+import store from '../store';
 import config from '../config';
 
 const $http = axios.create({
@@ -12,11 +12,9 @@ class Client {
   constructor () {
     methods.forEach((method) => {
       this[method] = async (url, { params, data } = {}) => {
-        Common.LoadingBar.start();
+        store.commit('global/TOGGLE_LOADING', 'start');
         const token = window.localStorage.getItem('token');
-        if (token) {
-          $http.defaults.headers.common.Authorization = token;
-        }
+        if (token) $http.defaults.headers.common.Authorization = token;
         try {
           const response = await $http({
             method,
@@ -24,14 +22,14 @@ class Client {
             params,
             data
           });
-          Common.LoadingBar.finish();
-          return response;
+          store.commit('global/TOGGLE_LOADING', 'finish');
+          return response.data;
         } catch (error) {
           Notification.error({
             title: '出错啦',
             message: `错误信息：${error.response.data.message || '服务器开小差了'}`
           });
-          Common.LoadingBar.error();
+          store.commit('global/TOGGLE_LOADING', 'error');
           throw new Error(error);
         }
       };

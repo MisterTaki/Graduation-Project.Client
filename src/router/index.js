@@ -15,10 +15,7 @@ export default new Router({
     {
       path: '/login',
       name: 'login',
-      component: Views.Login,
-      meta: {
-        identity: 'student'
-      },
+      component: Views.Login
     },
     {
       path: '/:identity',

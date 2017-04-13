@@ -2,7 +2,7 @@
 
 <template lang="html">
   <div class="main-container">
-    <fixed-header :userName="userName"></fixed-header>
+    <fixed-header></fixed-header>
     <fixed-menu></fixed-menu>
     <router-view></router-view>
   </div>

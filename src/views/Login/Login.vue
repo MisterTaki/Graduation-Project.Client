@@ -13,7 +13,7 @@
           <el-form-item class="input-wrapper login-view--formItem" prop="account">
             <el-input class="login-view--input" type="text" placeholder="账号" v-model="loginForm.account"></el-input>
           </el-form-item>
-          <el-form-item class="input-wrapper login-view--formItem" prop="pwd">
+          <el-form-item class="input-wrapper login-view--formItem" prop="originalPwd">
             <el-input class="login-view--input" type="password" placeholder="密码" v-model="loginForm.originalPwd"></el-input>
           </el-form-item>
         </div>
@@ -124,7 +124,7 @@
         loginForm: {
           account: '',
           originalPwd: '',
-          identity: '',
+          identity: 'student',
         },
         registerForm: {
           name: '',
@@ -148,7 +148,7 @@
             account: [
               { required: true, message: '请输入账号', trigger: 'blur' }
             ],
-            pwd: [
+            originalPwd: [
               { required: true, message: '请输入密码', trigger: 'blur' }
             ]
           },
@@ -212,17 +212,13 @@
     },
     methods: {
       login () {
-        this.$store.dispatch('auth/LOGIN', {
-          data: this.loginForm
-        }).then(() => {
+        this.$store.dispatch('auth/LOGIN', this.loginForm).then(() => {
           router.push(`${this.loginForm.identity}/home`);
         });
       },
       register () {
-        this.$store.dispatch('user/REGISTER_STUDENT', {
-          data: this.registerForm
-        }).then(() => {
-          console.log(this.$store.state.user.registerInfo);
+        this.$store.dispatch('user/REGISTER_STUDENT', this.registerForm).then(() => {
+          this.dialog.registerForm = false;
         });
       },
       openFindPwdForm () {
@@ -230,15 +226,8 @@
         this.findPwd.step = 0;
       }
     },
-    beforeRouteEnter (to, from, next) {
-      const identity = to.matched[0].meta.identity;
-      next((vm) => {
-        vm.$data.loginForm.identity = identity;
-      });
-    },
-    beforeRouteLeave (to, from, next) {
-      from.matched[0].meta.identity = this.loginForm.identity;
-      next();
-    }
+    // beforeRouteLeave (to, from, next) {
+    //   this.$store.dispatch('user/LOAD').then(next);
+    // }
   };
 </script>

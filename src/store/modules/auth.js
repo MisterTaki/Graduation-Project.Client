@@ -17,10 +17,11 @@ function getToken () {
 
 export default {
   state: {
-    token: getToken()
+    token: getToken(),
+    userName: ''
   },
   actions: {
-    async [LOGIN] ({ commit }, { data }) {
+    async [LOGIN] ({ commit }, data) {
       commit(LOGIN, await client.post(apiMap.login, { data }));
     },
     async [LOGOUT] ({ commit }) {
@@ -28,9 +29,10 @@ export default {
     }
   },
   mutations: {
-    [LOGIN] (state, { data }) {
-      window.localStorage.setItem('token', data.token);
-      state.token = data.token;
+    [LOGIN] (state, { token, userInfo }) {
+      window.localStorage.setItem('token', token);
+      state.token = token;
+      state.userName = userInfo.name;
     },
     [LOGOUT] (state) {
       window.localStorage.setItem('token', '');

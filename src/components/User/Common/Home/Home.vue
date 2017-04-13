@@ -34,6 +34,9 @@
 
 <script>
   export default {
-    name: 'home'
+    name: 'home',
+    // created () {
+    //   this.$store.dispatch('user/LOAD').then()
+    // },
   };
 </script>

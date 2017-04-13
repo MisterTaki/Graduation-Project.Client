@@ -1,22 +1,35 @@
 import { client } from '../../helpers';
 import apiMap from '../../api';
 
-const REGISTER_STUDENT = 'user/REGISTER_STUDENT';
-// const REGISTER_TEACHER = 'user/REGISTER_TEACHER';
-// const REGISTER_ADMIN = 'user/REGISTER_ADMIN';
+const LOAD = 'user/LOAD';
+const CREATE = 'user/CREATE';
+const UPDATE = 'user/UPDATE';
+const MODIFY_PASSWORD = 'user/MODIFY_PASSWORD';
 
 export default {
   state: {
-
+    info: {}
   },
   actions: {
-    async [REGISTER_STUDENT] ({ commit }, { data }) {
-      commit(REGISTER_STUDENT, await client.post(apiMap.registerStudent, { data }));
+    async [LOAD] ({ commit }) {
+      commit(LOAD, await client.get(apiMap.loadUser));
+    },
+    async [CREATE] ({ commit }, { data }) {
+      await client.post(apiMap.createUser, { data });
+    },
+    async [UPDATE] ({ commit }, { data }) {
+      await client.post(apiMap.updateUser, { data });
+    },
+    async [MODIFY_PASSWORD] ({ commit }, { data }) {
+      await client.post(apiMap.modifyPwd, { data });
     },
   },
   mutations: {
-    [REGISTER_STUDENT] (state, { data }) {
-      state.registerInfo = data;
-    }
+    [LOAD] (state, { userInfo }) {
+      state.info = userInfo;
+    },
+    // [REGISTER] (state) {
+    //
+    // },
   }
 };

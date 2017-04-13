@@ -6,7 +6,7 @@
       <i class="logo" title="毕业设计（论文）系统"></i>
     </h1>
     <div class="user-name-wrapper">
-      <span class="user-name" :title="userName">{{userName}}</span>
+      <span class="user-name" :title="$store.state.auth.userName">{{$store.state.auth.userName}}</span>
     </div>
     <div class="nav-wrapper">
       <router-link to="notification" class="nav-item notification" title="进入通知管理">
@@ -30,7 +30,6 @@
 
   export default {
     name: 'fixed-header',
-    props: ['userName'],
     methods: {
       logout () {
         this.$store.dispatch('auth/LOGOUT').then(() => {
