@@ -29,7 +29,7 @@ class Client {
         } catch (error) {
           Notification.error({
             title: '出错啦',
-            message: `错误信息：${error.response.status}，${error.response.data.message || '服务器开小差了'}`
+            message: `错误信息：${error.response.data.message || '服务器开小差了'}`
           });
           Common.LoadingBar.error();
           throw new Error(error);

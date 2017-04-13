@@ -14,7 +14,7 @@
             <el-input class="login-view--input" type="text" placeholder="账号" v-model="loginForm.account"></el-input>
           </el-form-item>
           <el-form-item class="input-wrapper login-view--formItem" prop="pwd">
-            <el-input class="login-view--input" type="password" placeholder="密码" v-model="loginForm.pwd"></el-input>
+            <el-input class="login-view--input" type="password" placeholder="密码" v-model="loginForm.originalPwd"></el-input>
           </el-form-item>
         </div>
         <el-radio-group class="radio-group" v-model="loginForm.identity">
@@ -123,7 +123,7 @@
       return {
         loginForm: {
           account: '',
-          pwd: '',
+          originalPwd: '',
           identity: '',
         },
         registerForm: {
