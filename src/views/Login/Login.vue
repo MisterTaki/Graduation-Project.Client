@@ -10,8 +10,8 @@
       <h2 class="sub-title">让毕设变得更方便、高效和优秀</h2>
       <el-form ref="loginForm" class="login-form" :model="loginForm" :rules="rules.login">
         <div class="input-group">
-          <el-form-item class="input-wrapper login-view--formItem" prop="account">
-            <el-input class="login-view--input" type="text" placeholder="账号" v-model="loginForm.account"></el-input>
+          <el-form-item class="input-wrapper login-view--formItem" prop="_id">
+            <el-input class="login-view--input" type="text" placeholder="账号" v-model="loginForm._id"></el-input>
           </el-form-item>
           <el-form-item class="input-wrapper login-view--formItem" prop="originalPwd">
             <el-input class="login-view--input" type="password" placeholder="密码" v-model="loginForm.originalPwd"></el-input>
@@ -83,7 +83,7 @@
             <el-input class="login-view--input" type="text" placeholder="性别" v-model="registerForm.gender"></el-input>
           </el-form-item>
           <el-form-item class="input-wrapper" prop="studentID">
-            <el-input class="login-view--input" type="text" placeholder="学号" v-model="registerForm.account"></el-input>
+            <el-input class="login-view--input" type="text" placeholder="学号" v-model="registerForm._id"></el-input>
           </el-form-item>
           <el-form-item class="input-wrapper" prop="class">
             <el-input class="login-view--input" type="text" placeholder="班级" v-model="registerForm.class"></el-input>
@@ -122,14 +122,15 @@
     data () {
       return {
         loginForm: {
-          account: '',
+          _id: '',
           originalPwd: '',
           identity: 'student',
         },
         registerForm: {
           name: '',
+          identity: 'student',
           gender: '',
-          account: '',
+          _id: '',
           class: '',
           academy: '',
           major: '',
@@ -145,7 +146,7 @@
         },
         rules: {
           login: {
-            account: [
+            _id: [
               { required: true, message: '请输入账号', trigger: 'blur' }
             ],
             originalPwd: [
@@ -173,7 +174,7 @@
             gender: [
               { required: true, message: '请输入性别', trigger: 'blur' }
             ],
-            account: [
+            _id: [
               { required: true, message: '请输入学号', trigger: 'blur' }
             ],
             class: [
@@ -217,7 +218,7 @@
         });
       },
       register () {
-        this.$store.dispatch('user/REGISTER_STUDENT', this.registerForm).then(() => {
+        this.$store.dispatch('user/CREATE', this.registerForm).then(() => {
           this.dialog.registerForm = false;
         });
       },

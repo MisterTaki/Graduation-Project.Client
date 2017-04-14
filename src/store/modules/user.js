@@ -14,13 +14,13 @@ export default {
     async [LOAD] ({ commit }) {
       commit(LOAD, await client.get(apiMap.loadUser));
     },
-    async [CREATE] ({ commit }, { data }) {
+    async [CREATE] ({ commit }, data) {
       await client.post(apiMap.createUser, { data });
     },
-    async [UPDATE] ({ commit }, { data }) {
+    async [UPDATE] ({ commit }, data) {
       await client.post(apiMap.updateUser, { data });
     },
-    async [MODIFY_PASSWORD] ({ commit }, { data }) {
+    async [MODIFY_PASSWORD] ({ commit }, data) {
       await client.post(apiMap.modifyPwd, { data });
     },
   },

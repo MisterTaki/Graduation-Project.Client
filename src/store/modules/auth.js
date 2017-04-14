@@ -18,7 +18,7 @@ function getToken () {
 export default {
   state: {
     token: getToken(),
-    userName: '',
+    username: '',
     identity: ''
   },
   actions: {
@@ -30,11 +30,12 @@ export default {
     }
   },
   mutations: {
-    [LOGIN] (state, { token, userInfo }) {
+    [LOGIN] (state, { result }) {
+      const { token, userInfo: { name: username, identity } } = result;
       window.localStorage.setItem('token', token);
       state.token = token;
-      state.userName = userInfo.name;
-      state.identity = userInfo.identity;
+      state.username = username;
+      state.identity = identity;
     },
     [LOGOUT] (state) {
       window.localStorage.setItem('token', '');
