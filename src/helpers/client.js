@@ -21,14 +21,13 @@ class Client {
           params,
           data
         }).then((response) => {
-          const { state, result, message } = response.data;
-          if (state === 'Success') {
+          if (response.data.state === 'Success') {
             store.commit('global/TOGGLE_LOADING', 'finish');
-            resolve(result);
+            resolve(response.data.result);
           } else {
             Notification.error({
               title: '出错啦',
-              message: `错误信息：${message || '请求出错了'}`
+              message: `错误信息：${response.data.message || '请求出错了'}`
             });
             store.commit('global/TOGGLE_LOADING', 'error');
             reject();

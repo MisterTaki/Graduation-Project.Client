@@ -30,8 +30,8 @@ export default {
     }
   },
   mutations: {
-    [LOGIN] (state, { result }) {
-      const { token, userInfo: { name: username, identity } } = result;
+    [LOGIN] (state, data) {
+      const { token, userInfo: { name: username, identity } } = data;
       window.localStorage.setItem('token', token);
       state.token = token;
       state.username = username;
