@@ -3,7 +3,6 @@
 import Vue from 'vue';
 import { sync } from 'vuex-router-sync';
 import { Row, Col, Dialog, Upload, Button, Table, Tabs, TabPane, TableColumn, Form, FormItem, Select, Option, Input, Radio, RadioGroup, Badge, Step, Steps, Dropdown, DropdownMenu, DropdownItem, datePicker } from 'element-ui';
-// import { Common } from '@/components';
 import App from './App';
 import router from './router';
 import store from './store';
@@ -37,16 +36,6 @@ Vue.config.productionTip = false; // Set this to false to prevent the production
 
 sync(store, router); // use vuex-router-sync.
 
-// router.beforeEach((to, from, next) => {
-//   Common.LoadingBar.start();
-//   next();
-// });
-//
-// router.afterEach(() => {
-//   Common.LoadingBar.finish();
-// });
-
-/* eslint-disable no-new */
 export default new Vue({
   el: '#app',
   router,

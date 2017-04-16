@@ -1,5 +1,5 @@
 import { client } from '../../helpers';
-import apiMap from '../../api';
+import { user } from '../../api';
 
 const LOAD = 'user/LOAD';
 const CREATE = 'user/CREATE';
@@ -12,16 +12,16 @@ export default {
   },
   actions: {
     async [LOAD] ({ commit }) {
-      commit(LOAD, await client.get(apiMap.loadUser));
+      commit(LOAD, await client.get(user.loadUser));
     },
     async [CREATE] ({ commit }, data) {
-      await client.post(apiMap.createUser, { data });
+      await client.post(user.createUser, { data });
     },
     async [UPDATE] ({ commit }, data) {
-      await client.post(apiMap.updateUser, { data });
+      await client.post(user.updateUser, { data });
     },
     async [MODIFY_PASSWORD] ({ commit }, data) {
-      await client.post(apiMap.modifyPwd, { data });
+      await client.post(user.modifyPwd, { data });
     },
   },
   mutations: {

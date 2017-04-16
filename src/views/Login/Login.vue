@@ -76,8 +76,8 @@
       <el-dialog class="dialog-form" title="申请账号（仅限学生）" size="tiny" v-model="dialog.registerForm" @open="resetForm('registerForm')">
         <h3 class="tip">请填写本人信息：</h3>
         <el-form ref="registerForm" class="form register-form" :model="registerForm" :rules="rules.register">
-          <el-form-item class="input-wrapper" prop="name">
-            <el-input class="login-view--input" type="text" placeholder="姓名" v-model="registerForm.name"></el-input>
+          <el-form-item class="input-wrapper" prop="username">
+            <el-input class="login-view--input" type="text" placeholder="姓名" v-model="registerForm.username"></el-input>
           </el-form-item>
           <el-form-item class="input-wrapper" prop="gender">
             <el-input class="login-view--input" type="text" placeholder="性别" v-model="registerForm.gender"></el-input>
@@ -113,7 +113,9 @@
 </template>
 
 <script>
+  import { Message } from 'element-ui';
   import router from '@/router';
+  import store from '@/store';
   import mixins from '@/mixins';
 
   export default {
@@ -127,7 +129,7 @@
           identity: 'student',
         },
         registerForm: {
-          name: '',
+          username: '',
           identity: 'student',
           gender: '',
           _id: '',
@@ -168,7 +170,7 @@
             ]
           },
           register: {
-            name: [
+            username: [
               { required: true, message: '请输入账号', trigger: 'blur' }
             ],
             gender: [
@@ -214,11 +216,12 @@
     methods: {
       login () {
         this.$store.dispatch('auth/LOGIN', this.loginForm).then(() => {
-          router.push(`${this.loginForm.identity}/home`);
+          router.push(`${this.$store.state.auth.identity}/home`);
         });
       },
       register () {
         this.$store.dispatch('user/CREATE', this.registerForm).then(() => {
+          Message.success('申请成功，申请通过后将会以邮件形式告知');
           this.dialog.registerForm = false;
         });
       },
@@ -227,8 +230,17 @@
         this.findPwd.step = 0;
       }
     },
-    // beforeRouteLeave (to, from, next) {
-    //   this.$store.dispatch('user/LOAD').then(next);
-    // }
+    beforeRouteEnter (to, from, next) {
+      const token = window.localStorage.getItem('token');
+      if (token) {
+        store.dispatch('auth/LOAD').then(
+          () => next({
+            path: `${store.state.auth.identity}/home`
+          }),
+          () => next()
+        );
+      }
+      return next();
+    }
   };
 </script>

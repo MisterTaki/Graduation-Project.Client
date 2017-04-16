@@ -1,6 +1,3 @@
-export default {
-  login: '/auth/login',
-  createUser: '/user/create',
-  updateUser: '/user/update',
-  modifyPwd: '/user/modifyPwd',
-};
+export auth from './auth';
+export user from './user';
+export system from './system';

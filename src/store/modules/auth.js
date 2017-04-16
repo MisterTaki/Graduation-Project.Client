@@ -1,37 +1,35 @@
 import { client } from '../../helpers';
-import apiMap from '../../api';
+import { auth } from '../../api';
 
+const LOAD = 'auth/LOAD';
 const LOGIN = 'auth/LOGIN';
 const LOGOUT = 'auth/LOGOUT';
 
-function getToken () {
-  const token = window.localStorage.getItem('token');
-  if (token) {
-    const payload = JSON.parse(window.atob(token.split('.')[1]));
-    if (payload.exp > Date.now() / 1000) {
-      return token;
-    }
-  }
-  return '';
-}
-
 export default {
   state: {
-    token: getToken(),
+    token: window.localStorage.getItem('token') || '',
     username: '',
     identity: ''
   },
   actions: {
+    async [LOAD] ({ commit }) {
+      commit(LOAD, await client.get(auth.load));
+    },
     async [LOGIN] ({ commit }, data) {
-      commit(LOGIN, await client.post(apiMap.login, { data }));
+      commit(LOGIN, await client.post(auth.login, { data }));
     },
     async [LOGOUT] ({ commit }) {
       commit(LOGOUT);
     }
   },
   mutations: {
+    [LOAD] (state, data) {
+      const { username, identity } = data;
+      state.username = username;
+      state.identity = identity;
+    },
     [LOGIN] (state, data) {
-      const { token, userInfo: { name: username, identity } } = data;
+      const { token, userInfo: { username, identity } } = data;
       window.localStorage.setItem('token', token);
       state.token = token;
       state.username = username;

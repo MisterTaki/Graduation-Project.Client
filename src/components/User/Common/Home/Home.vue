@@ -4,9 +4,9 @@
   <div class="main-wrapper">
     <div class="main main-step">
       <h2 class="main-title">当前状态</h2>
-      <button class="button-dom text black-color goto-btn">去提交任务书-></button>
+      <button class="button-dom text black-color goto-btn">{{gotoText[$store.state.system.status - 1]}}-></button>
       <div class="step-wrapper">
-        <el-steps :space="80" :active="1" direction="vertical" finish-status="success">
+        <el-steps :space="80" :active=status direction="vertical" finish-status="success">
           <el-step title="学生、导师双向选择" description="学生和导师之间进行双向选择，每个学生可以按照填报三个志愿导师。"></el-step>
           <el-step title="提交任务书" description="按要求撰写任务书。"></el-step>
           <el-step title="提交选题报告" description="按要求撰写选题报告。"></el-step>
@@ -33,10 +33,28 @@
 </template>
 
 <script>
+  import store from '@/store';
+
   export default {
     name: 'home',
-    // created () {
-    //   this.$store.dispatch('user/LOAD').then()
-    // },
+    data () {
+      return {
+        status: this.$store.state.system.status - 1,
+        gotoText: [
+          '去进行双向选择',
+          '去提交任务书',
+          '去提交选题报告',
+          '去提交中期报告',
+          '去提交最终毕业设计（论文）',
+        ],
+        noticeList: []
+      };
+    },
+    beforeRouteEnter (to, from, next) {
+      store.dispatch('system/GET_STATUS').then(
+        () => next(),
+        () => next(false)
+      );
+    }
   };
 </script>

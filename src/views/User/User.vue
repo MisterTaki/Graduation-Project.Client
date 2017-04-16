@@ -16,11 +16,6 @@
     components: {
       'fixed-header': Common.FixedHeader,
       'fixed-menu': Common.FixedMenu,
-    },
-    data () {
-      return {
-        userName: '高琦'
-      };
     }
   };
 </script>
