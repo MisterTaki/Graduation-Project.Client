@@ -4,14 +4,14 @@
   <div class="main-wrapper">
     <div class="main main-step">
       <h2 class="main-title">当前状态</h2>
-      <button class="button-dom text black-color goto-btn">{{gotoText[$store.state.system.status - 1]}}-></button>
+      <router-link class="goto-link button-dom text black-color goto-btn" :to="gotoLink">{{gotoText}}-></router-link>
       <div class="step-wrapper">
-        <el-steps :space="80" :active=status direction="vertical" finish-status="success">
-          <el-step title="学生、导师双向选择" description="学生和导师之间进行双向选择，每个学生可以按照填报三个志愿导师。"></el-step>
+        <el-steps :space="80" :active="stepsActive" direction="vertical" finish-status="success">
+          <el-step title="学生、导师双向选择" description="学生和导师之间进行双向选择。"></el-step>
           <el-step title="提交任务书" description="按要求撰写任务书。"></el-step>
           <el-step title="提交选题报告" description="按要求撰写选题报告。"></el-step>
-          <el-step title="提交中期报告" description="按要求撰写中期报告"></el-step>
-          <el-step title="答辩并提交毕业设计（论文）" description="按要求准备答辩并撰写毕业设计（论文）"></el-step>
+          <el-step title="提交中期报告" description="按要求撰写中期报告。"></el-step>
+          <el-step title="答辩并提交毕业设计（论文）" description="按要求准备答辩并撰写毕业设计（论文）。"></el-step>
         </el-steps>
       </div>
     </div>
@@ -33,22 +33,42 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex';
   import store from '@/store';
 
   export default {
     name: 'home',
     data () {
       return {
-        status: this.$store.state.system.status - 1,
-        gotoText: [
+        noticeList: []
+      };
+    },
+    computed: mapState({
+      identity: ({ auth }) => auth.identity,
+      systemStatus: ({ system }) => system.status,
+      stepsActive () {
+        return this.systemStatus - 1;
+      },
+      gotoText () {
+        const candidateTexts = [
           '去进行双向选择',
           '去提交任务书',
           '去提交选题报告',
           '去提交中期报告',
           '去提交最终毕业设计（论文）',
-        ],
-        noticeList: []
-      };
+        ];
+        return candidateTexts[this.systemStatus - 1];
+      },
+      gotoLink () {
+        if (this.systemStatus === 1) {
+          if (this.identity === 'student') return 'my-teacher';
+          return 'my-students';
+        }
+        if (this.identity === 'student') return 'submit-report';
+        return 'review-report';
+      }
+    }),
+    methods: {
     },
     beforeRouteEnter (to, from, next) {
       store.dispatch('system/GET_STATUS').then(
