@@ -28,7 +28,7 @@
       </el-form>
       <div class="misc-btn-wrapper wrapper-marginTop">
         <button class="button-dom text default-color find-pwd" @click.prevent="dialog.findPwdForm=true">找回密码</button>
-        <button class="button-dom text not-account" @click.prevent="dialog.registerForm=true">账号不存在？</button>
+        <button class="button-dom text not-account" @click.prevent="dialog.applyForm=true">账号不存在？</button>
       </div>
     </div>
     <template v-if="dialog.findPwdForm">
@@ -72,39 +72,39 @@
         </el-form>
       </el-dialog>
     </template>
-    <template v-if="dialog.registerForm">
-      <el-dialog class="dialog-form" title="申请账号（仅限学生）" size="tiny" v-model="dialog.registerForm" @open="resetForm('registerForm')">
+    <template v-if="dialog.applyForm">
+      <el-dialog class="dialog-form" title="申请账号（仅限学生）" size="tiny" v-model="dialog.applyForm" @open="resetForm('applyForm')">
         <h3 class="tip">请填写本人信息：</h3>
-        <el-form ref="registerForm" class="form register-form" :model="registerForm" :rules="rules.register">
+        <el-form ref="applyForm" class="form apply-form" :model="applyForm" :rules="rules.apply">
           <el-form-item class="input-wrapper" prop="username">
-            <el-input class="login-view--input" type="text" placeholder="姓名" v-model="registerForm.username"></el-input>
+            <el-input class="login-view--input" type="text" placeholder="姓名" v-model="applyForm.username"></el-input>
           </el-form-item>
           <el-form-item class="input-wrapper" prop="gender">
-            <el-input class="login-view--input" type="text" placeholder="性别" v-model="registerForm.gender"></el-input>
+            <el-input class="login-view--input" type="text" placeholder="性别" v-model="applyForm.gender"></el-input>
           </el-form-item>
-          <el-form-item class="input-wrapper" prop="studentID">
-            <el-input class="login-view--input" type="text" placeholder="学号" v-model="registerForm._id"></el-input>
+          <el-form-item class="input-wrapper" prop="_id">
+            <el-input class="login-view--input" type="text" placeholder="学号" v-model="applyForm._id"></el-input>
           </el-form-item>
           <el-form-item class="input-wrapper" prop="class">
-            <el-input class="login-view--input" type="text" placeholder="班级" v-model="registerForm.class"></el-input>
+            <el-input class="login-view--input" type="text" placeholder="班级" v-model="applyForm.class"></el-input>
           </el-form-item>
           <el-form-item class="input-wrapper" prop="academy">
-            <el-input class="login-view--input" type="text" placeholder="学院" v-model="registerForm.academy"></el-input>
+            <el-input class="login-view--input" type="text" placeholder="学院" v-model="applyForm.academy"></el-input>
           </el-form-item>
           <el-form-item class="input-wrapper" prop="major">
-            <el-input class="login-view--input" type="text" placeholder="专业" v-model="registerForm.major"></el-input>
+            <el-input class="login-view--input" type="text" placeholder="专业" v-model="applyForm.major"></el-input>
           </el-form-item>
           <el-form-item class="input-wrapper" prop="ID">
-            <el-input class="login-view--input" type="text" placeholder="身份证号" v-model="registerForm.ID"></el-input>
+            <el-input class="login-view--input" type="text" placeholder="身份证号" v-model="applyForm.ID"></el-input>
           </el-form-item>
           <el-form-item class="input-wrapper" prop="mobile">
-            <el-input class="login-view--input" type="text" placeholder="手机" v-model="registerForm.mobile"></el-input>
+            <el-input class="login-view--input" type="mobile" placeholder="手机" v-model="applyForm.mobile"></el-input>
           </el-form-item>
           <el-form-item class="input-wrapper" prop="email">
-            <el-input class="login-view--input" type="text" placeholder="邮箱" v-model="registerForm.email"></el-input>
+            <el-input class="login-view--input" type="text" placeholder="邮箱" v-model="applyForm.email"></el-input>
           </el-form-item>
           <div class="wrapper-marginTop">
-            <button class="button-dom full-width default-color" @click.prevent="register" type="submit">申请</button>
+            <button class="button-dom full-width default-color" @click.prevent="apply" type="submit">申请</button>
           </div>
         </el-form>
       </el-dialog>
@@ -129,7 +129,7 @@
           originalPwd: '',
           identity: 'student',
         },
-        registerForm: {
+        applyForm: {
           username: '',
           identity: 'student',
           gender: '',
@@ -170,7 +170,7 @@
               { required: true, message: '请再次输入新密码', trigger: 'blur' }
             ]
           },
-          register: {
+          apply: {
             username: [
               { required: true, message: '请输入账号', trigger: 'blur' }
             ],
@@ -190,13 +190,16 @@
               { required: true, message: '请输入专业', trigger: 'blur' }
             ],
             ID: [
-              { required: true, message: '请输入身份证号', trigger: 'blur' }
+              { required: true, message: '请输入身份证号', trigger: 'blur' },
+              { pattern: /^(\d{18,18}|\d{15,15}|\d{17,17}x)$/, message: '请输入正确的身份证号', trigger: 'blur' }
             ],
             mobile: [
-              { required: true, message: '请输入手机', trigger: 'blur' }
+              { required: true, message: '请输入手机', trigger: 'blur' },
+              { pattern: /^1(3|4|5|7|8)[0-9]\d{8}/, message: '请输入正确的手机号码', trigger: 'blur' }
             ],
             email: [
-              { required: true, message: '请输入邮箱', trigger: 'blur' }
+              { required: true, message: '请输入邮箱', trigger: 'blur' },
+              { type: 'email', message: '请输入正确形式的邮箱', trigger: 'blur' }
             ],
           },
         },
@@ -210,7 +213,7 @@
         },
         dialog: {
           findPwdForm: false,
-          registerForm: false
+          applyForm: false
         }
       };
     },
@@ -229,10 +232,15 @@
           return Message.error('请填写账号或者密码');
         });
       },
-      register () {
-        this.$store.dispatch('user/CREATE', this.registerForm).then(() => {
-          Message.success('申请成功，申请通过后将会以邮件形式告知');
-          this.dialog.registerForm = false;
+      apply () {
+        this.$refs.applyForm.validate((valid) => {
+          if (valid) {
+            return this.$store.dispatch('user/APPLY', this.applyForm).then(() => {
+              Message.success('申请成功，申请通过后将会以邮件形式告知');
+              this.dialog.applyForm = false;
+            }, () => false);
+          }
+          return Message.error('请填写全部信息');
         });
       },
       openFindPwdForm () {
