@@ -23,7 +23,7 @@
           <el-radio label="admin">管理员</el-radio>
         </el-radio-group>
         <div class="login-btn-wrapper wrapper-marginTop">
-          <button class="button-dom full-width default-color login" type="submit" @click.prevent="login">登录</button>
+          <button class="button-dom full-width default-color login" type="submit" :disabled="loading" @click.prevent="login">登录</button>
         </div>
       </el-form>
       <div class="misc-btn-wrapper wrapper-marginTop">
@@ -113,6 +113,7 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex';
   import { Message } from 'element-ui';
   import router from '@/router';
   import store from '@/store';
@@ -213,10 +214,19 @@
         }
       };
     },
+    computed: mapState({
+      loading: ({ global }) => global.loading,
+      identity: ({ auth }) => auth.identity,
+    }),
     methods: {
       login () {
-        this.$store.dispatch('auth/LOGIN', this.loginForm).then(() => {
-          router.push(`${this.$store.state.auth.identity}/home`);
+        this.$refs.loginForm.validate((valid) => {
+          if (valid) {
+            return this.$store.dispatch('auth/LOGIN', this.loginForm).then(() => {
+              router.push(`${this.identity}/home`);
+            }, () => false);
+          }
+          return Message.error('请填写账号或者密码');
         });
       },
       register () {
@@ -233,7 +243,7 @@
     beforeRouteEnter (to, from, next) {
       const token = window.localStorage.getItem('token');
       if (token) {
-        store.dispatch('auth/LOAD').then(
+        return store.dispatch('auth/LOAD').then(
           () => next({
             path: `${store.state.auth.identity}/home`
           }),
