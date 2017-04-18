@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import * as Views from '@/views';
 import { User } from '@/components';
+import store from '@/store';
 
 Vue.use(Router);
 
@@ -102,15 +103,28 @@ const router = new Router({
   ],
 });
 
+/* eslint consistent-return: 0 */
 router.beforeEach((to, from, next) => {
   if (to.name !== 'login') {
     const token = window.localStorage.getItem('token');
-    if (token) return next();
-    return next({
-      path: '/login'
-    });
+    if (token) {
+      if (store.state.auth.username && store.state.auth.identity) {
+        return next();
+      }
+      store.dispatch('auth/LOAD').then(
+        () => next(),
+        () => next({
+          path: '/login'
+        })
+      );
+    } else {
+      return next({
+        path: '/login'
+      });
+    }
+  } else {
+    return next();
   }
-  return next();
 });
 
 export default router;
