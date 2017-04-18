@@ -103,7 +103,6 @@ const router = new Router({
   ],
 });
 
-/* eslint consistent-return: 0 */
 router.beforeEach((to, from, next) => {
   if (to.name !== 'login') {
     const token = window.localStorage.getItem('token');
@@ -111,20 +110,18 @@ router.beforeEach((to, from, next) => {
       if (store.state.auth.username && store.state.auth.identity) {
         return next();
       }
-      store.dispatch('auth/LOAD').then(
+      return store.dispatch('auth/LOAD').then(
         () => next(),
         () => next({
           path: '/login'
         })
       );
-    } else {
-      return next({
-        path: '/login'
-      });
     }
-  } else {
-    return next();
+    return next({
+      path: '/login'
+    });
   }
+  return next();
 });
 
 export default router;
