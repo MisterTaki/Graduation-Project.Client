@@ -1,34 +1,15 @@
 @import "~@/styles/mixin";
 @import "~@/styles/variables";
 
-.button-dom {
-  position: relative;
-  display: block;
-  margin: 0;
-  padding: 0;
-  border: none;
-  border-radius: 4px;
-  background-color: transparent;
-  outline: none;
-  font-size: 16px;
-  line-height: 40px;
-  cursor: pointer;
-  &.text {
-    line-height: 1;
-    &.black-color {
-      background-color: transparent;
-      color: $black;
-      &:hover {
-        color: $lightBlue;
-      }
-    }
-  }
-  &.goto-btn {
-    position: absolute;
-    top: 30px;
-    right: 30px;
-    font-size: 12px;
-    line-height: 20px;
+.goto-link {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  font-size: 12px;
+  line-height: 20px;
+  color: $black;
+  &:hover {
+    color: $lightBlue;
   }
 }
 .main-wrapper {
