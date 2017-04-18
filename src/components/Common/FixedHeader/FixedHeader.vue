@@ -6,7 +6,7 @@
       <i class="logo" title="毕业设计（论文）系统"></i>
     </h1>
     <div class="user-name-wrapper">
-      <span class="user-name" :title="$store.state.auth.username">{{$store.state.auth.username}}</span>
+      <span class="user-name" :title="username">{{username}}</span>
     </div>
     <div class="nav-wrapper">
       <router-link to="notification" class="nav-item notification" title="进入通知管理">
@@ -26,10 +26,14 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex';
   import router from '@/router';
 
   export default {
     name: 'fixed-header',
+    computed: mapState({
+      username: ({ auth }) => auth.username
+    }),
     methods: {
       logout () {
         this.$store.dispatch('auth/LOGOUT').then(() => {
