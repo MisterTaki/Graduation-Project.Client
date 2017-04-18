@@ -3,6 +3,7 @@ import { user } from '../../api';
 
 const LOAD = 'user/LOAD';
 const CREATE = 'user/CREATE';
+const APPLY = 'user/APPLY';
 const UPDATE = 'user/UPDATE';
 const MODIFY_PASSWORD = 'user/MODIFY_PASSWORD';
 
@@ -16,6 +17,9 @@ export default {
     },
     async [CREATE] ({ commit }, data) {
       await client.post(user.createUser, { data });
+    },
+    async [APPLY] ({ commit }, data) {
+      await client.post(user.applyUser, { data });
     },
     async [UPDATE] ({ commit }, data) {
       await client.post(user.updateUser, { data });
