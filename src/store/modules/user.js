@@ -5,6 +5,7 @@ const LOAD = 'user/LOAD';
 const CREATE = 'user/CREATE';
 const APPLY = 'user/APPLY';
 const UPDATE = 'user/UPDATE';
+const FORGET_PASSWORD = 'user/FORGET_PASSWORD';
 const MODIFY_PASSWORD = 'user/MODIFY_PASSWORD';
 
 export default {
@@ -27,6 +28,9 @@ export default {
     async [MODIFY_PASSWORD] ({ commit }, data) {
       await client.post(user.modifyPwd, { data });
     },
+    async [FORGET_PASSWORD] ({ commit }, data) {
+      await client.post(user.forgetPwd, { data });
+    }
   },
   mutations: {
     [LOAD] (state, { userInfo }) {
