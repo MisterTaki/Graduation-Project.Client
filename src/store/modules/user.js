@@ -30,14 +30,11 @@ export default {
     },
     async [FORGET_PASSWORD] ({ commit }, data) {
       await client.post(user.forgetPwd, { data });
-    }
+    },
   },
   mutations: {
     [LOAD] (state, { userInfo }) {
       state.info = userInfo;
     },
-    // [REGISTER] (state) {
-    //
-    // },
   }
 };
