@@ -35,36 +35,32 @@
       <el-dialog class="dialog-form" title="找回密码" size="tiny" v-model="dialog.findPwdForm"  :close-on-click-modal=false @open="openFindPwdForm">
         <h3 class="tip">{{findPwd.tip[findPwd.step]}}</h3>
         <el-form ref="findPwdForm" class="form findPwd-form" :model="findPwdForm" :rules="rules.findPwd">
-          <template v-if="findPwd.step < 2">
-            <el-form-item class="input-wrapper login-view--select" prop="identity">
-              <el-select class="select-full-width" v-model="findPwdForm.identity" :disabled="this.findPwd.step !== 0" placeholder="账号类型">
-                <el-option label="学生" value="student"></el-option>
-                <el-option label="导师" value="teacher"></el-option>
-                <el-option label="管理员" value="admin"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item class="input-wrapper" prop="boundEmail">
-              <el-input class="login-view--input" type="text" placeholder="绑定的邮箱" v-model="findPwdForm.boundEmail" :readonly="findPwd.step !== 0"></el-input>
-            </el-form-item>
-          </template>
+          <el-form-item class="input-wrapper login-view--select" prop="identity">
+            <el-select class="select-full-width" v-model="findPwdForm.identity" :disabled="this.findPwd.step !== 0" placeholder="账号类型">
+              <el-option label="学生" value="student"></el-option>
+              <el-option label="导师" value="teacher"></el-option>
+              <el-option label="管理员" value="admin"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item class="input-wrapper" prop="boundEmail">
+            <el-input class="login-view--input" type="text" placeholder="绑定的邮箱" v-model="findPwdForm.boundEmail" :readonly="findPwd.step !== 0"></el-input>
+          </el-form-item>
           <template v-if="findPwd.step === 1">
             <div class="inline-btn-wrapper">
-              <button class="button-dom" type="button" @click.prevent="findPwd.step=0">修改</button>
+              <button class="button-dom" type="button" @click.prevent="findPwd.step = 0">修改</button>
             </div>
             <el-form-item class="input-wrapper" prop="captcha">
-              <el-input class="login-view--input" type="text" placeholder="请输入收到的验证码" v-model="findPwdForm.captcha" :readonly="findPwd.step !== 1"></el-input>
+              <el-input class="login-view--input" type="text" placeholder="请输入收到的验证码（6位）" v-model="findPwdForm.captcha"></el-input>
             </el-form-item>
-          </template>
-          <template v-if="findPwd.step === 2">
             <el-form-item class="input-wrapper" prop="newPwd">
-              <el-input class="login-view--input" type="password" placeholder="请设置新密码" v-model="findPwdForm.newPwd"></el-input>
+              <el-input class="login-view--input" type="password" placeholder="请设置新密码（6~12位）" v-model="findPwdForm.newPwd"></el-input>
             </el-form-item>
             <el-form-item class="input-wrapper" prop="repeatPwd">
-              <el-input class="login-view--input" type="password" placeholder="请再次输入新密码" v-model="findPwdForm.repeatPwd"></el-input>
+              <el-input class="login-view--input" type="password" placeholder="请再次输入新密码（6~12位）" v-model="findPwdForm.repeatPwd"></el-input>
             </el-form-item>
           </template>
           <div class="next-btn-wrapper wrapper-marginTop">
-            <button class="button-dom  full-width default-color" @click.prevent="forgetPwd" type="submit">{{findPwd.step < 2 ? '下一步' : '提交'}}</button>
+            <button class="button-dom  full-width default-color" @click.prevent="forgetPwd" type="submit" :disabled="loading">{{findPwd.step === 0 ? '下一步' : '提交'}}</button>
           </div>
         </el-form>
       </el-dialog>
@@ -107,7 +103,7 @@
             <el-input class="login-view--input" type="text" placeholder="邮箱" v-model="applyForm.email"></el-input>
           </el-form-item>
           <div class="wrapper-marginTop">
-            <button class="button-dom full-width default-color" @click.prevent="apply" type="submit">申请</button>
+            <button class="button-dom full-width default-color" @click.prevent="apply" type="submit" :disabled="loading">申请</button>
           </div>
         </el-form>
       </el-dialog>
@@ -179,7 +175,7 @@
             ],
             captcha: [
               { required: true, message: '请输入验证码', trigger: 'blur' },
-              { type: /^[A-Za-z0-9]{4}$/, message: '请输入正确形式的验证码', trigger: 'blur' }
+              { pattern: /^[A-Za-z0-9]{6}$/, message: '请输入正确形式的验证码', trigger: 'blur' }
             ],
             newPwd: [
               { required: true, message: '请输入新密码', trigger: 'blur' },
@@ -223,11 +219,10 @@
           },
         },
         findPwd: {
-          step: 0, // 0:填写绑定邮箱  1：填写验证码  2：重置密码
+          step: 0, // 0:填写绑定邮箱  1：填写验证码并设置新密码
           tip: [
-            '验证码将会发送至你初次登陆后绑定的邮箱',
-            '验证码已发送，请查收后填写',
-            '验证码填写正确，请重新设置登陆密码',
+            '验证码将会发送至你绑定的邮箱',
+            '验证码已发送，请查收后填写并设置新密码'
           ],
         },
         dialog: {
@@ -274,14 +269,8 @@
                 }, () => false);
               }
               case 1: {
-                const { identity, boundEmail, captcha } = this.findPwdForm;
-                return this.$store.dispatch('user/VALIDATE_CAPTCHA', { identity, boundEmail, captcha }).then(() => {
-                  this.findPwd.step += 1;
-                }, () => false);
-              }
-              case 2: {
-                const { forgetPwd_id, newPwd } = this.findPwdForm;
-                return this.$store.dispatch('user/SET_PASSWORD', { forgetPwd_id, newPwd }).then(() => {
+                const { identity, boundEmail, captcha, newPwd } = this.findPwdForm;
+                return this.$store.dispatch('user/SET_PASSWORD', { identity, boundEmail, captcha, newPwd }).then(() => {
                   Message.success('设置新密码成功，请登录');
                   this.findPwd.step = 0;
                   this.dialog.findPwdForm = false;
