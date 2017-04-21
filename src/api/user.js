@@ -4,4 +4,5 @@ export default {
   updateUser: '/user/update',
   modifyPwd: '/user/modify-pwd',
   forgetPwd: '/user/forget-pwd',
+  setPwd: '/user/set-pwd',
 };
