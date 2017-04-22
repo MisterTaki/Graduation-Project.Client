@@ -84,9 +84,9 @@
           <el-form-item class="input-wrapper login-view--select" prop="academyID">
             <el-select class="select-full-width" v-model="applyForm.academyID" placeholder="学院">
               <el-option
-                v-for="(item, index) in academyOptions"
+                v-for="item in academyOptions"
                 :label="item.value"
-                :key="item.index"
+                :key="item._id"
                 :value="item._id">
               </el-option>
             </el-select>
