@@ -27,12 +27,12 @@
         </div>
       </el-form>
       <div class="misc-btn-wrapper wrapper-marginTop">
-        <button class="button-dom text default-color find-pwd" @click.prevent="dialog.findPwdForm=true">找回密码</button>
-        <button class="button-dom text not-account" @click.prevent="dialog.applyForm=true">账号不存在？</button>
+        <button class="button-dom text default-color find-pwd" @click.prevent="openFindPwdForm">找回密码</button>
+        <button class="button-dom text not-account" @click.prevent="openApplyForm">账号不存在？</button>
       </div>
     </div>
     <template v-if="dialog.findPwdForm">
-      <el-dialog class="dialog-form" title="找回密码" size="tiny" v-model="dialog.findPwdForm"  :close-on-click-modal=false @open="openFindPwdForm">
+      <el-dialog class="dialog-form" title="找回密码" size="tiny" :close-on-click-modal=false v-model="dialog.findPwdForm"  >
         <h3 class="tip">{{findPwd.tip[findPwd.step]}}</h3>
         <el-form ref="findPwdForm" class="form findPwd-form" :model="findPwdForm" :rules="rules.findPwd">
           <el-form-item class="input-wrapper login-view--select" prop="identity">
@@ -66,7 +66,7 @@
       </el-dialog>
     </template>
     <template v-if="dialog.applyForm">
-      <el-dialog class="dialog-form" title="申请账号（仅限学生）" size="tiny" v-model="dialog.applyForm" :close-on-click-modal=false @open="resetForm('applyForm')">
+      <el-dialog class="dialog-form" title="申请账号（仅限学生）" size="tiny" :close-on-click-modal=false v-model="dialog.applyForm">
         <h3 class="tip">请填写本人信息：</h3>
         <el-form ref="applyForm" class="form apply-form" :model="applyForm" :rules="rules.apply">
           <el-form-item class="input-wrapper" prop="username">
@@ -81,10 +81,14 @@
           <el-form-item class="input-wrapper" prop="_id">
             <el-input class="login-view--input" type="text" placeholder="学号" v-model="applyForm._id"></el-input>
           </el-form-item>
-          <el-form-item class="input-wrapper login-view--select" prop="academy">
-            <el-select class="select-full-width" v-model="applyForm.academy" placeholder="学院">
-              <el-option label="计算机与通信工程学院" value="计算机与通信工程学院"></el-option>
-              <el-option label="经济与管理学院" value="经济与管理学院"></el-option>
+          <el-form-item class="input-wrapper login-view--select" prop="academyID">
+            <el-select class="select-full-width" v-model="applyForm.academyID" placeholder="学院">
+              <el-option
+                v-for="(item, index) in academyOptions"
+                :label="item.value"
+                :key="item.index"
+                :value="item._id">
+              </el-option>
             </el-select>
           </el-form-item>
           <el-form-item class="input-wrapper" prop="class">
@@ -143,7 +147,7 @@
           gender: '',
           _id: '',
           class: '',
-          academy: '',
+          academyID: '',
           major: '',
           ID: '',
           mobile: '',
@@ -198,7 +202,7 @@
             class: [
               { required: true, message: '请输入班级', trigger: 'blur' }
             ],
-            academy: [
+            academyID: [
               { required: true, message: '请选择学院' }
             ],
             major: [
@@ -235,6 +239,7 @@
       loading: ({ global }) => global.loading,
       identity: ({ auth }) => auth.identity,
       forgetPwd_id: ({ user }) => user.forgetPwd_id,
+      academyOptions: ({ global }) => global.academy
     }),
     methods: {
       login () {
@@ -264,13 +269,13 @@
             switch (this.findPwd.step) {
               case 0: {
                 const { identity, boundEmail } = this.findPwdForm;
-                return this.$store.dispatch('user/FORGET_PASSWORD', { identity, boundEmail }).then(() => {
+                return store.dispatch('user/FORGET_PASSWORD', { identity, boundEmail }).then(() => {
                   this.findPwd.step += 1;
                 }, () => false);
               }
               case 1: {
                 const { identity, boundEmail, captcha, newPwd } = this.findPwdForm;
-                return this.$store.dispatch('user/SET_PASSWORD', { identity, boundEmail, captcha, newPwd }).then(() => {
+                return store.dispatch('user/SET_PASSWORD', { identity, boundEmail, captcha, newPwd }).then(() => {
                   Message.success('设置新密码成功，请登录');
                   this.findPwd.step = 0;
                   this.dialog.findPwdForm = false;
@@ -283,8 +288,17 @@
         });
       },
       openFindPwdForm () {
+        this.dialog.findPwdForm = true;
         this.resetForm('findPwdForm');
         this.findPwd.step = 0;
+      },
+      openApplyForm () {
+        this.dialog.applyForm = true;
+        this.resetForm('applyForm');
+        if (this.academyOptions.length !== 0) return;
+        store.dispatch('global/LOAD_ACADEMY').then(() => false, () => {
+          this.dialog.applyForm = false;
+        });
       }
     },
     beforeRouteEnter (to, from, next) {
