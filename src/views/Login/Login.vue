@@ -23,7 +23,7 @@
           <el-radio label="admin">管理员</el-radio>
         </el-radio-group>
         <div class="login-btn-wrapper wrapper-marginTop">
-          <button class="button-dom full-width default-color login" type="submit" :disabled="loading" @click.prevent="login">登录</button>
+          <button class="button-dom full-width default-color login" type="submit" :disabled="loading" @click.prevent="submitLogin">登录</button>
         </div>
       </el-form>
       <div class="misc-btn-wrapper wrapper-marginTop">
@@ -60,7 +60,7 @@
             </el-form-item>
           </template>
           <div class="next-btn-wrapper wrapper-marginTop">
-            <button class="button-dom  full-width default-color" @click.prevent="forgetPwd" type="submit" :disabled="loading">{{findPwd.step === 0 ? '下一步' : '提交'}}</button>
+            <button class="button-dom  full-width default-color" @click.prevent="submitForgetPwd" type="submit" :disabled="loading">{{findPwd.step === 0 ? '下一步' : '提交'}}</button>
           </div>
         </el-form>
       </el-dialog>
@@ -92,7 +92,7 @@
             </el-select>
           </el-form-item>
           <el-form-item class="input-wrapper" prop="class">
-            <el-input class="login-view--input" type="text" placeholder="班级" v-model="applyForm.class"></el-input>
+            <el-input class="login-view--input" type="text" placeholder="班级" v-model="applyForm._class"></el-input>
           </el-form-item>
           <el-form-item class="input-wrapper" prop="major">
             <el-input class="login-view--input" type="text" placeholder="专业" v-model="applyForm.major"></el-input>
@@ -107,7 +107,7 @@
             <el-input class="login-view--input" type="text" placeholder="邮箱" v-model="applyForm.email"></el-input>
           </el-form-item>
           <div class="wrapper-marginTop">
-            <button class="button-dom full-width default-color" @click.prevent="apply" type="submit" :disabled="loading">申请</button>
+            <button class="button-dom full-width default-color" @click.prevent="submitApply" type="submit" :disabled="loading">申请</button>
           </div>
         </el-form>
       </el-dialog>
@@ -146,7 +146,7 @@
           identity: 'student',
           gender: '',
           _id: '',
-          class: '',
+          _class: '',
           academyID: '',
           major: '',
           ID: '',
@@ -199,7 +199,7 @@
             _id: [
               { required: true, message: '请输入学号', trigger: 'blur' }
             ],
-            class: [
+            _class: [
               { required: true, message: '请输入班级', trigger: 'blur' }
             ],
             academyID: [
@@ -242,7 +242,7 @@
       academyOptions: ({ global }) => global.academy
     }),
     methods: {
-      login () {
+      submitLogin () {
         this.$refs.loginForm.validate((valid) => {
           if (valid) {
             return this.$store.dispatch('auth/LOGIN', this.loginForm).then(() => {
@@ -252,7 +252,7 @@
           return Message.error('请填写账号或者密码');
         });
       },
-      apply () {
+      submitApply () {
         this.$refs.applyForm.validate((valid) => {
           if (valid) {
             return this.$store.dispatch('user/APPLY', this.applyForm).then(() => {
@@ -263,7 +263,7 @@
           return Message.error('请按要求填写信息');
         });
       },
-      forgetPwd () {
+      submitForgetPwd () {
         this.$refs.findPwdForm.validate((valid) => {
           if (valid) {
             switch (this.findPwd.step) {
