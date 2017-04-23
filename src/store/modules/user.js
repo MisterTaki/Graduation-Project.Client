@@ -15,16 +15,16 @@ export default {
   },
   actions: {
     async [LOAD] ({ commit }) {
-      commit(LOAD, await client.get(user.loadUser));
+      commit(LOAD, await client.get(user.load));
     },
     async [CREATE] ({ commit }, data) {
-      await client.post(user.createUser, { data });
+      await client.post(user.create, { data });
     },
     async [APPLY] ({ commit }, data) {
-      await client.post(user.applyUser, { data });
+      await client.post(user.apply, { data });
     },
     async [UPDATE] ({ commit }, data) {
-      await client.post(user.updateUser, { data });
+      await client.post(user.update, { data });
     },
     async [MODIFY_PASSWORD] ({ commit }, data) {
       await client.post(user.modifyPwd, { data });
@@ -37,8 +37,8 @@ export default {
     },
   },
   mutations: {
-    [LOAD] (state, { userInfo }) {
-      state.info = userInfo;
+    [LOAD] (state, data) {
+      state.info = data;
     },
   }
 };
