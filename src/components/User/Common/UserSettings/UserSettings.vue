@@ -108,6 +108,7 @@
   import { Message } from 'element-ui';
   import store from '@/store';
   import mixins from '@/mixins';
+  import { cnMap } from '@/helpers';
 
   export default {
     name: 'user-settings',
@@ -152,11 +153,13 @@
       identity: ({ auth }) => auth.identity,
       academyList: ({ global }) => global.academy,
       userInfo ({ user }) {
+        const { genderMap, identityMap } = cnMap;
         const { info } = user;
-        const { academyID, gender, ...otherInfo } = info;
+        const { academyID, gender, identity, ...otherInfo } = info;
         const academy = this.academyList[academyID - 1].value;
         return {
-          gender: gender === 'm' ? '男' : '女',
+          gender: genderMap[gender],
+          identity: identityMap[identity],
           academy,
           ...otherInfo
         };
