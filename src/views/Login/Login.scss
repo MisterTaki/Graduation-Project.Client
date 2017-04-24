@@ -73,11 +73,17 @@
 }
 .findPwd-btn {
   float: left;
-  font-size: 14px;
 }
 .applyAccount-btn {
   float: right;
-  font-size: 14px;
+}
+.inline-btn-wrapper {
+  position: relative
+}
+.back-btn {
+  position: absolute;
+  top: -44px;
+  right: 10px;
 }
 .dialog-form {
   text-align: left;
@@ -90,20 +96,6 @@
   }
   .login-view--input {
     border-bottom: 1px solid #e8e8e8;
-  }
-  .inline-btn-wrapper {
-    position: relative;
-    .button-dom {
-      position: absolute;
-      top: -44px;
-      right: 10px;
-      font-size: 14px;
-      color: $blue;
-      z-index: 99;
-      &:hover {
-        color: $lightBlue;
-      }
-    }
   }
 }
 .select-full-width {

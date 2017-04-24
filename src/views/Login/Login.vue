@@ -45,7 +45,7 @@
           </el-form-item>
           <template v-if="findPwd.step === 1">
             <div class="inline-btn-wrapper">
-              <button class="button-dom" type="button" @click.prevent="findPwd.step = 0">修改</button>
+              <el-button @click="findPwd.step = 0" type="text" class="back-btn">修改</el-button>
             </div>
             <el-form-item class="input-wrapper" prop="captcha">
               <el-input class="login-view--input" type="text" placeholder="请输入收到的验证码（6位）" v-model="findPwdForm.captcha"></el-input>
@@ -87,7 +87,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item class="input-wrapper" prop="class">
+          <el-form-item class="input-wrapper" prop="_class">
             <el-input class="login-view--input" type="text" placeholder="班级" v-model="applyForm._class"></el-input>
           </el-form-item>
           <el-form-item class="input-wrapper" prop="major">
@@ -241,6 +241,7 @@
           if (valid) {
             return this.$store.dispatch('auth/LOGIN', this.loginForm).then(() => {
               router.push(`${this.identity}/home`);
+              Message.success('登陆成功');
             }, () => false);
           }
           return Message.error('请填写账号或者密码');
@@ -299,9 +300,12 @@
       const token = window.localStorage.getItem('token');
       if (token) {
         return store.dispatch('auth/LOAD').then(
-          () => next({
-            path: `${store.state.auth.identity}/home`
-          }),
+          () => {
+            Message.success('自动登陆成功（返回登录页，请先注销）');
+            next({
+              path: `/${store.state.auth.identity}/home`
+            });
+          },
           () => next()
         );
       }
