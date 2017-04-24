@@ -60,13 +60,13 @@
           <el-col :span="10">
             <el-form-item label="邮箱">
               <el-input class="edit-input" v-model="userInfo.email" :readonly="true"></el-input>
-              <el-button type="text" class="edit-btn">修改<i class="el-icon-edit el-icon--right"></i></el-button>
+              <el-button type="text" class="edit-btn" @click="openModifyForm('Email')">修改<i class="el-icon-edit el-icon--right"></i></el-button>
             </el-form-item>
           </el-col>
           <el-col :span="10">
             <el-form-item label="手机">
               <el-input v-model="userInfo.mobile" :readonly="true"></el-input>
-              <el-button type="text" class="edit-btn">修改<i class="el-icon-edit el-icon--right"></i></el-button>
+              <!-- <el-button type="text" class="edit-btn" @click="openModifyForm('Mobile')">修改<i class="el-icon-edit el-icon--right"></i></el-button> -->
             </el-form-item>
           </el-col>
         </el-row>
@@ -77,7 +77,7 @@
           <el-col :span="10">
             <el-form-item label="密码">
               <el-input class="edit-input" value="********" :readonly="true" type="text"></el-input>
-              <el-button type="text" class="edit-btn" @click="openModifyPwdForm">修改<i class="el-icon-edit el-icon--right"></i></el-button>
+              <el-button type="text" class="edit-btn" @click="openModifyForm('Pwd')">修改<i class="el-icon-edit el-icon--right"></i></el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -97,6 +97,25 @@
             <el-input v-model="modifyPwdForm.repeatPwd" type="password" placeholder="确认新密码："></el-input>
           </el-form-item>
           <el-button @click.prevent="submitModifyPwd" type="primary" class="submit-btn" nativeType="submit" :loading="loading" :disabled="loading">提交</el-button>
+        </el-form>
+      </el-dialog>
+    </template>
+    <template v-if="dialog.modifyEmail">
+      <el-dialog class="dialog-form" title="修改邮箱" size="tiny" top="24%" v-model="dialog.modifyEmail">
+        <h3 class="tip">请输入新邮箱以获得验证码进行验证</h3>
+        <el-form ref="modifyEmailForm" class="form modifyEmail-form" label-position="left" :model="modifyEmailForm" :rules="rules.modifyEmailForm">
+          <el-form-item prop="newEmail">
+            <el-input type="text" placeholder="新邮箱" v-model="modifyEmailForm.newEmail" :readonly="modifyEmail.step !== 0"></el-input>
+          </el-form-item>
+          <template v-if="modifyEmail.step === 1">
+            <div class="inline-btn-wrapper">
+              <el-button @click="modifyEmail.step = 0" type="text" class="back-btn">修改</el-button>
+            </div>
+            <el-form-item class="input-wrapper" prop="captcha">
+              <el-input type="text" placeholder="请输入收到的验证码（6位）" v-model="modifyEmailForm.captcha"></el-input>
+            </el-form-item>
+          </template>
+          <el-button @click.prevent="submitModifyEmail" type="primary" class="submit-btn" nativeType="submit" :loading="loading" :disabled="loading">{{modifyEmail.step === 0 ? '下一步' : '提交'}}</el-button>
         </el-form>
       </el-dialog>
     </template>
@@ -129,6 +148,10 @@
           newPwd: '',
           repeatPwd: ''
         },
+        modifyEmailForm: {
+          newEmail: '',
+          captcha: ''
+        },
         rules: {
           modifyPwdForm: {
             oldPwd: [
@@ -142,10 +165,24 @@
             repeatPwd: [
               { validator: validateRepeatPass, trigger: 'blur' }
             ]
-          }
+          },
+          modifyEmailForm: {
+            newEmail: [
+              { required: true, message: '请输入绑定的邮箱', trigger: 'blur' },
+              { type: 'email', message: '请输入正确形式的邮箱', trigger: 'blur' }
+            ],
+            captcha: [
+              { required: true, message: '请输入验证码', trigger: 'blur' },
+              { pattern: /^[A-Za-z0-9]{6}$/, message: '请输入正确形式的验证码', trigger: 'blur' }
+            ]
+          },
         },
         dialog: {
-          modifyPwd: false
+          modifyPwd: false,
+          modifyEmail: false
+        },
+        modifyEmail: {
+          step: 0
         }
       };
     },
@@ -167,9 +204,9 @@
       }
     }),
     methods: {
-      openModifyPwdForm () {
-        this.dialog.modifyPwd = true;
-        this.resetForm('modifyPwdForm');
+      openModifyForm (formName) {
+        this.dialog[`modify${formName}`] = true;
+        this.resetForm(`modify${formName}Form`);
       },
       submitModifyPwd () {
         this.$refs.modifyPwdForm.validate((valid) => {
@@ -181,6 +218,29 @@
             }, () => false);
           }
           return Message.error('请填写按要求填写');
+        });
+      },
+      submitModifyEmail () {
+        this.$refs.modifyEmailForm.validate((valid) => {
+          if (valid) {
+            switch (this.modifyEmail.step) {
+              case 0: {
+                const { newEmail } = this.modifyEmailForm;
+                return store.dispatch('user/MODIFY_EMAIL', { newEmail }).then(() => {
+                  this.modifyEmail.step += 1;
+                }, () => false);
+              }
+              case 1: {
+                return store.dispatch('user/SET_EMAIL', this.modifyEmailForm).then(() => {
+                  Message.success('绑定新邮箱成功');
+                  this.modifyEmail.step = 0;
+                  this.dialog.modifyEmail = false;
+                }, () => false);
+              }
+              default:
+            }
+          }
+          return Message.error('请按要求填写信息');
         });
       }
     },

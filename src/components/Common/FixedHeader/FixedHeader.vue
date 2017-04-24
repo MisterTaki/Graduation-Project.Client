@@ -27,6 +27,7 @@
 
 <script>
   import { mapState } from 'vuex';
+  import { Message } from 'element-ui';
   import router from '@/router';
 
   export default {
@@ -37,8 +38,9 @@
     methods: {
       logout () {
         this.$store.dispatch('auth/LOGOUT').then(() => {
+          Message.success('注销成功');
           router.push('/login');
-        });
+        }, () => Message.error('注销失败'));
       }
     }
   };

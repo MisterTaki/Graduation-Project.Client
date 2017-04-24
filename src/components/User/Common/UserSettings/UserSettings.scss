@@ -23,19 +23,27 @@
   font-size: 20px;
   margin: 20px 0;
 }
+.inline-btn-wrapper {
+  position: relative
+}
+.back-btn {
+  position: absolute;
+  top: -56px;
+  right: 10px;
+}
 .edit-btn {
   position: absolute;
   top: -32px;
   right: 0;
+}
+.submit-btn {
+  display: block;
+  width: 100%;
 }
 .dialog-form {
   .tip {
     margin-bottom: 16px;
     font-size: 14px;
     line-height: 24px;
-  }
-  .submit-btn {
-    display: block;
-    width: 100%;
   }
 }
