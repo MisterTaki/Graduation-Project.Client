@@ -7,25 +7,27 @@
         <h2 class="title">发布公告</h2>
         <el-button class="publish-btn" type="text" @click="dialog.editNotice=true">发布<i class="el-icon-edit el-icon--right"></i></el-button>
       </div>
-      <h5 v-if="noticesData.length === 0" class="notice">还没有发布过公告，点击右上角发布按钮进行公告发布吧：）</h5>
+      <h5 v-if="noticeList.length === 0" class="notice">还没有发布过公告，点击右上角发布按钮进行公告发布吧：）</h5>
       <div v-else class="noticeList-wrapper">
-        <el-table class="notice-list publishNotice-view--table" :data="noticesData" border>
+        <el-table class="notice-list publishNotice-view--table" :data="noticeList" border>
           <el-table-column type="expand">
             <template scope="props">
               <el-form label-position="left" label-width="80px">
                 <el-form-item label="内容：">
                   <span>{{ props.row.content }}</span>
                 </el-form-item>
-                <el-form-item label="备注：">
-                  <span>{{ props.row.remark }}</span>
-                </el-form-item>
+                <template v-if="props.row.remark !== ''">
+                  <el-form-item label="备注：">
+                    <span>{{ props.row.remark }}</span>
+                  </el-form-item>
+                </template>
               </el-form>
             </template>
           </el-table-column>
           <el-table-column type="index" label="序号" width="70" align="center"></el-table-column>
           <el-table-column prop="title" label="标题" align="center"></el-table-column>
           <el-table-column width="150" prop="author" label="发布者" align="center"></el-table-column>
-          <el-table-column width="150" prop="time" label="发布时间" align="center"></el-table-column>
+          <el-table-column width="180" prop="created_at" label="发布时间" align="center"></el-table-column>
           <el-table-column width="100" label="操作" align="center">
             <template scope="scope">
               <el-button type="text" size="small" @click="deleteNotice(scope.$index, scope.row)">删除</el-button>
@@ -56,7 +58,7 @@
 
 <script>
   import { mapState } from 'vuex';
-  import { Message } from 'element-ui';
+  import { Message, MessageBox } from 'element-ui';
   import store from '@/store';
   import mixins from '@/mixins';
 
@@ -65,22 +67,6 @@
     mixins: [mixins],
     data () {
       return {
-        noticesData: [
-          {
-            title: '通知1',
-            content: '的撒都是的是等待是导师第三代是导师的搜索',
-            remark: '倒萨大厦大大说的',
-            author: '系统管理员',
-            time: '2017-07-06'
-          },
-          {
-            title: '通知2',
-            content: '的撒都是的是等待是导师第三代是导师的搜索',
-            remark: '倒萨大厦大大说的',
-            author: '系统管理员',
-            time: '2017-07-06'
-          },
-        ],
         dialog: {
           editNotice: false
         },
@@ -102,12 +88,24 @@
       };
     },
     computed: mapState({
-      loading: ({ global }) => global.loading
+      loading: ({ global }) => global.loading,
+      noticeList: ({ notice }) => notice.data
     }),
     methods: {
       deleteNotice (index, row) {
-        console.log(index);
-        console.log(row);
+        MessageBox.confirm('此操作将永久删除该通知, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          const { _id } = row;
+          store.dispatch('notice/REMOVE', { _id }).then(() => {
+            store.commit('notice/DELETE', { index });
+            Message.success('删除公告成功');
+          }, () => false);
+        }).catch(() => {
+          Message.info('已取消');
+        });
       },
       submitPublishNotice () {
         this.$refs.noticeForm.validate((valid) => {
@@ -120,6 +118,12 @@
           return Message.error('请填写按要求填写');
         });
       }
+    },
+    beforeRouteEnter (to, from, next) {
+      store.dispatch('notice/LOAD').then(
+        () => next(),
+        () => next(false)
+      );
     }
   };
 </script>
