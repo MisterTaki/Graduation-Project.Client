@@ -45,7 +45,7 @@
             <el-input v-model="noticeForm.remark"></el-input>
           </el-form-item>
           <div class="btn-group">
-            <el-button type="primary" @click="submitNotice">立即发布</el-button>
+            <el-button type="primary" @click.prevent="submitPublishNotice" nativeType="submit" :loading="loading" :disabled="loading">立即发布</el-button>
             <el-button @click="dialog.editNotice=false">取消</el-button>
           </div>
         </el-form>
@@ -55,7 +55,9 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex';
   import { Message } from 'element-ui';
+  import store from '@/store';
   import mixins from '@/mixins';
 
   export default {
@@ -99,13 +101,24 @@
         }
       };
     },
+    computed: mapState({
+      loading: ({ global }) => global.loading
+    }),
     methods: {
       deleteNotice (index, row) {
         console.log(index);
         console.log(row);
       },
-      submitNotice () {
-        Message.success('发布公告成功');
+      submitPublishNotice () {
+        this.$refs.noticeForm.validate((valid) => {
+          if (valid) {
+            return store.dispatch('notice/PUBLISH', this.noticeForm).then(() => {
+              Message.success('发布公告成功');
+              this.dialog.editNotice = false;
+            }, () => false);
+          }
+          return Message.error('请填写按要求填写');
+        });
       }
     }
   };
