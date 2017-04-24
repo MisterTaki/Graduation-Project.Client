@@ -19,25 +19,13 @@
         </el-row>
         <el-row :gutter="60">
           <el-col :span="10">
-            <el-form-item label="学号">
+            <el-form-item :label="_idLabel">
               <el-input v-model="userInfo._id" :readonly="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <el-form-item label="班级">
-              <el-input v-model="userInfo._class" :readonly="true"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="60">
-          <el-col :span="10">
             <el-form-item label="学院">
               <el-input v-model="userInfo.academy" :readonly="true"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10">
-            <el-form-item label="专业">
-              <el-input v-model="userInfo.major" :readonly="true"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -52,6 +40,39 @@
               <el-input v-model="userInfo.identity" :readonly="true"></el-input>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row :gutter="60">
+          <template v-if="identity === 'student'">
+            <el-col :span="10">
+              <el-form-item label="班级">
+                <el-input v-model="userInfo._class" :readonly="true"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="10">
+              <el-form-item label="专业">
+                <el-input v-model="userInfo.major" :readonly="true"></el-input>
+              </el-form-item>
+            </el-col>
+          </template>
+          <template v-else-if="identity === 'teacher'">
+            <el-col :span="10">
+              <el-form-item label="学历">
+                <el-input v-model="userInfo.education" :readonly="true"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="10">
+              <el-form-item label="职位（职称）">
+                <el-input v-model="userInfo.position" :readonly="true"></el-input>
+              </el-form-item>
+            </el-col>
+          </template>
+          <template v-else>
+            <el-col :span="10">
+              <el-form-item label="权限级别">
+                <el-input v-model="userInfo.level" :readonly="true"></el-input>
+              </el-form-item>
+            </el-col>
+          </template>
         </el-row>
       </el-form>
       <el-form class="form bound-form" label-position="top" :model="userInfo">
@@ -193,14 +214,28 @@
       userInfo ({ user }) {
         const { genderMap, identityMap } = cnMap;
         const { info } = user;
-        const { academyID, gender, identity, ...otherInfo } = info;
+        const { academyID, gender, identity } = info;
         const academy = this.academyList[academyID - 1].value;
+        if (identity === 'admin') {
+          const { levelMap } = cnMap;
+          const { level } = info;
+          return {
+            ...info,
+            level: levelMap[level],
+            gender: genderMap[gender],
+            identity: identityMap[identity],
+            academy
+          };
+        }
         return {
+          ...info,
           gender: genderMap[gender],
           identity: identityMap[identity],
-          academy,
-          ...otherInfo
+          academy
         };
+      },
+      _idLabel () {
+        return this.identity === 'student' ? '学号' : '工号';
       }
     }),
     methods: {
