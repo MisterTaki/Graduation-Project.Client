@@ -8,8 +8,8 @@ const LOGOUT = 'auth/LOGOUT';
 export default {
   state: {
     token: window.localStorage.getItem('token') || '',
-    username: '',
-    identity: ''
+    username: window.localStorage.getItem('username') || '',
+    identity: window.localStorage.getItem('identity') || ''
   },
   actions: {
     async [LOAD] ({ commit }) {
@@ -31,13 +31,17 @@ export default {
     [LOGIN] (state, data) {
       const { token, userInfo: { username, identity } } = data;
       window.localStorage.setItem('token', token);
+      window.localStorage.setItem('username', username);
+      window.localStorage.setItem('identity', identity);
       state.token = token;
       state.username = username;
       state.identity = identity;
     },
     [LOGOUT] (state) {
-      window.localStorage.setItem('token', '');
+      window.localStorage.clear();
       state.token = '';
+      state.username = '';
+      state.identity = '';
     }
   }
 };
