@@ -8,7 +8,10 @@ const LOAD_ACADEMY = 'global/LOAD_ACADEMY';
 export default {
   state: {
     loading: false,
-    academy: []
+    academy: {
+      value: [],
+      loaded: false
+    }
   },
   actions: {
     async [LOAD_ACADEMY] ({ commit }) {
@@ -35,7 +38,10 @@ export default {
       }
     },
     [LOAD_ACADEMY] (state, data) {
-      state.academy = data;
+      state.academy = {
+        value: data,
+        loaded: true
+      };
     }
   }
 };

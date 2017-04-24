@@ -210,10 +210,10 @@
     computed: mapState({
       identity: ({ auth }) => auth.identity,
       loading: ({ global }) => global.loading,
-      academyList: ({ global }) => global.academy,
+      academyList: ({ global }) => global.academy.value,
       userInfo ({ user }) {
         const { genderMap, identityMap } = cnMap;
-        const { info } = user;
+        const { value: info } = user.info;
         const { academyID, gender, identity } = info;
         const academy = this.academyList[academyID - 1].value;
         if (identity === 'admin') {
@@ -281,14 +281,15 @@
     },
     beforeRouteEnter (to, from, next) {
       const loads = [];
-      loads.push(store.dispatch('user/LOAD'));
-      if (store.state.global.academy.length === 0) {
-        loads.push(store.dispatch('global/LOAD_ACADEMY'));
+      if (!store.state.global.academy.loaded) loads.push(store.dispatch('global/LOAD_ACADEMY'));
+      if (!store.state.user.info.loaded) loads.push(store.dispatch('user/LOAD'));
+      if (loads.length > 0) {
+        return Promise.all(loads).then(
+          () => next(),
+          () => next(false)
+        );
       }
-      Promise.all(loads).then(
-        () => next(),
-        () => next(false)
-      );
+      return next();
     }
   };
 </script>

@@ -13,7 +13,10 @@ const SET_EMAIL = 'user/SET_EMAIL';
 
 export default {
   state: {
-    info: {}
+    info: {
+      value: {},
+      loaded: false
+    }
   },
   actions: {
     async [LOAD] ({ commit }) {
@@ -46,10 +49,13 @@ export default {
   },
   mutations: {
     [LOAD] (state, data) {
-      state.info = data;
+      state.info = {
+        value: data,
+        loaded: true
+      };
     },
     [SET_EMAIL] (state, data) {
-      state.info.email = data.newEmail;
+      state.info.value.email = data.newEmail;
     }
   }
 };

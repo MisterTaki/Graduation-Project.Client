@@ -89,7 +89,7 @@
     },
     computed: mapState({
       loading: ({ global }) => global.loading,
-      noticeList: ({ notice }) => notice.data
+      noticeList: ({ notice }) => notice.data.value
     }),
     methods: {
       deleteNotice (index, row) {
@@ -120,10 +120,13 @@
       }
     },
     beforeRouteEnter (to, from, next) {
-      store.dispatch('notice/LOAD').then(
-        () => next(),
-        () => next(false)
-      );
+      if (!store.state.notice.data.loaded) {
+        store.dispatch('notice/LOAD').then(
+          () => next(),
+          () => next(false)
+        );
+      }
+      return next();
     }
   };
 </script>

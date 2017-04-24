@@ -40,21 +40,12 @@
     name: 'home',
     data () {
       return {
-        noticeList: [
-          {
-            title: '公告1',
-            content: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-          },
-          {
-            title: '公告2',
-            content: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-          },
-        ]
       };
     },
     computed: mapState({
       identity: ({ auth }) => auth.identity,
-      systemStatus: ({ system }) => system.status,
+      systemStatus: ({ system }) => system.status.value,
+      noticeList: ({ notice }) => notice.data.value,
       stepsActive () {
         return this.systemStatus - 1;
       },
@@ -80,10 +71,16 @@
     methods: {
     },
     beforeRouteEnter (to, from, next) {
-      store.dispatch('system/GET_STATUS').then(
-        () => next(),
-        () => next(false)
-      );
+      const loads = [];
+      if (!store.state.system.status.loaded) loads.push(store.dispatch('system/GET_STATUS'));
+      if (!store.state.notice.data.loaded) loads.push(store.dispatch('notice/LOAD'));
+      if (loads.length > 0) {
+        return Promise.all(loads).then(
+          () => next(),
+          () => next(false)
+        );
+      }
+      return next();
     }
   };
 </script>

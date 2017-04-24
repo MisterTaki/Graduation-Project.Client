@@ -231,8 +231,7 @@
     computed: mapState({
       loading: ({ global }) => global.loading,
       identity: ({ auth }) => auth.identity,
-      forgetPwd_id: ({ user }) => user.forgetPwd_id,
-      academyOptions: ({ global }) => global.academy
+      academyOptions: ({ global }) => global.academy.value
     }),
     methods: {
       submitLogin () {
@@ -289,7 +288,7 @@
       openApplyForm () {
         this.dialog.applyForm = true;
         this.resetForm('applyForm');
-        if (this.academyOptions.length !== 0) return;
+        if (this.$store.state.global.academy.loaded) return;
         this.$store.dispatch('global/LOAD_ACADEMY').then(() => false, () => {
           this.dialog.applyForm = false;
         });

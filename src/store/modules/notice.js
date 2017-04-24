@@ -8,7 +8,10 @@ const DELETE = 'notice/DELETE';
 
 export default {
   state: {
-    data: []
+    data: {
+      value: [],
+      loaded: false
+    }
   },
   actions: {
     async [LOAD] ({ commit }) {
@@ -22,14 +25,17 @@ export default {
     }
   },
   mutations: {
-    [LOAD] (state, data) {
-      state.data = data.noticeList;
+    [LOAD] (state, { noticeList }) {
+      state.data = {
+        value: noticeList,
+        loaded: true
+      };
     },
-    [DELETE] (state, data) {
-      state.data.splice(data.index, 1);
+    [DELETE] (state, { index }) {
+      state.data.value.splice(index, 1);
     },
-    [PUBLISH] (state, data) {
-      state.data.push(data.notice);
+    [PUBLISH] (state, { notice: noticeItem }) {
+      state.data.value.push(noticeItem);
     },
   }
 };

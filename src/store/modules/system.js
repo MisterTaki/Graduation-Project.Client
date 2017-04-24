@@ -5,7 +5,10 @@ const GET_STATUS = 'system/GET_STATUS';
 
 export default {
   state: {
-    status: 0
+    status: {
+      value: '',
+      loaded: false
+    }
   },
   actions: {
     async [GET_STATUS] ({ commit }) {
@@ -14,7 +17,10 @@ export default {
   },
   mutations: {
     [GET_STATUS] (state, { status }) {
-      state.status = status;
+      state.status = {
+        value: status,
+        loaded: true
+      };
     }
   }
 };
