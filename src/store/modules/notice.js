@@ -11,11 +11,11 @@ export default {
     data: []
   },
   actions: {
-    async [PUBLISH] ({ commit }, data) {
-      commit(PUBLISH, await client.post(notice.publish, { data }));
-    },
     async [LOAD] ({ commit }) {
       commit(LOAD, await client.get(notice.load));
+    },
+    async [PUBLISH] ({ commit }, data) {
+      commit(PUBLISH, await client.post(notice.publish, { data }));
     },
     async [REMOVE] ({ commit }, data) {
       await client.delete(notice.remove, { data });
