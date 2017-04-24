@@ -113,7 +113,6 @@
   import { mapState } from 'vuex';
   import { Message } from 'element-ui';
   import router from '@/router';
-  import store from '@/store';
   import mixins from '@/mixins';
 
   export default {
@@ -240,7 +239,7 @@
         this.$refs.loginForm.validate((valid) => {
           if (valid) {
             return this.$store.dispatch('auth/LOGIN', this.loginForm).then(() => {
-              router.push(`${this.identity}/home`);
+              router.push('/user/home');
               Message.success('登陆成功');
             }, () => false);
           }
@@ -264,13 +263,13 @@
             switch (this.findPwd.step) {
               case 0: {
                 const { identity, boundEmail } = this.findPwdForm;
-                return store.dispatch('user/FORGET_PASSWORD', { identity, boundEmail }).then(() => {
+                return this.$store.dispatch('user/FORGET_PASSWORD', { identity, boundEmail }).then(() => {
                   this.findPwd.step += 1;
                 }, () => false);
               }
               case 1: {
                 const { identity, boundEmail, captcha, newPwd } = this.findPwdForm;
-                return store.dispatch('user/SET_PASSWORD', { identity, boundEmail, captcha, newPwd }).then(() => {
+                return this.$store.dispatch('user/SET_PASSWORD', { identity, boundEmail, captcha, newPwd }).then(() => {
                   Message.success('设置新密码成功，请登录');
                   this.findPwd.step = 0;
                   this.dialog.findPwdForm = false;
@@ -291,23 +290,18 @@
         this.dialog.applyForm = true;
         this.resetForm('applyForm');
         if (this.academyOptions.length !== 0) return;
-        store.dispatch('global/LOAD_ACADEMY').then(() => false, () => {
+        this.$store.dispatch('global/LOAD_ACADEMY').then(() => false, () => {
           this.dialog.applyForm = false;
         });
       }
     },
     beforeRouteEnter (to, from, next) {
       const token = window.localStorage.getItem('token');
-      if (token) {
-        return store.dispatch('auth/LOAD').then(
-          () => {
-            Message.success('自动登陆成功（返回登录页，请先注销）');
-            next({
-              path: `/${store.state.auth.identity}/home`
-            });
-          },
-          () => next()
-        );
+      const username = window.localStorage.getItem('username');
+      const identity = window.localStorage.getItem('identity');
+      if (token && username && identity) {
+        Message.success('自动登陆成功（如需返回登录页，请先注销）');
+        return next('/user/home');
       }
       return next();
     }
