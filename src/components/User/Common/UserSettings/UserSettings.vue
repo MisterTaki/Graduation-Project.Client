@@ -96,7 +96,7 @@
           <el-form-item prop="repeatPwd">
             <el-input v-model="modifyPwdForm.repeatPwd" type="password" placeholder="确认新密码："></el-input>
           </el-form-item>
-          <el-button @click="submitModifyPwd" type="primary" class="submit-btn">提交</el-button>
+          <el-button @click.prevent="submitModifyPwd" type="primary" class="submit-btn" nativeType="submit" :loading="loading" :disabled="loading">提交</el-button>
         </el-form>
       </el-dialog>
     </template>
@@ -151,6 +151,7 @@
     },
     computed: mapState({
       identity: ({ auth }) => auth.identity,
+      loading: ({ global }) => global.loading,
       academyList: ({ global }) => global.academy,
       userInfo ({ user }) {
         const { genderMap, identityMap } = cnMap;
@@ -171,11 +172,16 @@
         this.resetForm('modifyPwdForm');
       },
       submitModifyPwd () {
-        const { oldPwd, newPwd } = this.modifyPwdForm;
-        store.dispatch('user/MODIFY_PASSWORD', { oldPwd, newPwd }).then(() => {
-          Message.success('修改成功');
-          this.dialog.modifyPwd = false;
-        }, () => false);
+        this.$refs.modifyPwdForm.validate((valid) => {
+          if (valid) {
+            const { oldPwd, newPwd } = this.modifyPwdForm;
+            return store.dispatch('user/MODIFY_PASSWORD', { oldPwd, newPwd }).then(() => {
+              Message.success('修改成功');
+              this.dialog.modifyPwd = false;
+            }, () => false);
+          }
+          return Message.error('请填写按要求填写');
+        });
       }
     },
     beforeRouteEnter (to, from, next) {
