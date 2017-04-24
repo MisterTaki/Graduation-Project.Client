@@ -22,13 +22,11 @@
           <el-radio label="teacher">导师</el-radio>
           <el-radio label="admin">管理员</el-radio>
         </el-radio-group>
-        <div class="login-btn-wrapper wrapper-marginTop">
-          <button class="button-dom full-width default-color login" type="submit" :disabled="loading" @click.prevent="submitLogin">登录</button>
-        </div>
+        <el-button @click.prevent="submitLogin" type="primary" class="submit-btn" nativeType="submit" :loading="loading" :disabled="loading">登录</el-button>
       </el-form>
-      <div class="misc-btn-wrapper wrapper-marginTop">
-        <button class="button-dom text default-color find-pwd" @click.prevent="openFindPwdForm">找回密码</button>
-        <button class="button-dom text not-account" @click.prevent="openApplyForm">账号不存在？</button>
+      <div class="misc-btn-wrapper">
+        <el-button @click="openFindPwdForm" type="text" class="findPwd-btn">找回密码</el-button>
+        <el-button @click="openApplyForm" type="text" class="applyAccount-btn">账号不存在？</el-button>
       </div>
     </div>
     <template v-if="dialog.findPwdForm">
@@ -59,9 +57,7 @@
               <el-input class="login-view--input" type="password" placeholder="请再次输入新密码（6~12位）" v-model="findPwdForm.repeatPwd"></el-input>
             </el-form-item>
           </template>
-          <div class="next-btn-wrapper wrapper-marginTop">
-            <button class="button-dom  full-width default-color" @click.prevent="submitForgetPwd" type="submit" :disabled="loading">{{findPwd.step === 0 ? '下一步' : '提交'}}</button>
-          </div>
+          <el-button @click.prevent="submitForgetPwd" type="primary" class="submit-btn" nativeType="submit" :loading="loading" :disabled="loading">{{findPwd.step === 0 ? '下一步' : '提交'}}</el-button>
         </el-form>
       </el-dialog>
     </template>
@@ -106,9 +102,7 @@
           <el-form-item class="input-wrapper" prop="email">
             <el-input class="login-view--input" type="text" placeholder="邮箱" v-model="applyForm.email"></el-input>
           </el-form-item>
-          <div class="wrapper-marginTop">
-            <button class="button-dom full-width default-color" @click.prevent="submitApply" type="submit" :disabled="loading">申请</button>
-          </div>
+          <el-button @click.prevent="submitApply" type="primary" class="submit-btn" nativeType="submit" :loading="loading" :disabled="loading">申请</el-button>
         </el-form>
       </el-dialog>
     </template>
