@@ -6,4 +6,6 @@ export default {
   modifyPwd: '/user/modify-pwd',
   forgetPwd: '/user/forget-pwd',
   setPwd: '/user/set-pwd',
+  modifyEmail: '/user/modify-email',
+  setEmail: '/user/set-email',
 };
