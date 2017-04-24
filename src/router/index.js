@@ -3,7 +3,6 @@ import Router from 'vue-router';
 import { Message } from 'element-ui';
 import * as Views from '@/views';
 import { User } from '@/components';
-import store from '@/store';
 
 Vue.use(Router);
 
@@ -20,81 +19,110 @@ const router = new Router({
       component: Views.Login
     },
     {
-      path: '/:identity',
+      path: '/user',
       name: 'user',
       component: Views.User,
       children: [
         {
           name: 'home',
           path: 'home',
-          component: User.Common.Home
+          component: User.Common.Home,
+          meta: { identity: 'common' }
         },
         {
           name: 'notification',
           path: 'notification',
-          component: User.Common.Notification
+          component: User.Common.Notification,
+          meta: { identity: 'common' }
         },
         {
           name: 'user-settings',
           path: 'user-settings',
-          component: User.Common.UserSettings
+          component: User.Common.UserSettings,
+          meta: { identity: 'common' }
         },
         {
           name: 'data-share',
           path: 'data-share',
-          component: User.Common.DataShare
+          component: User.Common.DataShare,
+          meta: { identity: 'common' }
         },
         {
           name: 'my-teacher',
           path: 'my-teacher',
-          component: User.Student.MyTeacher
+          component: User.Student.MyTeacher,
+          meta: { identity: 'student' }
         },
         {
           name: 'choose-teacher',
           path: 'choose-teacher',
-          component: User.Student.ChooseTeacher
+          component: User.Student.ChooseTeacher,
+          meta: { identity: 'student' }
         },
         {
           name: 'submit-report',
           path: 'submit-report',
-          component: User.Student.SubmitReport
+          component: User.Student.SubmitReport,
+          meta: { identity: 'student' }
         },
         {
           name: 'choose-students',
           path: 'choose-students',
-          component: User.Teacher.ChooseStudents
+          component: User.Teacher.ChooseStudents,
+          meta: { identity: 'teacher' }
         },
         {
           name: 'my-students',
           path: 'my-students',
-          component: User.Teacher.MyStudents
+          component: User.Teacher.MyStudents,
+          meta: { identity: 'teacher' }
         },
         {
           name: 'review-report',
           path: 'review-report',
-          component: User.Teacher.ReviewReport
+          component: User.Teacher.ReviewReport,
+          meta: { identity: 'teacher' }
         },
         {
           name: 'reply-schedule',
           path: 'reply-schedule',
-          component: User.Admin.ReplySchedule
+          component: User.Admin.ReplySchedule,
+          meta: { identity: 'admin' }
         },
         {
           name: 'account-manage',
           path: 'account-manage',
-          component: User.Admin.AccountManage
+          component: User.Admin.AccountManage,
+          meta: { identity: 'admin' }
         },
         {
           name: 'publish-notice',
           path: 'publish-notice',
-          component: User.Admin.PublishNotice
+          component: User.Admin.PublishNotice,
+          meta: { identity: 'admin' }
         },
         {
           name: 'system-settings',
           path: 'system-settings',
-          component: User.Admin.SystemSettings
+          component: User.Admin.SystemSettings,
+          meta: { identity: 'admin' }
         }
-      ]
+      ],
+      beforeEnter: (to, from, next) => {
+        const token = window.localStorage.getItem('token');
+        const identity = window.localStorage.getItem('identity');
+        const username = window.localStorage.getItem('username');
+        if (token && identity && username) {
+          if (to.matched.some(record => record.meta.identity === identity || record.meta.identity === 'common')) {
+            return next();
+          }
+          window.localStorage.clear();
+          Message.error('身份验证错误，请重新登录');
+          return next('/login');
+        }
+        Message.error('尚未登录');
+        return next('/login');
+      }
     },
     {
       path: '*',
@@ -102,28 +130,6 @@ const router = new Router({
       component: Views.NotFound,
     },
   ],
-});
-
-router.beforeEach((to, from, next) => {
-  if (to.name !== 'login') {
-    const token = window.localStorage.getItem('token');
-    if (token) {
-      if (store.state.auth.username && store.state.auth.identity) {
-        return next();
-      }
-      return store.dispatch('auth/LOAD').then(
-        () => next(),
-        () => next({
-          path: '/login'
-        })
-      );
-    }
-    Message.error('尚未登录');
-    return next({
-      path: '/login'
-    });
-  }
-  return next();
 });
 
 export default router;
