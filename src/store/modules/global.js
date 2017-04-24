@@ -1,6 +1,6 @@
 import { Common } from '@/components';
-import { client } from '../../helpers';
-import { academy } from '../../api';
+import { client } from '@/helpers';
+import { academy } from '@/api';
 
 const TOGGLE_LOADING = 'global/TOGGLE_LOADING';
 const LOAD_ACADEMY = 'global/LOAD_ACADEMY';

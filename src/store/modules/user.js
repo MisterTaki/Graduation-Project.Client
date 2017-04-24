@@ -1,5 +1,5 @@
-import { client } from '../../helpers';
-import { user } from '../../api';
+import { client } from '@/helpers';
+import { user } from '@/api';
 
 const LOAD = 'user/LOAD';
 const CREATE = 'user/CREATE';

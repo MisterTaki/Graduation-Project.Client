@@ -1,5 +1,5 @@
-import { client } from '../../helpers';
-import { auth } from '../../api';
+import { client } from '@/helpers';
+import { auth } from '@/api';
 
 const LOAD = 'auth/LOAD';
 const LOGIN = 'auth/LOGIN';

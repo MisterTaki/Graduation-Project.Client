@@ -1,5 +1,5 @@
-import { client } from '../../helpers';
-import { system } from '../../api';
+import { client } from '@/helpers';
+import { system } from '@/api';
 
 const GET_STATUS = 'system/GET_STATUS';
 
