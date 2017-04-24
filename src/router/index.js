@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import { Message } from 'element-ui';
 import * as Views from '@/views';
 import { User } from '@/components';
 import store from '@/store';
@@ -117,6 +118,7 @@ router.beforeEach((to, from, next) => {
         })
       );
     }
+    Message.error('尚未登录');
     return next({
       path: '/login'
     });
