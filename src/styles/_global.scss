@@ -1,5 +1,11 @@
 @import "./variables";
 
+.el-button.is-disabled, .el-button.is-disabled:focus, .el-button.is-disabled:hover {
+  color: #fff!important;
+  background-color: $blue!important;
+  border-color: $blue!important;
+}
+
 .login-view--input {
   .el-input.is-disabled .el-input__inner {
     color: $black;
