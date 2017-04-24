@@ -8,26 +8,26 @@
       <div class="step-wrapper">
         <el-steps :space="80" :active="stepsActive" direction="vertical" finish-status="success">
           <el-step title="学生、导师双向选择" description="学生和导师之间进行双向选择。"></el-step>
-          <el-step title="提交任务书" description="按要求撰写任务书。"></el-step>
-          <el-step title="提交选题报告" description="按要求撰写选题报告。"></el-step>
-          <el-step title="提交中期报告" description="按要求撰写中期报告。"></el-step>
-          <el-step title="答辩并提交毕业设计（论文）" description="按要求准备答辩并撰写毕业设计（论文）。"></el-step>
+          <el-step title="任务书" description="学生按要求撰写任务书。"></el-step>
+          <el-step title="选题报告" description="学生按要求撰写选题报告。"></el-step>
+          <el-step title="中期报告" description="学生按要求撰写中期报告。"></el-step>
+          <el-step title="答辩并提交毕业设计（论文）" description="学生按要求准备答辩并撰写毕业设计（论文）。"></el-step>
         </el-steps>
       </div>
     </div>
     <div class="main main-notice">
       <h2 class="main-title">公告</h2>
-      <!-- <h5 class="no-notice-title">暂无公告</h5> -->
-      <ul class="notice-list">
-        <li class="notice-item">
-          <h5 class="notice-title">临近任务书提交时间</h5>
-          <p class="notice-content">请各位同在XXXX日之前尽快提交任务书。</p>
-        </li>
-        <li class="notice-item">
-          <h5 class="notice-title">临近任务书提交时间</h5>
-          <p class="notice-content">请各位同在XXXX日之前尽快提交任务书。</p>
-        </li>
-      </ul>
+      <template v-if="noticeList.length === 0">
+        <h5 class="no-notice-title">暂无公告</h5>
+      </template>
+      <template v-else>
+        <ul class="notice-list">
+          <li v-for="item in noticeList" class="notice-item">
+            <h5 class="notice-title">{{ item.title }}</h5>
+            <p class="notice-content">{{ item.content }}</p>
+          </li>
+        </ul>
+      </template>
     </div>
   </div>
 </template>
@@ -40,7 +40,16 @@
     name: 'home',
     data () {
       return {
-        noticeList: []
+        noticeList: [
+          {
+            title: '公告1',
+            content: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+          },
+          {
+            title: '公告2',
+            content: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+          },
+        ]
       };
     },
     computed: mapState({
