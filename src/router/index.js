@@ -30,9 +30,9 @@ const router = new Router({
           meta: { identity: 'common' }
         },
         {
-          name: 'notification',
-          path: 'notification',
-          component: User.Common.Notification,
+          name: 'message',
+          path: 'message',
+          component: User.Common.Message,
           meta: { identity: 'common' }
         },
         {
