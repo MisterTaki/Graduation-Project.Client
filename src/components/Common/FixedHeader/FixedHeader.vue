@@ -9,7 +9,7 @@
       <span class="user-name" :title="username">{{username}}</span>
     </div>
     <div class="nav-wrapper">
-      <router-link to="message" class="nav-item message" title="进入通知管理">
+      <router-link to="message" class="nav-item message" title="进入私信中心">
         <el-badge :value="1" :max="10" class="message-badge"></el-badge>
         <div class="message-wrapper">
           <h5 class="message-title">私信</h5>
