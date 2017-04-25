@@ -247,12 +247,14 @@
         this.$refs.modifyPwdForm.validate((valid) => {
           if (valid) {
             const { oldPwd, newPwd } = this.modifyPwdForm;
-            return store.dispatch('user/MODIFY_PASSWORD', { oldPwd, newPwd }).then(() => {
-              Message.success('修改成功');
-              this.dialog.modifyPwd = false;
-            }, () => false);
+            return store.dispatch('user/MODIFY_PASSWORD', { oldPwd, newPwd })
+              .then(() => {
+                Message.success('修改成功');
+                this.dialog.modifyPwd = false;
+              })
+              .catch(() => false);
           }
-          return Message.error('请填写按要求填写');
+          return this.showInvalidateMsg();
         });
       },
       submitModifyEmail () {
@@ -261,21 +263,25 @@
             switch (this.modifyEmail.step) {
               case 0: {
                 const { newEmail } = this.modifyEmailForm;
-                return store.dispatch('user/MODIFY_EMAIL', { newEmail }).then(() => {
-                  this.modifyEmail.step += 1;
-                }, () => false);
+                return store.dispatch('user/MODIFY_EMAIL', { newEmail })
+                  .then(() => {
+                    this.modifyEmail.step += 1;
+                  })
+                  .catch(() => false);
               }
               case 1: {
-                return store.dispatch('user/SET_EMAIL', this.modifyEmailForm).then(() => {
-                  Message.success('绑定新邮箱成功');
-                  this.modifyEmail.step = 0;
-                  this.dialog.modifyEmail = false;
-                }, () => false);
+                return store.dispatch('user/SET_EMAIL', this.modifyEmailForm)
+                  .then(() => {
+                    Message.success('绑定新邮箱成功');
+                    this.modifyEmail.step = 0;
+                    this.dialog.modifyEmail = false;
+                  })
+                  .catch(() => false);
               }
               default:
             }
           }
-          return Message.error('请按要求填写信息');
+          return this.showInvalidateMsg();
         });
       }
     },
@@ -284,10 +290,9 @@
       if (!store.state.global.academy.loaded) loads.push(store.dispatch('global/LOAD_ACADEMY'));
       if (!store.state.user.info.loaded) loads.push(store.dispatch('user/LOAD'));
       if (loads.length > 0) {
-        return Promise.all(loads).then(
-          () => next(),
-          () => next(false)
-        );
+        return Promise.all(loads)
+          .then(() => next())
+          .catch(() => next(false));
       }
       return next();
     }
