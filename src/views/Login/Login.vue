@@ -22,7 +22,7 @@
           <el-radio label="teacher">导师</el-radio>
           <el-radio label="admin">管理员</el-radio>
         </el-radio-group>
-        <el-button @click.prevent="submitLogin" type="primary" class="submit-btn" nativeType="submit" :loading="loading" :disabled="loading">登录</el-button>
+        <el-button @click.prevent="submitLogin" type="primary" class="submit-btn" nativeType="submit" :loading="isLoading.login" :disabled="loading">登录</el-button>
       </el-form>
       <div class="misc-btn-wrapper">
         <el-button @click="openFindPwdForm" type="text" class="findPwd-btn">找回密码</el-button>
@@ -57,7 +57,7 @@
               <el-input class="login-view--input" type="password" placeholder="请再次输入新密码（6~12位）" v-model="findPwdForm.repeatPwd"></el-input>
             </el-form-item>
           </template>
-          <el-button @click.prevent="submitForgetPwd" type="primary" class="submit-btn" nativeType="submit" :loading="loading" :disabled="loading">{{findPwd.step === 0 ? '下一步' : '提交'}}</el-button>
+          <el-button @click.prevent="submitForgetPwd" type="primary" class="submit-btn" nativeType="submit" :loading="isLoading.forgetPwd" :disabled="loading">{{findPwd.step === 0 ? '下一步' : '提交'}}</el-button>
         </el-form>
       </el-dialog>
     </template>
@@ -102,7 +102,7 @@
           <el-form-item class="input-wrapper" prop="email">
             <el-input class="login-view--input" type="text" placeholder="邮箱" v-model="applyForm.email"></el-input>
           </el-form-item>
-          <el-button @click.prevent="submitApply" type="primary" class="submit-btn" nativeType="submit" :loading="loading" :disabled="loading">申请</el-button>
+          <el-button @click.prevent="submitApply" type="primary" class="submit-btn" nativeType="submit" :loading="isLoading.apply" :disabled="loading">申请</el-button>
         </el-form>
       </el-dialog>
     </template>
@@ -152,6 +152,11 @@
           captcha: '',
           newPwd: '',
           repeatPwd: ''
+        },
+        isLoading: {
+          login: false,
+          forgetPwd: false,
+          apply: false
         },
         rules: {
           login: {
@@ -237,10 +242,15 @@
       submitLogin () {
         this.$refs.loginForm.validate((valid) => {
           if (valid) {
+            this.isLoading.login = true;
             return this.$store.dispatch('auth/LOGIN', this.loginForm).then(() => {
               router.push('/user/home');
               Message.success('登陆成功');
-            }, () => false);
+              this.isLoading.login = false;
+            })
+            .catch(() => {
+              this.isLoading.login = false;
+            });
           }
           return Message.error('请填写账号或者密码');
         });
@@ -248,10 +258,15 @@
       submitApply () {
         this.$refs.applyForm.validate((valid) => {
           if (valid) {
+            this.isLoading.apply = true;
             return this.$store.dispatch('user/APPLY', this.applyForm).then(() => {
               Message.success('申请成功，申请通过后将会以邮件形式告知');
+              this.isLoading.apply = false;
               this.dialog.applyForm = false;
-            }, () => false);
+            })
+            .catch(() => {
+              this.isLoading.apply = false;
+            });
           }
           return Message.error('请按要求填写信息');
         });
@@ -259,20 +274,31 @@
       submitForgetPwd () {
         this.$refs.findPwdForm.validate((valid) => {
           if (valid) {
+            this.isLoading.forgetPwd = true;
             switch (this.findPwd.step) {
               case 0: {
                 const { identity, boundEmail } = this.findPwdForm;
-                return this.$store.dispatch('user/FORGET_PASSWORD', { identity, boundEmail }).then(() => {
-                  this.findPwd.step += 1;
-                }, () => false);
+                return this.$store.dispatch('user/FORGET_PASSWORD', { identity, boundEmail })
+                  .then(() => {
+                    this.isLoading.forgetPwd = false;
+                    this.findPwd.step += 1;
+                  })
+                  .catch(() => {
+                    this.isLoading.forgetPwd = false;
+                  });
               }
               case 1: {
                 const { identity, boundEmail, captcha, newPwd } = this.findPwdForm;
-                return this.$store.dispatch('user/SET_PASSWORD', { identity, boundEmail, captcha, newPwd }).then(() => {
-                  Message.success('设置新密码成功，请登录');
-                  this.findPwd.step = 0;
-                  this.dialog.findPwdForm = false;
-                }, () => false);
+                return this.$store.dispatch('user/SET_PASSWORD', { identity, boundEmail, captcha, newPwd })
+                  .then(() => {
+                    Message.success('设置新密码成功，请登录');
+                    this.isLoading.forgetPwd = false;
+                    this.dialog.findPwdForm = false;
+                    this.findPwd.step = 0;
+                  })
+                  .catch(() => {
+                    this.isLoading.forgetPwd = false;
+                  });
               }
               default:
             }
@@ -285,13 +311,15 @@
         this.resetForm('findPwdForm');
         this.findPwd.step = 0;
       },
-      openApplyForm () {
+      showApplyForm () {
         this.dialog.applyForm = true;
         this.resetForm('applyForm');
-        if (this.$store.state.global.academy.loaded) return;
-        this.$store.dispatch('global/LOAD_ACADEMY').then(() => false, () => {
-          this.dialog.applyForm = false;
-        });
+      },
+      openApplyForm () {
+        if (this.$store.state.global.academy.loaded) return this.showApplyForm();
+        return this.$store.dispatch('global/LOAD_ACADEMY')
+          .then(this.showApplyForm)
+          .catch(() => false);
       }
     },
     beforeRouteEnter (to, from, next) {
@@ -299,7 +327,6 @@
       const username = window.localStorage.getItem('username');
       const identity = window.localStorage.getItem('identity');
       if (token && username && identity) {
-        Message.success('自动登陆成功（如需返回登录页，请先注销）');
         return next('/user/home');
       }
       return next();
