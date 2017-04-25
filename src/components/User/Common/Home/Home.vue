@@ -43,6 +43,7 @@
 
 <script>
   import { mapState } from 'vuex';
+  import { Message } from 'element-ui';
   import store from '@/store';
 
   export default {
@@ -98,10 +99,14 @@
       if (!store.state.system.status.loaded) loads.push(store.dispatch('system/GET_STATUS'));
       if (!store.state.notice.data.loaded) loads.push(store.dispatch('notice/LOAD'));
       if (loads.length > 0) {
-        return Promise.all(loads).then(
-          () => next(),
-          () => next(false)
-        );
+        return Promise.all(loads)
+          .then(() => next())
+          .catch(() => {
+            Message.closeAll();
+            Message.error('服务器错误，请稍后登录');
+            window.localStorage.clear();
+            next('/login');
+          });
       }
       return next();
     }
