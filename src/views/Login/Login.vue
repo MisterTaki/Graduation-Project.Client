@@ -252,7 +252,7 @@
               this.isLoading.login = false;
             });
           }
-          return Message.error('请填写账号或者密码');
+          return this.showInvalidateMsg();
         });
       },
       submitApply () {
@@ -268,7 +268,7 @@
               this.isLoading.apply = false;
             });
           }
-          return Message.error('请按要求填写信息');
+          return this.showInvalidateMsg();
         });
       },
       submitForgetPwd () {
@@ -303,7 +303,7 @@
               default:
             }
           }
-          return Message.error('请按要求填写信息');
+          return this.showInvalidateMsg();
         });
       },
       openFindPwdForm () {
@@ -327,6 +327,7 @@
       const username = window.localStorage.getItem('username');
       const identity = window.localStorage.getItem('identity');
       if (token && username && identity) {
+        Message.success('自动登录成功，如需返回登录页请先注销');
         return next('/user/home');
       }
       return next();
