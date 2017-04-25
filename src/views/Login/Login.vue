@@ -327,7 +327,7 @@
       const username = window.localStorage.getItem('username');
       const identity = window.localStorage.getItem('identity');
       if (token && username && identity) {
-        Message.success('自动登录成功，如需返回登录页请先注销');
+        Message.success('自动登陆成功（如需返回登录页，请先注销）');
         return next('/user/home');
       }
       return next();
