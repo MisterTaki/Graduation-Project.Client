@@ -99,10 +99,11 @@
           type: 'warning'
         }).then(() => {
           const { _id } = row;
-          store.dispatch('notice/REMOVE', { _id }).then(() => {
-            store.commit('notice/DELETE', { index });
-            Message.success('删除公告成功');
-          }, () => false);
+          store.dispatch('notice/DELETE', { _id })
+            .then(() => {
+              Message.success('删除公告成功');
+            })
+            .catch(() => false);
         }).catch(() => {
           Message.info('已取消');
         });
@@ -110,21 +111,22 @@
       submitPublishNotice () {
         this.$refs.noticeForm.validate((valid) => {
           if (valid) {
-            return store.dispatch('notice/PUBLISH', this.noticeForm).then(() => {
-              Message.success('发布公告成功');
-              this.dialog.editNotice = false;
-            }, () => false);
+            return store.dispatch('notice/PUBLISH', this.noticeForm)
+              .then(() => {
+                Message.success('发布公告成功');
+                this.dialog.editNotice = false;
+              })
+              .catch(() => false);
           }
-          return Message.error('请填写按要求填写');
+          return this.showInvalidateMsg();
         });
       }
     },
     beforeRouteEnter (to, from, next) {
       if (!store.state.notice.data.loaded) {
-        store.dispatch('notice/LOAD').then(
-          () => next(),
-          () => next(false)
-        );
+        return store.dispatch('notice/LOAD')
+          .then(() => next())
+          .catch(() => next(false));
       }
       return next();
     }
