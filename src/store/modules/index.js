@@ -3,3 +3,4 @@ export auth from './auth';
 export user from './user';
 export system from './system';
 export notice from './notice';
+export message from './message';

@@ -3,7 +3,6 @@ import { notice } from '@/api';
 
 const PUBLISH = 'notice/PUBLISH';
 const LOAD = 'notice/LOAD';
-const REMOVE = 'notice/REMOVE';
 const DELETE = 'notice/DELETE';
 
 export default {
@@ -20,8 +19,9 @@ export default {
     async [PUBLISH] ({ commit }, data) {
       commit(PUBLISH, await client.post(notice.publish, { data }));
     },
-    async [REMOVE] ({ commit }, data) {
-      await client.delete(notice.remove, { data });
+    async [DELETE] ({ commit }, { data, index }) {
+      await client.delete(notice.delete, { data });
+      commit(DELETE, { index });
     }
   },
   mutations: {
