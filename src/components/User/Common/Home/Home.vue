@@ -22,13 +22,22 @@
       </template>
       <template v-else>
         <ul class="notice-list">
-          <li v-for="item in noticeList" class="notice-item">
+          <li v-for="(item, index) in noticeList" class="notice-item" @click="showNotice(index)">
             <h5 class="notice-title">{{ item.title }}</h5>
             <p class="notice-content">{{ item.content }}</p>
           </li>
         </ul>
       </template>
     </div>
+    <template v-if="dialog.noticeItem">
+      <el-dialog class="dialog-noticeItem" v-model="dialog.noticeItem">
+        <span slot="title" class="title">{{noticeItem.title}}</span>
+        <p class="paragraph content">{{noticeItem.content}}</p>
+        <p v-show="noticeItem.remark !== ''" class="paragraph"><span class="outline">备注：</span>{{noticeItem.remark}}</p>
+        <p class="paragraph"><span class="outline">发布者：</span>{{noticeItem.author}}</p>
+        <p class="paragraph"><span class="outline">发布时间：</span>{{noticeItem.created_at}}</p>
+      </el-dialog>
+    </template>
   </div>
 </template>
 
@@ -40,6 +49,16 @@
     name: 'home',
     data () {
       return {
+        noticeItem: {
+          title: '',
+          content: '',
+          remark: '',
+          author: '',
+          created_at: ''
+        },
+        dialog: {
+          noticeItem: false
+        }
       };
     },
     computed: mapState({
@@ -69,6 +88,10 @@
       }
     }),
     methods: {
+      showNotice (index) {
+        this.noticeItem = this.noticeList[index];
+        this.dialog.noticeItem = true;
+      }
     },
     beforeRouteEnter (to, from, next) {
       const loads = [];

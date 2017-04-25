@@ -9,13 +9,13 @@
       <span class="user-name" :title="username">{{username}}</span>
     </div>
     <div class="nav-wrapper">
-      <router-link to="notification" class="nav-item notification" title="进入通知管理">
-        <el-badge :value="1" :max="10" class="notification-badge"></el-badge>
-        <div class="notification-wrapper">
-          <h5 class="notification-title">通知</h5>
-          <ul class="notification-list">
-            <li class="notification-item">这是一条通知</li>
-            <li class="notification-item">这是一条通知</li>
+      <router-link to="message" class="nav-item message" title="进入通知管理">
+        <el-badge :value="1" :max="10" class="message-badge"></el-badge>
+        <div class="message-wrapper">
+          <h5 class="message-title">私信</h5>
+          <ul class="message-list">
+            <li class="message-item">这是一条私信</li>
+            <li class="message-item">这是一条私信</li>
           </ul>
         </div>
       </router-link>

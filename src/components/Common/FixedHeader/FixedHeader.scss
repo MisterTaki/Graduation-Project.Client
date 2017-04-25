@@ -56,11 +56,11 @@
     height: 100%;
     display: block;
   }
-  &.notification:before {
-    background: url(~@/assets/images/icon-notification_26x26.png) no-repeat center;
+  &.message:before {
+    background: url(~@/assets/images/icon-message_26x26.png) no-repeat center;
   }
-  &.notification:hover:before {
-    background: url(~@/assets/images/icon-notification--hover_26x26.png) no-repeat center;
+  &.message:hover:before {
+    background: url(~@/assets/images/icon-message--hover_26x26.png) no-repeat center;
   }
   &.settings:before {
     background: url(~@/assets/images/icon-settings_26x26.png) no-repeat center;
@@ -74,16 +74,16 @@
   &.logout:hover:before {
     background: url(~@/assets/images/icon-logout--hover_26x26.png) no-repeat center;
   }
-  .notification-badge {
+  .message-badge {
     position: absolute;
     top: 10px;
     right: 6px;
   }
 }
-.nav-item.notification:hover .notification-wrapper {
+.nav-item.message:hover .message-wrapper {
   display: block;
 }
-.notification-wrapper {
+.message-wrapper {
   display: none;
   position: absolute;
   top: 70px;
@@ -107,19 +107,19 @@
     transform: rotate(45deg);
   }
 }
-.notification-title {
+.message-title {
   font-size: 14px;
   font-weight: bold;
   text-align: center;
 }
-.notification-list {
+.message-list {
   padding: 5px 0;
 }
-.notification-item {
+.message-item {
   padding: 5px 0;
   font-size: 12px;
   line-height: 24px;
-  & + .notification-item {
+  & + .message-item {
     border-top: 1px solid rgba(0,0,0,.05);
   }
 }

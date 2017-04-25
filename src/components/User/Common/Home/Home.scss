@@ -63,6 +63,7 @@
 }
 .notice-item {
   margin: 10px 0;
+  cursor: pointer;
 }
 .notice-title {
   font-size: 14px;
@@ -72,4 +73,22 @@
 .notice-content {
   font-size: 12px;
   line-height: 24px;
+}
+.dialog-noticeItem {
+  .title {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .paragraph {
+    line-height: 30px;
+    &.content {
+      margin-bottom: 18px;
+      font-size: 18px;
+    }
+  }
+  .outline {
+    font-weight: bold;
+  }
+  .content {
+  }
 }
