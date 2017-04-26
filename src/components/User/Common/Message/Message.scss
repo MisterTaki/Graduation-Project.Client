@@ -8,12 +8,24 @@
 .main {
   position: relative;
   box-sizing: border-box;
-  padding: 20px 60px;
+  padding: 20px 60px 30px;
   background-color: #fff;
   transition: all .4s ease;
   &:hover {
     box-shadow: $hoverShadow;
   }
+}
+.editMessage-btn {
+  position: absolute;
+  top: 30px;
+  right: 62px;
+  z-index: 99;
+}
+.receive-select {
+  width: 100%;
+}
+.btn-group {
+  text-align: right;
 }
 .title {
   font-size: 20px;
@@ -21,4 +33,10 @@
 }
 .message-table {
   width: 100%;
+}
+.delete-btn {
+  color: $danger;
+  &:hover {
+    color: $lightDanger;
+  }
 }
