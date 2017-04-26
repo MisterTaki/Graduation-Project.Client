@@ -51,7 +51,7 @@ export default {
       };
     },
     [SEND] (state, { newMessage }) {
-      state.send.vlue.push(newMessage);
+      state.send.value.push(newMessage);
     },
   }
 };
