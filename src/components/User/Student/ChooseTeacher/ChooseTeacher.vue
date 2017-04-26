@@ -121,23 +121,33 @@
         ],
         teachersData: [
           {
-            name: '王昭顺',
+            name: '导师1',
             gender: '男',
             academy: '计算机与通信工程',
             education: '博士',
             position: '教授（博导）',
             email: 'zhswang@sohu.com',
             mobile: '13520555528',
-            topicList: ['毕业设计（论文）管理系', '毕业设计（论文）管理系统']
+            topicList: ['毕业设计（论文）管理系统', '毕业设计（论文）管理系统']
           }, {
-            name: '王昭顺',
+            name: '导师2',
             gender: '男',
             academy: '经济与管理',
             education: '博士',
             position: '教授（博导）',
             email: 'zhswang@sohu.com',
             mobile: '13520555528',
-            topicList: ['毕业设计（论文）管理系', '毕业设计（论文）统', '毕业设计（论文）管理系统']
+            topicList: ['毕业设计（论文）管理系统', '毕业设计（论文）管理系统', '毕业设计（论文）管理系统']
+          },
+          {
+            name: '导师3',
+            gender: '男',
+            academy: '经济与管理',
+            education: '博士',
+            position: '教授（博导）',
+            email: 'zhswang@sohu.com',
+            mobile: '13520555528',
+            topicList: ['毕业设计（论文）管理系统']
           }
         ],
         dialog: {
@@ -212,6 +222,7 @@
         const data = {
           data: this.volunteersForm
         };
+        Message.success('提交成功');
         console.log(data);
       }
     }
