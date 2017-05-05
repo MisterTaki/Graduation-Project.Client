@@ -41,6 +41,7 @@
     methods: {
       logout () {
         this.$store.dispatch('auth/LOGOUT').then(() => {
+          Message.closeAll();
           Message.success('注销成功');
           router.push('/login');
         }, () => Message.error('注销失败'));

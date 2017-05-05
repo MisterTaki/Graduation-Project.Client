@@ -117,6 +117,7 @@ const router = new Router({
             return next();
           }
           window.localStorage.clear();
+          Message.closeAll();
           Message.error('身份验证错误，请重新登录');
           return next('/login');
         }
