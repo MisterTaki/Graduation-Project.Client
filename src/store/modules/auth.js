@@ -20,6 +20,7 @@ export default {
     },
     async [LOGOUT] ({ commit }) {
       commit(LOGOUT);
+      commit('root/RESET');
     }
   },
   mutations: {
@@ -37,11 +38,8 @@ export default {
       state.username = username;
       state.identity = identity;
     },
-    [LOGOUT] (state) {
+    [LOGOUT] () {
       window.localStorage.clear();
-      state.token = '';
-      state.username = '';
-      state.identity = '';
     }
   }
 };
