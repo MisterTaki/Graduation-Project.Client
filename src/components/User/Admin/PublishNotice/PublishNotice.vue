@@ -99,7 +99,7 @@
           type: 'warning'
         }).then(() => {
           const { _id } = row;
-          store.dispatch('notice/DELETE', { _id })
+          store.dispatch('notice/DELETE', { data: { _id }, index })
             .then(() => {
               Message.success('删除公告成功');
             })
