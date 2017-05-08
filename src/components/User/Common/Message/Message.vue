@@ -79,38 +79,40 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <el-dialog class="editNotice-dialog" title="编辑" size="small" :close-on-click-modal=false v-model="dialog.edit">
-      <el-form :model="basicForm" :rules="rules.basicForm" ref="basicForm" label-width="100px" class="notice-form">
-        <el-form-item label="收件人" prop="receiveIndex">
-          <template v-if="dialogEditType === 'send'">
-            <el-select class="receive-select" v-model="basicForm.receiveIndex" placeholder="请选择">
-              <el-option
-                v-for="(item, index) in receiveOptions"
-                :label="item.username"
-                :key="item._id"
-                :value="index">
-              </el-option>
-            </el-select>
-          </template>
-          <template v-else-if="dialogEditType === 'reply'">
-            <el-input v-model="basicForm.receiveName" :readonly='true'></el-input>
-          </template>
-        </el-form-item>
-        <el-form-item label="标题" prop="title">
-          <el-input v-model="basicForm.title" :readonly='dialogEditType === "reply"'></el-input>
-        </el-form-item>
-        <el-form-item label="内容" prop="content">
-          <el-input type="textarea" :autosize="{ minRows: 4}" v-model="basicForm.content"></el-input>
-        </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="basicForm.remark"></el-input>
-        </el-form-item>
-        <div class="btn-group">
-          <el-button type="primary" @click.prevent="submitSendMessage" nativeType="submit" :loading="loading" :disabled="loading">确定</el-button>
-          <el-button @click="dialog.edit=false">取消</el-button>
-        </div>
-      </el-form>
-    </el-dialog>
+    <template v-if="dialog.edit">
+      <el-dialog class="editNotice-dialog" title="编辑" size="small" :close-on-click-modal=false v-model="dialog.edit">
+        <el-form :model="basicForm" :rules="rules.basicForm" ref="basicForm" label-width="100px" class="notice-form">
+          <el-form-item label="收件人" prop="receiveIndex">
+            <template v-if="dialogEditType === 'send'">
+              <el-select class="receive-select" v-model="basicForm.receiveIndex" placeholder="请选择">
+                <el-option
+                  v-for="(item, index) in receiveOptions"
+                  :label="item.username"
+                  :key="item._id"
+                  :value="index">
+                </el-option>
+              </el-select>
+            </template>
+            <template v-else-if="dialogEditType === 'reply'">
+              <el-input v-model="basicForm.receiveName" :readonly='true'></el-input>
+            </template>
+          </el-form-item>
+          <el-form-item label="标题" prop="title">
+            <el-input v-model="basicForm.title" :readonly='dialogEditType === "reply"'></el-input>
+          </el-form-item>
+          <el-form-item label="内容" prop="content">
+            <el-input type="textarea" :autosize="{ minRows: 4}" v-model="basicForm.content"></el-input>
+          </el-form-item>
+          <el-form-item label="备注" prop="remark">
+            <el-input v-model="basicForm.remark"></el-input>
+          </el-form-item>
+          <div class="btn-group">
+            <el-button type="primary" @click.prevent="submitSendMessage" nativeType="submit" :loading="loading" :disabled="loading">确定</el-button>
+            <el-button @click="dialog.edit=false">取消</el-button>
+          </div>
+        </el-form>
+      </el-dialog>
+    </template>
   </div>
 </template>
 
@@ -238,6 +240,9 @@
           return this.showInvalidateMsg();
         });
       }
+    },
+    created () {
+      store.dispatch('message/MARK');
     },
     beforeRouteEnter (to, from, next) {
       const loads = [];
