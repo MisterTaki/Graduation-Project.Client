@@ -4,8 +4,9 @@ import { message } from '@/api';
 const SEND = 'message/SEND';
 const LOAD_RECEIVE = 'message/LOAD_RECEIVE';
 const LOAD_SEND = 'message/LOAD_SEND';
+const LOAD_DELETED = 'message/LOAD_DELETED';
 // const MARK = 'message/MARK';
-// const DELETE = 'message/DELETE';
+const DELETE = 'message/DELETE';
 
 export default {
   state: {
@@ -14,6 +15,10 @@ export default {
       loaded: false
     },
     send: {
+      value: [],
+      loaded: false
+    },
+    deleted: {
       value: [],
       loaded: false
     }
@@ -33,8 +38,19 @@ export default {
         }
       }));
     },
+    async [LOAD_DELETED] ({ commit }) {
+      commit(LOAD_DELETED, await client.get(message.load, {
+        params: {
+          type: 'deleted'
+        }
+      }));
+    },
     async [SEND] ({ commit }, data) {
       commit(SEND, await client.post(message.send, { data }));
+    },
+    async [DELETE] ({ commit }, { data, index }) {
+      await client.delete(message.delete, { data });
+      commit(DELETE, { index });
     },
   },
   mutations: {
@@ -50,8 +66,17 @@ export default {
         loaded: true
       };
     },
+    [LOAD_DELETED] (state, { messageList }) {
+      state.deleted = {
+        value: messageList,
+        loaded: true
+      };
+    },
     [SEND] (state, { newMessage }) {
       state.send.value.push(newMessage);
     },
+    [DELETE] (state, { index }) {
+      state.deleted.value.push(state.receive.value.splice(index, 1));
+    }
   }
 };
