@@ -4,3 +4,4 @@ export system from './system';
 export academy from './academy';
 export notice from './notice';
 export message from './message';
+export topic from './topic';
