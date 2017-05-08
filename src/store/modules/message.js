@@ -2,14 +2,19 @@ import { client } from '@/helpers';
 import { message } from '@/api';
 
 const SEND = 'message/SEND';
+const LOAD_LATEST = 'message/LOAD_LATEST';
 const LOAD_RECEIVE = 'message/LOAD_RECEIVE';
 const LOAD_SEND = 'message/LOAD_SEND';
 const LOAD_DELETED = 'message/LOAD_DELETED';
-// const MARK = 'message/MARK';
+const MARK = 'message/MARK';
 const DELETE = 'message/DELETE';
 
 export default {
   state: {
+    latest: {
+      value: [],
+      loaded: false
+    },
     receive: {
       value: [],
       loaded: false
@@ -24,6 +29,13 @@ export default {
     }
   },
   actions: {
+    async [LOAD_LATEST] ({ commit }) {
+      commit(LOAD_LATEST, await client.get(message.load, {
+        params: {
+          type: 'latest'
+        }
+      }));
+    },
     async [LOAD_RECEIVE] ({ commit }) {
       commit(LOAD_RECEIVE, await client.get(message.load, {
         params: {
@@ -52,8 +64,17 @@ export default {
       await client.delete(message.delete, { data });
       commit(DELETE, { index });
     },
+    async [MARK] ({ commit }) {
+      commit(MARK, await client.post(message.mark));
+    },
   },
   mutations: {
+    [LOAD_LATEST] (state, { messageList }) {
+      state.latest = {
+        value: messageList,
+        loaded: true
+      };
+    },
     [LOAD_RECEIVE] (state, { messageList }) {
       state.receive = {
         value: messageList,
@@ -77,6 +98,9 @@ export default {
     },
     [DELETE] (state, { index }) {
       state.deleted.value.push(state.receive.value.splice(index, 1));
+    },
+    [MARK] (state) {
+      state.latest.value = [];
     }
   }
 };
