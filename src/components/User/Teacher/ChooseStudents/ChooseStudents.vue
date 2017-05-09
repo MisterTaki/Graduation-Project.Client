@@ -4,29 +4,29 @@
   <div class="main-wrapper">
     <div class="main">
       <div class="title-wrapper">
-        <h2 class="title">我的学生：<span>（最多选取五位学生）</span></h2>
+        <h2 class="title">选择学生：<span>（最多选取五位学生）</span></h2>
         <el-button class="studentList-btn" type="text" @click="dialog.studentList=true">我的学生列表<i class="el-icon-document el-icon--right"></i></el-button>
       </div>
       <div class="studentList-wrapper">
         <div class="status">
-          <el-table class="myStudents-table myStudents-view--table" :data="myStudents" border>
+          <el-table class="student-list chooseStudent-view--table" :data="studentOptions" border>
             <el-table-column type="expand">
               <template scope="props">
                 <el-form label-position="left" label-width="100px">
                   <el-form-item label="学号：">
-                    <span>{{ props.row.studentID }}</span>
+                    <span>{{ props.row._id }}</span>
                   </el-form-item>
                   <el-form-item label="性别：">
-                    <span>{{ props.row.gender }}</span>
+                    <span>{{ props.row.gender === 'm' ? '男' : '女' }}</span>
                   </el-form-item>
                   <el-form-item label="班级：">
-                    <span>{{ props.row.class }}</span>
+                    <span>{{ props.row._class }}</span>
                   </el-form-item>
                   <el-form-item label="专业：">
                     <span>{{ props.row.major }}</span>
                   </el-form-item>
                   <el-form-item label="学院：">
-                    <span>{{ props.row.academy }}</span>
+                    <span>{{ academyList[props.row.academyID - 1].value }}</span>
                   </el-form-item>
                   <el-form-item label="邮箱：">
                     <span>{{ props.row.email }}</span>
@@ -37,11 +37,17 @@
                 </el-form>
               </template>
             </el-table-column>
-            <el-table-column width="140" prop="name" label="姓名" align="center"></el-table-column>
+            <el-table-column width="120" prop="order" label="志愿次序" align="center" :filters="orderValues" :filter-method="filterOrder"></el-table-column>
+            <el-table-column width="120" prop="username" label="学生姓名" align="center"></el-table-column>
             <el-table-column prop="choosedTopic" label="选择的研究课题" align="center"></el-table-column>
+            <el-table-column width="180" prop="status" label="状态" align="center" :filters="statusValues" :filter-method="filterStatus">
+              <template scope="scope">
+                <el-tag :type="scope.row.status === '已确认选择为您的学生' ? 'primary' : scope.row.status === '可以选择成为您的学生' ? 'success' : 'warning'">{{scope.row.status}}</el-tag>
+              </template>
+            </el-table-column>
             <el-table-column width="140" label="操作" align="center">
               <template scope="scope">
-                <el-button type="text" size="small" @click="addStudent(scope.$index, scope.row)">添加至学生列表</el-button>
+                <el-button v-if="scope.row.status === '可以选择成为您的学生'" type="text" size="small" @click="addStudent(scope.$index, scope.row)">添加至学生列表</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -54,19 +60,19 @@
           <template scope="props">
             <el-form label-position="left" label-width="100px">
               <el-form-item label="学号：">
-                <span>{{ props.row.studentID }}</span>
+                <span>{{ props.row._id }}</span>
               </el-form-item>
               <el-form-item label="性别：">
-                <span>{{ props.row.gender }}</span>
+                <span>{{ props.row.gender === 'm' ? '男' : '女' }}</span>
               </el-form-item>
               <el-form-item label="班级：">
-                <span>{{ props.row.class }}</span>
+                <span>{{ props.row._class }}</span>
               </el-form-item>
               <el-form-item label="专业：">
                 <span>{{ props.row.major }}</span>
               </el-form-item>
               <el-form-item label="学院：">
-                <span>{{ props.row.academy }}</span>
+                <span>{{ academyList[props.row.academyID - 1].value }}</span>
               </el-form-item>
               <el-form-item label="邮箱：">
                 <span>{{ props.row.email }}</span>
@@ -77,7 +83,8 @@
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column width="120" prop="name" label="学生姓名" align="center"></el-table-column>
+        <el-table-column width="120" prop="username" label="学生姓名" align="center"></el-table-column>
+        <el-table-column width="120" prop="order" label="志愿次序" align="center"></el-table-column>
         <el-table-column prop="choosedTopic" label="选择的研究课题" align="center"></el-table-column>
         <el-table-column width="140" label="操作" align="center">
           <template scope="scope">
@@ -86,42 +93,54 @@
         </el-table-column>
       </el-table>
       <div class="submitStudents-btn-wrapper">
-        <el-button type="primary" @click="submitStudents">提交学生列表</el-button>
+        <el-button v-if="studentsForm.length > 0" type="primary" @click="submitStudents">提交学生列表</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
+  import { mapState } from 'vuex';
   import { Message } from 'element-ui';
+  import store from '@/store';
+  import mixins from '@/mixins';
 
   export default {
     name: 'choose-students',
+    mixins: [mixins],
     data () {
       return {
-        myStudents: [
+        orderValues: [
           {
-            name: '高琦',
-            studentID: '41355025',
-            gender: '男',
-            class: '计1301',
-            major: '计算机科学与技术',
-            academy: '计算机与通信工程',
-            email: 'ustb_gaoqi@163.com',
-            mobile: '15652063671',
-            choosedTopic: '毕业设计（论文）管理系统'
+            text: '1',
+            value: 1
           },
           {
-            name: '高琦',
-            studentID: '41355025',
-            gender: '男',
-            class: '计1301',
-            major: '计算机科学与技术',
-            academy: '计算机与通信工程',
-            email: 'ustb_gaoqi@163.com',
-            mobile: '15652063671',
-            choosedTopic: '毕业设计（论文）管理系统'
+            text: '2',
+            value: 2
           },
+          {
+            text: '3',
+            value: 3
+          }
+        ],
+        statusValues: [
+          {
+            text: '已确认选择为您的学生',
+            value: '已确认选择为您的学生'
+          },
+          {
+            text: '可以选择成为您的学生',
+            value: '可以选择成为您的学生'
+          },
+          {
+            text: '正在被其他志愿老师选择',
+            value: '正在被其他志愿老师选择'
+          },
+          {
+            text: '已被其他志愿老师选择',
+            value: '已被其他志愿老师选择'
+          }
         ],
         dialog: {
           studentList: false
@@ -129,7 +148,25 @@
         studentsForm: []
       };
     },
+    computed: mapState({
+      loading: ({ global }) => global.loading,
+      academyList: ({ global }) => global.academy.value,
+      studentOptions: ({ volunteer }) => volunteer.studentOptions.value
+    }),
     methods: {
+      filterOrder (value, row) {
+        return row.order === value;
+      },
+      filterStatus (value, row) {
+        if (value !== '已确认选择为您的学生' || value !== '可以选择成为您的学生') {
+          if (value === '正在被其他志愿老师选择') {
+            return (row.status === '第一志愿老师正在选择') || (row.status === '第二志愿老师正在选择') || (row.status === '第三志愿老师正在选择');
+          } else if (value === '已被其他志愿老师选择') {
+            return (row.status === '已被第一志愿老师选择') || (row.status === '已被第二志愿老师选择') || (row.status === '已被第三志愿老师选择');
+          }
+        }
+        return row.status === value;
+      },
       addStudent (index, row) {
         if (this.studentsForm.length === 5) {
           Message.error('已经达到最大指导学生数（5个），请在我的学生列表查看');
@@ -146,11 +183,18 @@
         Message.success('移除成功');
       },
       submitStudents () {
-        const data = {
-          data: this.studentsForm
-        };
-        console.log(data);
       }
+    },
+    beforeRouteEnter (to, from, next) {
+      const loads = [];
+      if (!store.state.global.academy.loaded) loads.push(store.dispatch('global/LOAD_ACADEMY'));
+      if (!store.state.volunteer.studentOptions.loaded) loads.push(store.dispatch('volunteer/LOAD_STUDENT_OPTIONS'));
+      if (loads.length > 0) {
+        return Promise.all(loads)
+          .then(() => next())
+          .catch(() => next(false));
+      }
+      return next();
     }
   };
 </script>
