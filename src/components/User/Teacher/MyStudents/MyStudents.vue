@@ -6,7 +6,7 @@
       <div class="title-wrapper">
         <h2 class="title">我的学生</h2>
         <template v-if="status !== 1">
-          <el-button class="addTopic-btn" type="text" @click="dialog.topic=true">我的课题<i class="el-icon-fa-plus el-icon--right"></i></el-button>
+          <el-button class="addTopic-btn" type="text" @click="dialog.topic=true">我的课题<i class="el-icon-fa-tasks el-icon--right"></i></el-button>
         </template>
         <template v-if="dialog.topic">
           <el-dialog title="我的课题" v-model="dialog.topic" :close-on-click-modal=false>
@@ -44,7 +44,7 @@
         <template v-if="status===0">
           <div class="status">
             <h5 class="notice">还没有选择学生，点击右下角的“开始选择学生”来开始：）</h5>
-            <router-link to="choose-students" class="choose-btn">开始选择学生</router-link>
+            <router-link to="choose-students" class="choose-btn">开始选择学生<i class="el-icon-fa-arrow-right el-icon--right"></i></router-link>
           </div>
         </template>
         <template v-else-if="status===1">
