@@ -4,7 +4,7 @@
   <div class="main-wrapper">
     <div class="main">
       <div class="title-wrapper">
-        <h2 class="title">选择导师：<span>（最多选取三位导师）</span></h2>
+        <h2 class="title">选择导师：<span>（请选取三位导师）</span></h2>
         <el-button class="volunteerList-btn" type="text" @click="dialog.volunteerList=true">我的志愿列表<i class="el-icon-document el-icon--right"></i></el-button>
       </div>
       <div class="teacherList-wrapper">
@@ -80,7 +80,7 @@
         </el-table-column>
       </el-table>
       <div class="submitTopic-btn-wrapper">
-        <el-button v-if="volunteersForm.length !== 0" type="primary" @click="submitTopic" :loading="loading">提交志愿</el-button>
+        <el-button v-if="volunteersForm.length === 3" type="primary" @click="submitTopic" :loading="loading">提交志愿</el-button>
       </div>
     </el-dialog>
     <el-dialog class="chooseTopic-dialog" title="选择研究课题" size="tiny" v-model="dialog.chooseTopic" :close-on-click-modal=false>
@@ -103,7 +103,7 @@
 
 <script>
   import { mapState } from 'vuex';
-  import { Message } from 'element-ui';
+  import { Message, MessageBox } from 'element-ui';
   import store from '@/store';
   import mixins from '@/mixins';
 
@@ -168,6 +168,7 @@
         this.chooseTopicForm.currentData.choosedTopic = this.chooseTopicForm.choosedTopic;
         this.chooseTopicForm.currentData.order = this.chooseTopicForm.order;
         this.volunteersForm.push(this.chooseTopicForm.currentData);
+        this.volunteersForm.sort((a, b) => a.order - b.order);
         for (let i = 0; i < this.orderOptions.length; i += 1) {
           if (this.orderOptions[i].value === this.chooseTopicForm.order) {
             this.orderOptions.splice(i, 1);
@@ -222,11 +223,57 @@
         Message.success('移除成功');
       },
       submitTopic () {
-        Message.closeAll();
-        Message.success('提交成功');
+        MessageBox.confirm('只能提交一次志愿, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          store.dispatch('volunteer/CHOOSE', {
+            firstTeacherID: this.volunteersForm[0]._id,
+            firstTopic: this.volunteersForm[0].choosedTopic,
+            secondTeacherID: this.volunteersForm[1]._id,
+            secondTopic: this.volunteersForm[1].choosedTopic,
+            thirdTeacherID: this.volunteersForm[2]._id,
+            thirdTopic: this.volunteersForm[2].choosedTopic,
+          })
+          .then(() => {
+            Message.closeAll();
+            Message.success('提交志愿成功');
+            this.$router.replace('/user/my-teacher');
+          })
+          .catch(() => false);
+        }).catch(() => {
+          Message.closeAll();
+          Message.success('已取消');
+        });
       }
     },
     beforeRouteEnter (to, from, next) {
+      if (!store.state.volunteer.studentStatus.loaded) {
+        store.dispatch('volunteer/LOAD_STUDENT_STATUS')
+        .then(() => {
+          if (store.state.volunteer.studentStatus.value !== 0) {
+            Message.closeAll();
+            Message.error('已提交过志愿名单，无法再次选择');
+            return next('/user/my-teacher');
+          }
+          const loads = [];
+          if (!store.state.global.academy.loaded) loads.push(store.dispatch('global/LOAD_ACADEMY'));
+          if (!store.state.volunteer.teacherOptions.loaded) loads.push(store.dispatch('volunteer/LOAD_TEACHER_OPTIONS'));
+          if (loads.length > 0) {
+            return Promise.all(loads)
+              .then(() => next())
+              .catch(() => next(false));
+          }
+          return next();
+        })
+        .catch(() => next(false));
+      }
+      if (store.state.volunteer.studentStatus.value !== 0) {
+        Message.closeAll();
+        Message.error('已提交过志愿名单，无法再次选择');
+        return next('/user/my-teacher');
+      }
       const loads = [];
       if (!store.state.global.academy.loaded) loads.push(store.dispatch('global/LOAD_ACADEMY'));
       if (!store.state.volunteer.teacherOptions.loaded) loads.push(store.dispatch('volunteer/LOAD_TEACHER_OPTIONS'));
