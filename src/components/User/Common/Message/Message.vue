@@ -242,7 +242,7 @@
       }
     },
     created () {
-      store.dispatch('message/MARK');
+      if (!store.state.message.isMarked && store.state.message.latest.value.length !== 0) store.dispatch('message/MARK');
     },
     beforeRouteEnter (to, from, next) {
       const loads = [];
