@@ -44,7 +44,7 @@
         <template v-if="status===0">
           <div class="status">
             <h5 class="notice">还没有选择学生，点击右下角的“开始选择学生”来开始：）</h5>
-            <router-link to="choose-students" class="choose-btn">开始选择学生<i class="el-icon-fa-arrow-right el-icon--right"></i></router-link>
+            <router-link to="choose-students" class="choose-btn">开始选择学生</router-link>
           </div>
         </template>
         <template v-else-if="status===1">
