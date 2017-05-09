@@ -26,7 +26,8 @@ export default {
     deleted: {
       value: [],
       loaded: false
-    }
+    },
+    isMarked: false
   },
   actions: {
     async [LOAD_LATEST] ({ commit }) {
@@ -101,6 +102,7 @@ export default {
     },
     [MARK] (state) {
       state.latest.value = [];
+      state.isMarked = true;
     }
   }
 };
