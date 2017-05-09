@@ -100,11 +100,13 @@
         }).then(() => {
           const { _id } = row;
           store.dispatch('notice/DELETE', { data: { _id }, index })
-            .then(() => {
-              Message.success('删除公告成功');
-            })
-            .catch(() => false);
+          .then(() => {
+            Message.closeAll();
+            Message.success('删除公告成功');
+          })
+          .catch(() => false);
         }).catch(() => {
+          Message.closeAll();
           Message.info('已取消');
         });
       },
@@ -113,6 +115,7 @@
           if (valid) {
             return store.dispatch('notice/PUBLISH', this.noticeForm)
               .then(() => {
+                Message.closeAll();
                 Message.success('发布公告成功');
                 this.dialog.editNotice = false;
               })
