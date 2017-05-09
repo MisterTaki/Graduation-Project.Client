@@ -5,27 +5,27 @@
     <div class="main">
       <h2 class="title">我的导师：</h2>
       <div class="myTeacher-wrapper">
-        <template v-if="status===0">
+        <template v-if="status === 0">
           <div class="status">
             <h5 class="notice">还没有选择导师，点击右下角的“开始选择导师”来开始：）</h5>
             <router-link to="choose-teacher" class="choose-btn">开始选择导师</router-link>
           </div>
         </template>
-        <template v-else-if="status===1">
+        <template v-else-if="status === 1">
           <div class="status">
             <h5 class="notice">已提交导师志愿名单，请耐心等待导师选择确认：）</h5>
-            <el-button class="start-btn" type="text" @click="volunteerListDialog=true">查看已选择志愿</el-button>
+            <el-button class="start-btn" type="text" @click="openVounteerDialog">查看已选择志愿</el-button>
           </div>
-          <el-dialog class="volunteerList-dialog" title="已选择志愿" size="large" v-model="volunteerListDialog">
-            <el-table class="myVolunteer-table myTeacher-view--table" :data="myVolunteers" border>
+          <el-dialog class="volunteerList-dialog" title="已选择志愿" size="large" v-model="dialog.volunteer">
+            <el-table class="myVolunteer-table myTeacher-view--table" :data="choosedTeachers" border>
               <el-table-column type="expand">
                 <template scope="props">
                   <el-form label-position="left" label-width="100px">
                     <el-form-item label="学院：">
-                      <span>{{ props.row.academy }}</span>
+                      <span>{{ academyList[props.row.academyID - 1].value }}</span>
                     </el-form-item>
                     <el-form-item label="性别：">
-                      <span>{{ props.row.gender }}</span>
+                      <span>{{ props.row.gender === 'm' ? '男' : '女' }}</span>
                     </el-form-item>
                     <el-form-item label="学历：">
                       <span>{{ props.row.education }}</span>
@@ -43,12 +43,17 @@
                 </template>
               </el-table-column>
               <el-table-column width="140" prop="order" label="志愿次序" align="center"></el-table-column>
-              <el-table-column width="140" prop="name" label="姓名" align="center"></el-table-column>
+              <el-table-column width="140" prop="username" label="姓名" align="center"></el-table-column>
               <el-table-column prop="choosedTopic" label="选择的研究课题" align="center"></el-table-column>
+              <el-table-column width="100" prop="status" label="状态" align="center">
+                <template scope="scope">
+                  <el-tag :type="scope.row.status === '进行中' ? 'success' : scope.row.status === '待进行' ? 'warning' : 'danger'">{{scope.row.status}}</el-tag>
+                </template>
+              </el-table-column>
             </el-table>
           </el-dialog>
         </template>
-        <template v-else-if="status===2">
+        <template v-else-if="status === 2">
           <div class="status">
             <el-table class="myTeacher-table myTeacher-view--table" :data="myTeacher" border>
               <el-table-column type="expand">
@@ -75,7 +80,7 @@
                   </el-form>
                 </template>
               </el-table-column>
-              <el-table-column width="140" prop="name" label="姓名" align="center"></el-table-column>
+              <el-table-column width="140" prop="username" label="姓名" align="center"></el-table-column>
               <el-table-column prop="choosedTopic" label="选择的研究课题" align="center"></el-table-column>
             </el-table>
           </div>
@@ -86,54 +91,46 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex';
+  import store from '@/store';
+  import mixins from '@/mixins';
+
   export default {
-    name: 'my-teacher',
+    username: 'my-teacher',
+    mixins: [mixins],
     data () {
       return {
-        status: 0, // 0:未选择导师，1:等待导师回复中，2:已选择完成
-        volunteerListDialog: false,
-        myVolunteers: [{
-          order: '第一志愿',
-          name: '王昭顺',
-          gender: '男',
-          academy: '计算机与通信工程',
-          education: '博士',
-          position: '教授（博导）',
-          email: 'zhswang@sohu.com',
-          mobile: '13520555528',
-          choosedTopic: '毕业设计（论文）管理系统'
-        }, {
-          order: '第二志愿',
-          name: '王昭顺',
-          gender: '男',
-          academy: '计算机与通信工程',
-          education: '博士',
-          position: '教授（博导）',
-          email: 'zhswang@sohu.com',
-          mobile: '13520555528',
-          choosedTopic: '毕业设计（论文）管理系统'
-        }, {
-          order: '第三志愿',
-          name: '王昭顺',
-          gender: '男',
-          academy: '计算机与通信工程',
-          education: '博士',
-          position: '教授（博导）',
-          email: 'zhswang@sohu.com',
-          mobile: '13520555528',
-          choosedTopic: '毕业设计（论文）管理系统'
-        }],
-        myTeacher: [{
-          name: '王昭顺',
-          gender: '男',
-          academy: '计算机与通信工程',
-          education: '博士',
-          position: '教授（博导）',
-          email: 'zhswang@sohu.com',
-          mobile: '13520555528',
-          choosedTopic: '毕业设计（论文）管理系统'
-        }]
+        dialog: {
+          volunteer: false
+        }
       };
+    },
+    computed: mapState({
+      loading: ({ global }) => global.loading,
+      academyList: ({ global }) => global.academy.value,
+      status: ({ volunteer }) => volunteer.studentStatus.value, // 0:未选择导师，1:等待导师回复中，2:已选择完成
+      choosedTeachers: ({ volunteer }) => volunteer.choosedTeachers.value
+    }),
+    methods: {
+      openVounteerDialog () {
+        if (!store.state.volunteer.choosedTeachers.loaded) {
+          store.dispatch('volunteer/LOAD_CHOOSED_TEACHERS')
+          .then(() => (this.dialog.volunteer = true))
+          .catch(() => false);
+        }
+        this.dialog.volunteer = true;
+      }
+    },
+    beforeRouteEnter (to, from, next) {
+      const loads = [];
+      if (!store.state.global.academy.loaded) loads.push(store.dispatch('global/LOAD_ACADEMY'));
+      if (!store.state.volunteer.studentStatus.loaded) loads.push(store.dispatch('volunteer/LOAD_STUDENT_STATUS'));
+      if (loads.length > 0) {
+        return Promise.all(loads)
+          .then(() => next())
+          .catch(() => next(false));
+      }
+      return next();
     }
   };
 </script>
