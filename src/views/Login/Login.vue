@@ -2,6 +2,25 @@
 
 <template>
   <div class="main-container">
+    <div class="particles-wrapper">
+      <particles
+        color="#D3DCE6"
+        :particleOpacity="0.6"
+        linesColor="#D3DCE6"
+        :particlesNumber="20"
+        shapeType="circle"
+        :particleSize="10"
+        :linesWidth="2"
+        :lineLinked="true"
+        :lineOpacity="0.4"
+        :linesDistance="500"
+        :moveSpeed="2"
+        :hoverEffect="true"
+        hoverMode="grab"
+        :clickEffect="true"
+        clickMode="push">
+      </particles>
+    </div>
     <div class="main-wrapper">
       <div class="logo-wrapper">
         <img src="~@/assets/images/logo_400x400.png" alt="logo">
@@ -112,12 +131,16 @@
 <script>
   import { mapState } from 'vuex';
   import { Message } from 'element-ui';
+  import { Common } from '@/components';
   import router from '@/router';
   import mixins from '@/mixins';
 
   export default {
     name: 'login-view',
     mixins: [mixins],
+    components: {
+      particles: Common.Particles
+    },
     data () {
       const validateRepeatPass = (rule, value, callback) => {
         if (value === '') {
