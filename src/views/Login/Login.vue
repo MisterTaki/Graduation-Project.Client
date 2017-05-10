@@ -2,25 +2,23 @@
 
 <template>
   <div class="main-container">
-    <div class="particles-wrapper">
-      <particles
-        color="#D3DCE6"
-        :particleOpacity="0.6"
-        linesColor="#D3DCE6"
-        :particlesNumber="20"
-        shapeType="circle"
-        :particleSize="10"
-        :linesWidth="2"
-        :lineLinked="true"
-        :lineOpacity="0.4"
-        :linesDistance="500"
-        :moveSpeed="2"
-        :hoverEffect="true"
-        hoverMode="grab"
-        :clickEffect="true"
-        clickMode="push">
-      </particles>
-    </div>
+    <particles class="particles"
+      color="#D3DCE6"
+      :particleOpacity="0.6"
+      linesColor="#D3DCE6"
+      :particlesNumber="20"
+      shapeType="circle"
+      :particleSize="10"
+      :linesWidth="2"
+      :lineLinked="true"
+      :lineOpacity="0.4"
+      :linesDistance="500"
+      :moveSpeed="2"
+      :hoverEffect="true"
+      hoverMode="grab"
+      :clickEffect="true"
+      clickMode="push">
+    </particles>
     <div class="main-wrapper">
       <div class="logo-wrapper">
         <img src="~@/assets/images/logo_400x400.png" alt="logo">
