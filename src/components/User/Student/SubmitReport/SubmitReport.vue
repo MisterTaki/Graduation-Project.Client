@@ -6,11 +6,9 @@
       <div class="submit-wrapper">
         <div class="title-wrapper">
           <h2 class="title">提交报告</h2>
-          <template v-if="systemStatus !== 0">
-            <el-button class="upload-btn" type="text" @click="dialog.upload=true">上传<i class="el-icon-upload2 el-icon--right"></i></el-button>
-          </template>
+          <el-button v-if="systemStatus !== 1" class="upload-btn" type="text" @click="dialog.upload=true">上传<i class="el-icon-upload2 el-icon--right"></i></el-button>
         </div>
-        <h5 class="notice">同学你好，现在是“{{noticeText}}”环节，{{systemStatus !== 0 ? '请点击右上角上传按钮进行提交：）' : '暂时无法提交报告'}}</h5>
+        <h5 class="notice">同学你好，现在是“{{noticeText}}”环节，{{systemStatus !== 1 ? '请点击右上角上传按钮进行提交：）' : '暂时无法提交报告'}}</h5>
         <template v-if="dialog.upload">
           <el-dialog class="upload-dialog" title="报告上传提交" size="small" v-model="dialog.upload">
             <el-upload ref="upload" class="upload submitReport-view--upload" action="//jsonplaceholder.typicode.com/posts/" drag :before-upload="beforeUpload" :on-success="submitSuccess">
@@ -60,7 +58,7 @@
       };
     },
     computed: mapState({
-      systemStatus: ({ system }) => system.status,
+      systemStatus: ({ system }) => system.status.value,
       noticeText () {
         const noticeTexts = [
           '与导师双向选择',
