@@ -141,6 +141,7 @@
     },
     computed: mapState({
       loading: ({ global }) => global.loading,
+      systemStatus: ({ system }) => system.status.value,
       academyList: ({ global }) => global.academy.value,
       teacherOptions: ({ volunteer }) => volunteer.teacherOptions.value,
       academyValues () {
@@ -228,7 +229,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          store.dispatch('volunteer/CHOOSE', {
+          store.dispatch('volunteer/CHOOSE_TEACHERS', {
             firstTeacherID: this.volunteersForm[0]._id,
             firstTopic: this.volunteersForm[0].choosedTopic,
             secondTeacherID: this.volunteersForm[1]._id,
@@ -249,38 +250,35 @@
       }
     },
     beforeRouteEnter (to, from, next) {
-      if (!store.state.volunteer.studentStatus.loaded) {
-        store.dispatch('volunteer/LOAD_STUDENT_STATUS')
-        .then(() => {
-          if (store.state.volunteer.studentStatus.value !== 0) {
-            Message.closeAll();
-            Message.error('已提交过志愿名单，无法再次选择');
-            return next('/user/my-teacher');
-          }
-          const loads = [];
-          if (!store.state.global.academy.loaded) loads.push(store.dispatch('global/LOAD_ACADEMY'));
-          if (!store.state.volunteer.teacherOptions.loaded) loads.push(store.dispatch('volunteer/LOAD_TEACHER_OPTIONS'));
-          if (loads.length > 0) {
-            return Promise.all(loads)
-              .then(() => next())
-              .catch(() => next(false));
-          }
-          return next();
-        })
-        .catch(() => next(false));
+      const loads = [];
+      if (!store.state.system.status.loaded) loads.push(store.dispatch('system/GET_STATUS'));
+      if (!store.state.global.academy.loaded) loads.push(store.dispatch('global/LOAD_ACADEMY'));
+      if (!store.state.volunteer.studentStatus.loaded) loads.push(store.dispatch('volunteer/LOAD_STUDENT_STATUS'));
+      if (!store.state.volunteer.teacherOptions.loaded) loads.push(store.dispatch('volunteer/LOAD_TEACHER_OPTIONS'));
+      if (loads.length > 0) {
+        return Promise.all(loads)
+          .then(() => {
+            if (store.state.volunteer.studentStatus.value !== 0) {
+              Message.closeAll();
+              Message.error('已提交过志愿名单，无法再次选择');
+              return next('/user/my-teacher');
+            } else if (store.state.system.status.value !== 1) {
+              Message.closeAll();
+              Message.error('双向选择阶段已过期');
+              return next('/user/my-teacher');
+            }
+            return next();
+          })
+          .catch(() => next(false));
       }
       if (store.state.volunteer.studentStatus.value !== 0) {
         Message.closeAll();
         Message.error('已提交过志愿名单，无法再次选择');
         return next('/user/my-teacher');
-      }
-      const loads = [];
-      if (!store.state.global.academy.loaded) loads.push(store.dispatch('global/LOAD_ACADEMY'));
-      if (!store.state.volunteer.teacherOptions.loaded) loads.push(store.dispatch('volunteer/LOAD_TEACHER_OPTIONS'));
-      if (loads.length > 0) {
-        return Promise.all(loads)
-          .then(() => next())
-          .catch(() => next(false));
+      } else if (store.state.system.status.value !== 1) {
+        Message.closeAll();
+        Message.error('双向选择阶段已过期');
+        return next('/user/my-teacher');
       }
       return next();
     }
