@@ -5,7 +5,10 @@ const LOAD_TEACHER_OPTIONS = 'volunteer/LOAD_TEACHER_OPTIONS';
 const LOAD_STUDENT_OPTIONS = 'volunteer/LOAD_STUDENT_OPTIONS';
 const LOAD_STUDENT_STATUS = 'volunteer/LOAD_STUDENT_STATUS';
 const LOAD_CHOOSED_TEACHERS = 'volunteer/LOAD_CHOOSED_TEACHERS';
-const CHOOSE = 'volunteer/CHOOSE';
+const LOAD_CONFIRMED_STUDENTS = 'volunteer/LOAD_CONFIRMED_STUDENTS';
+const LOAD_CONFIRMED_TEACHER = 'volunteer/LOAD_CONFIRMED_TEACHER';
+const CHOOSE_TEACHERS = 'volunteer/CHOOSE_TEACHERS';
+const CHOOSE_STUDENTS = 'volunteer/CHOOSE_STUDENTS';
 
 export default {
   state: {
@@ -28,7 +31,15 @@ export default {
     choosedTeachers: {
       value: [],
       loaded: false
-    }
+    },
+    confirmedStudents: {
+      value: [],
+      loaded: false
+    },
+    confirmedTeacher: {
+      value: [],
+      loaded: false
+    },
   },
   actions: {
     async [LOAD_TEACHER_OPTIONS] ({ commit }) {
@@ -59,9 +70,27 @@ export default {
         }
       }));
     },
-    async [CHOOSE] ({ commit }, data) {
+    async [LOAD_CONFIRMED_STUDENTS] ({ commit }) {
+      commit(LOAD_CONFIRMED_STUDENTS, await client.get(volunteer.load, {
+        params: {
+          type: 'confirmed'
+        }
+      }));
+    },
+    async [LOAD_CONFIRMED_TEACHER] ({ commit }) {
+      commit(LOAD_CONFIRMED_TEACHER, await client.get(volunteer.load, {
+        params: {
+          type: 'confirmed'
+        }
+      }));
+    },
+    async [CHOOSE_TEACHERS] ({ commit }, data) {
       await client.post(volunteer.choose, { data });
-      commit(CHOOSE);
+      commit(CHOOSE_TEACHERS);
+    },
+    async [CHOOSE_STUDENTS] ({ commit }, data) {
+      await client.post(volunteer.choose, { data });
+      commit(CHOOSE_STUDENTS, { data });
     }
   },
   mutations: {
@@ -89,8 +118,29 @@ export default {
         loaded: true
       };
     },
-    [CHOOSE] (state) {
+    [LOAD_CONFIRMED_STUDENTS] (state, { confirmedStudents }) {
+      state.confirmedStudents = {
+        value: confirmedStudents,
+        loaded: true
+      };
+    },
+    [LOAD_CONFIRMED_TEACHER] (state, { confirmedTeacher }) {
+      state.confirmedTeacher = {
+        value: [confirmedTeacher],
+        loaded: true
+      };
+    },
+    [CHOOSE_TEACHERS] (state) {
       state.studentStatus.value = 1;
+    },
+    [CHOOSE_STUDENTS] (state, { data }) {
+      const { ids } = data;
+      state.studentOptions.value = state.studentOptions.value.map((item) => {
+        if (ids.indexOf(item._id) > -1) {
+          item.status = '已确认选择为您的学生';
+        }
+        return item;
+      });
     },
   }
 };
