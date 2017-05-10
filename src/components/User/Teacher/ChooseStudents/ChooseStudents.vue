@@ -5,7 +5,7 @@
     <div class="main">
       <div class="title-wrapper">
         <h2 class="title">选择学生：<span>（最多选取五位学生）</span></h2>
-        <el-button class="studentList-btn" type="text" @click="dialog.studentList=true">我的学生列表<i class="el-icon-document el-icon--right"></i></el-button>
+        <el-button class="studentList-btn" type="text" @click="dialog.studentList=true">待确认学生列表<i class="el-icon-document el-icon--right"></i></el-button>
       </div>
       <div class="studentList-wrapper">
         <div class="status">
@@ -18,9 +18,6 @@
                   </el-form-item>
                   <el-form-item label="性别：">
                     <span>{{ props.row.gender === 'm' ? '男' : '女' }}</span>
-                  </el-form-item>
-                  <el-form-item label="班级：">
-                    <span>{{ props.row._class }}</span>
                   </el-form-item>
                   <el-form-item label="专业：">
                     <span>{{ props.row.major }}</span>
@@ -39,15 +36,19 @@
             </el-table-column>
             <el-table-column width="120" prop="order" label="志愿次序" align="center" :filters="orderValues" :filter-method="filterOrder"></el-table-column>
             <el-table-column width="120" prop="username" label="学生姓名" align="center"></el-table-column>
+            <el-table-column width="120" prop="_class" label="班级" align="center"></el-table-column>
             <el-table-column prop="choosedTopic" label="选择的研究课题" align="center"></el-table-column>
             <el-table-column width="180" prop="status" label="状态" align="center" :filters="statusValues" :filter-method="filterStatus">
               <template scope="scope">
                 <el-tag :type="scope.row.status === '已确认选择为您的学生' ? 'primary' : scope.row.status === '可以选择成为您的学生' ? 'success' : 'warning'">{{scope.row.status}}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column width="140" label="操作" align="center">
+            <el-table-column width="120" label="操作" align="center">
               <template scope="scope">
-                <el-button v-if="scope.row.status === '可以选择成为您的学生'" type="text" size="small" @click="addStudent(scope.$index, scope.row)">添加至学生列表</el-button>
+                <template v-if="scope.row.status === '可以选择成为您的学生'">
+                  <el-button type="text" size="small" @click="addStudent(scope.$index, scope.row)">添加</el-button>
+                  <el-button class="refuse-btn" type="text" size="small" @click="refuseStudent(scope.$index, scope.row)">拒绝</el-button>
+                </template>
               </template>
             </el-table-column>
           </el-table>
@@ -55,7 +56,7 @@
       </div>
     </div>
     <el-dialog class="studentList-dialog" title="学生列表" size="large" v-model="dialog.studentList">
-      <el-table class="student-list myStudents-view--table" :data="studentsForm" border>
+      <el-table class="student-list myStudents-view--table" :data="choosedForm" border>
         <el-table-column type="expand">
           <template scope="props">
             <el-form label-position="left" label-width="100px">
@@ -93,7 +94,7 @@
         </el-table-column>
       </el-table>
       <div class="submitStudents-btn-wrapper">
-        <el-button v-if="studentsForm.length > 0" type="primary" @click="submitStudents">提交学生列表</el-button>
+        <el-button v-if="choosedForm.length > 0" type="primary" @click="submitStudents">提交学生列表</el-button>
       </div>
     </el-dialog>
   </div>
@@ -101,7 +102,7 @@
 
 <script>
   import { mapState } from 'vuex';
-  import { Message } from 'element-ui';
+  import { Message, MessageBox } from 'element-ui';
   import store from '@/store';
   import mixins from '@/mixins';
 
@@ -145,13 +146,17 @@
         dialog: {
           studentList: false
         },
-        studentsForm: []
+        choosedForm: [],
       };
     },
     computed: mapState({
       loading: ({ global }) => global.loading,
+      systemStatus: ({ system }) => system.status.value,
       academyList: ({ global }) => global.academy.value,
-      studentOptions: ({ volunteer }) => volunteer.studentOptions.value
+      studentOptions: ({ volunteer }) => volunteer.studentOptions.value,
+      confirmedStudents () {
+        return this.studentOptions.filter(item => item.status === '已确认选择为您的学生');
+      }
     }),
     methods: {
       filterOrder (value, row) {
@@ -168,31 +173,69 @@
         return row.status === value;
       },
       addStudent (index, row) {
-        if (this.studentsForm.length === 5) {
-          Message.error('已经达到最大指导学生数（5个），请在我的学生列表查看');
+        if (this.choosedForm.length + this.confirmedStudents.length === 5) {
+          Message.closeAll();
+          Message.error('已经达到最大指导学生数（5个），无法添加');
           return;
-        } else if (this.studentsForm.indexOf(row) > -1) {
+        } else if (this.choosedForm.indexOf(row) > -1) {
+          Message.closeAll();
           Message.warning('已经添加过此学生，请在我的学生列表查看');
           return;
         }
-        this.studentsForm.push(row);
+        this.choosedForm.push(row);
+        Message.closeAll();
         Message.success('添加成功');
       },
       removeStudent (index, row) {
-        this.studentsForm.splice(this.studentsForm.indexOf(row), 1);
+        this.choosedForm.splice(this.choosedForm.indexOf(row), 1);
+        Message.closeAll();
         Message.success('移除成功');
       },
       submitStudents () {
+        MessageBox.confirm('提交后无法再次拒绝该学生, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          store.dispatch('volunteer/CHOOSE_STUDENTS', {
+            ids: this.choosedForm.map(item => item._id),
+            topics: this.choosedForm.map(item => item.choosedTopic),
+          })
+          .then(() => {
+            Message.closeAll();
+            Message.success('提交成功');
+            this.dialog.studentList = false;
+            this.choosedForm = [];
+          })
+          .catch(() => false);
+        }).catch(() => {
+          Message.closeAll();
+          Message.success('已取消');
+        });
       }
     },
     beforeRouteEnter (to, from, next) {
       const loads = [];
+      if (!store.state.system.status.loaded) loads.push(store.dispatch('system/GET_STATUS'));
       if (!store.state.global.academy.loaded) loads.push(store.dispatch('global/LOAD_ACADEMY'));
+      if (!store.state.system.status.loaded) loads.push(store.dispatch('system/GET_STATUS'));
       if (!store.state.volunteer.studentOptions.loaded) loads.push(store.dispatch('volunteer/LOAD_STUDENT_OPTIONS'));
       if (loads.length > 0) {
         return Promise.all(loads)
-          .then(() => next())
+          .then(() => {
+            if (store.state.system.status.value !== 1) {
+              Message.closeAll();
+              Message.error('双向选择阶段已过期');
+              return next('/user/my-students');
+            }
+            return next();
+          })
           .catch(() => next(false));
+      }
+      if (store.state.system.status.value !== 1) {
+        Message.closeAll();
+        Message.error('双向选择阶段已过期');
+        return next('/user/my-students');
       }
       return next();
     }
