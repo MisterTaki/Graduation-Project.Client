@@ -14,9 +14,6 @@
         <template v-else-if="status === 1">
           <div class="status">
             <h5 class="notice">已提交导师志愿名单，请耐心等待导师选择确认：）</h5>
-            <el-button class="start-btn" type="text" @click="openVounteerDialog">查看已选择志愿</el-button>
-          </div>
-          <el-dialog class="volunteerList-dialog" title="已选择志愿" size="large" v-model="dialog.volunteer">
             <el-table class="myVolunteer-table myTeacher-view--table" :data="choosedTeachers" border>
               <el-table-column type="expand">
                 <template scope="props">
@@ -51,19 +48,19 @@
                 </template>
               </el-table-column>
             </el-table>
-          </el-dialog>
+          </div>
         </template>
         <template v-else-if="status === 2">
           <div class="status">
-            <el-table class="myTeacher-table myTeacher-view--table" :data="myTeacher" border>
+            <el-table class="myTeacher-table myTeacher-view--table" :data="confirmedTeacher" border>
               <el-table-column type="expand">
                 <template scope="props">
                   <el-form label-position="left" label-width="100px">
                     <el-form-item label="学院：">
-                      <span>{{ props.row.academy }}</span>
+                      <span>{{ academyList[props.row.academyID - 1].value }}</span>
                     </el-form-item>
                     <el-form-item label="性别：">
-                      <span>{{ props.row.gender }}</span>
+                      <span>{{ props.row.gender === 'm' ? '男' : '女' }}</span>
                     </el-form-item>
                     <el-form-item label="学历：">
                       <span>{{ props.row.education }}</span>
@@ -81,7 +78,7 @@
                 </template>
               </el-table-column>
               <el-table-column width="140" prop="username" label="姓名" align="center"></el-table-column>
-              <el-table-column prop="choosedTopic" label="选择的研究课题" align="center"></el-table-column>
+              <el-table-column prop="topic" label="选择的研究课题" align="center"></el-table-column>
             </el-table>
           </div>
         </template>
@@ -109,22 +106,36 @@
       loading: ({ global }) => global.loading,
       academyList: ({ global }) => global.academy.value,
       status: ({ volunteer }) => volunteer.studentStatus.value, // 0:未选择导师，1:等待导师回复中，2:已选择完成
-      choosedTeachers: ({ volunteer }) => volunteer.choosedTeachers.value
+      choosedTeachers: ({ volunteer }) => volunteer.choosedTeachers.value,
+      confirmedTeacher: ({ volunteer }) => volunteer.confirmedTeacher.value,
     }),
     methods: {
-      openVounteerDialog () {
-        if (!store.state.volunteer.choosedTeachers.loaded) {
-          store.dispatch('volunteer/LOAD_CHOOSED_TEACHERS')
-          .then(() => (this.dialog.volunteer = true))
-          .catch(() => false);
-        }
-        this.dialog.volunteer = true;
-      }
     },
     beforeRouteEnter (to, from, next) {
       const loads = [];
       if (!store.state.global.academy.loaded) loads.push(store.dispatch('global/LOAD_ACADEMY'));
-      if (!store.state.volunteer.studentStatus.loaded) loads.push(store.dispatch('volunteer/LOAD_STUDENT_STATUS'));
+      if (!store.state.volunteer.studentStatus.loaded) {
+        store.dispatch('volunteer/LOAD_STUDENT_STATUS')
+        .then(() => {
+          if (store.state.volunteer.studentStatus.value === 1 && !store.state.volunteer.choosedTeachers.loaded) {
+            loads.push(store.dispatch('volunteer/LOAD_CHOOSED_TEACHERS'));
+          } else if (store.state.volunteer.studentStatus.value === 2 && !store.state.volunteer.confirmedTeacher.loaded) {
+            loads.push(store.dispatch('volunteer/LOAD_CONFIRMED_TEACHER'));
+          }
+          if (loads.length > 0) {
+            return Promise.all(loads)
+              .then(() => next())
+              .catch(() => next(false));
+          }
+          return next();
+        })
+        .catch(() => next(false));
+      }
+      if (store.state.volunteer.studentStatus.value === 1 && !store.state.volunteer.choosedTeachers.loaded) {
+        loads.push(store.dispatch('volunteer/LOAD_CHOOSED_TEACHERS'));
+      } else if (store.state.volunteer.studentStatus.value === 2 && !store.state.volunteer.confirmedTeacher.loaded) {
+        loads.push(store.dispatch('volunteer/LOAD_CONFIRMED_TEACHER'));
+      }
       if (loads.length > 0) {
         return Promise.all(loads)
           .then(() => next())
