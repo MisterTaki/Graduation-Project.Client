@@ -3,7 +3,7 @@
 <template lang="html">
   <div class="main-wrapper">
     <div class="main">
-      <el-button class="editMessage-btn" type="text" @click="openEditDialog('send')">发送私信<i class="el-icon-fa-pencil el-icon--right"></i></el-button>
+      <el-button v-if="identity !== 'admin'" class="editMessage-btn" type="text" @click="openEditDialog('send')">发送私信<i class="el-icon-fa-pencil el-icon--right"></i></el-button>
       <el-tabs class="tabs accountManage-view--tabs" value="receive-box" type="card">
         <el-tab-pane label="收件箱" name="receive-box">
           <el-table class="message-list message-view--table" :data="receiveMessages" border>
@@ -82,11 +82,11 @@
     <template v-if="dialog.edit">
       <el-dialog class="editNotice-dialog" title="编辑" size="small" :close-on-click-modal=false v-model="dialog.edit">
         <el-form :model="basicForm" :rules="rules.basicForm" ref="basicForm" label-width="100px" class="notice-form">
-          <el-form-item label="收件人" prop="receiveIndex">
+          <el-form-item label="收件人" prop="receiverIndex">
             <template v-if="dialogEditType === 'send'">
-              <el-select class="receive-select" v-model="basicForm.receiveIndex" placeholder="请选择">
+              <el-select class="receive-select" v-model="basicForm.receiverIndex" placeholder="请选择">
                 <el-option
-                  v-for="(item, index) in receiveOptions"
+                  v-for="(item, index) in receiverOptions"
                   :label="item.username"
                   :key="item._id"
                   :value="index">
@@ -94,7 +94,7 @@
               </el-select>
             </template>
             <template v-else-if="dialogEditType === 'reply'">
-              <el-input v-model="basicForm.receiveName" :readonly='true'></el-input>
+              <el-input v-model="basicForm.receiverName" :readonly='true'></el-input>
             </template>
           </el-form-item>
           <el-form-item label="标题" prop="title">
@@ -132,15 +132,15 @@
         },
         dialogEditType: '',
         basicForm: {
-          receiveName: '',
-          receiveIndex: '',
+          receiverName: '',
+          receiverIndex: '',
           title: '',
           content: '',
           remark: ''
         },
         rules: {
           basicForm: {
-            receiveIndex: [
+            receiverIndex: [
               { required: true, message: '请选择收件人' }
             ],
             title: [
@@ -150,34 +150,19 @@
               { required: true, message: '请输入内容', trigger: 'blur' }
             ],
           }
-        },
-        receiveOptions: [
-          {
-            username: '王昭顺',
-            _id: 'T12345',
-            identity: 'teacher'
-          },
-          {
-            username: '超级管理员',
-            _id: 'A12345',
-            identity: 'admin'
-          },
-          {
-            username: '高琦',
-            _id: '41355025',
-            identity: 'student'
-          },
-        ]
+        }
       };
     },
     computed: mapState({
       loading: ({ global }) => global.loading,
+      identity: ({ auth }) => auth.identity,
       receiveMessages: ({ message }) => message.receive.value,
       sendMessages: ({ message }) => message.send.value,
       deletedMessages: ({ message }) => message.deleted.value,
+      receiverOptions: ({ group }) => group.data.value,
       messageForm () {
-        const { _id: receiverID, username: receiverName, identity: receiverIdentity } = this.receiveOptions[this.basicForm.receiveIndex];
-        const { receiveIndex, ...basicInfo } = this.basicForm;
+        const { _id: receiverID, username: receiverName, identity: receiverIdentity } = this.receiverOptions[this.basicForm.receiverIndex];
+        const { receiverIndex, ...basicInfo } = this.basicForm;
         return {
           ...basicInfo,
           receiverID,
@@ -191,19 +176,19 @@
         this.dialogEditType = type;
         this.resetForm('basicForm');
         if (type === 'reply') {
-          this.basicForm.receiveName = receiveData.name;
-          this.basicForm.receiveIndex = receiveData.index;
+          this.basicForm.receiverName = receiveData.name;
+          this.basicForm.receiverIndex = receiveData.index;
           this.basicForm.title = receiveData.title;
         }
         this.dialog.edit = true;
       },
       replyMessage (index, row) {
         const { senderID, title } = row;
-        for (let i = 0; i < this.receiveOptions.length; i += 1) {
-          if (this.receiveOptions[i]._id === senderID) {
+        for (let i = 0; i < this.receiverOptions.length; i += 1) {
+          if (this.receiverOptions[i]._id === senderID) {
             const receiveData = {
               index: i,
-              name: this.receiveOptions[i].username,
+              name: this.receiverOptions[i].username,
               title: `回复: "${title}"`
             };
             this.openEditDialog('reply', receiveData);
@@ -249,6 +234,9 @@
       if (!store.state.message.receive.loaded) loads.push(store.dispatch('message/LOAD_RECEIVE'));
       if (!store.state.message.send.loaded) loads.push(store.dispatch('message/LOAD_SEND'));
       if (!store.state.message.deleted.loaded) loads.push(store.dispatch('message/LOAD_DELETED'));
+      if (store.state.auth.identity !== 'admin' && !store.state.group.data.loaded) {
+        loads.push(store.dispatch('group/LOAD'));
+      }
       if (loads.length > 0) {
         return Promise.all(loads)
           .then(() => next())
