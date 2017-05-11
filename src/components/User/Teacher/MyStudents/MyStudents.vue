@@ -143,6 +143,7 @@
           if (valid) {
             return store.dispatch('topic/ADD', this.topicForm)
               .then(() => {
+                Message.closeAll();
                 Message.success('添加课题成功');
                 this.resetForm('topicForm');
               })
