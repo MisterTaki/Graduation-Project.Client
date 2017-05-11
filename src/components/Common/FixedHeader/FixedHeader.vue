@@ -27,6 +27,7 @@
 </template>
 
 <script>
+  import store from '@/store';
   import { mapState } from 'vuex';
   import { Message } from 'element-ui';
   import router from '@/router';
@@ -35,21 +36,22 @@
     name: 'fixed-header',
     data () {
       return {
-        badgeLen: 0,
-        isMore: false
       };
     },
     computed: mapState({
       username: ({ auth }) => auth.username,
       latestMessages ({ message }) {
         const messages = message.latest.value;
-        this.badgeLen = messages.length;
         if (messages.length > 10) {
-          this.isMore = true;
           return messages.slice(0, 10);
         }
-        this.isMore = false;
         return messages;
+      },
+      badgeLen () {
+        return this.latestMessages.length;
+      },
+      isMore () {
+        return this.badgeLen > 10;
       }
     }),
     methods: {
@@ -62,8 +64,9 @@
       }
     },
     created () {
-      if (this.$store.state.message.latest.loaded) return;
-      this.$store.dispatch('message/LOAD_LATEST');
-    },
+      if (!store.state.message.latest.loaded) {
+        store.dispatch('message/LOAD_LATEST');
+      }
+    }
   };
 </script>
