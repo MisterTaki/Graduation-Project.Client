@@ -1,7 +1,7 @@
 import { client } from '@/helpers';
 import { system } from '@/api';
 
-const GET_STATUS = 'system/GET_STATUS';
+const LOAD = 'system/LOAD';
 
 export default {
   state: {
@@ -11,12 +11,12 @@ export default {
     }
   },
   actions: {
-    async [GET_STATUS] ({ commit }) {
-      commit(GET_STATUS, await client.get(system.getStatus));
+    async [LOAD] ({ commit }) {
+      commit(LOAD, await client.get(system.getStatus));
     }
   },
   mutations: {
-    [GET_STATUS] (state, { status }) {
+    [LOAD] (state, { status }) {
       state.status = {
         value: status,
         loaded: true
