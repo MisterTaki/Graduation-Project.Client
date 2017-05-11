@@ -18,7 +18,7 @@
             <el-table-column width="180" prop="created_at" label="分享时间" align="center"></el-table-column>
             <el-table-column width="100" label="操作" align="center">
               <template scope="scope">
-                <el-button type="text" size="small" @click="downloadData(scope.row)">下载</el-button>
+                <el-button type="text" size="small" @click="downloadResource(scope.row)">下载</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -71,7 +71,7 @@
       systemStatus: ({ system }) => system.status.value,
     }),
     methods: {
-      downloadData (row) {
+      downloadResource (row) {
         window.open(`${config.baseURL}${resourceAPI.download}?token=${this.token}&_id=${row._id}`);
       },
       beforeUpload (file) {
@@ -94,11 +94,20 @@
       }
     },
     beforeRouteEnter (to, from, next) {
-      const loads = [];
-      if (!store.state.system.status.loaded) loads.push(store.dispatch('system/GET_STATUS'));
-      if (!store.state.resource.data.loaded) loads.push(store.dispatch('resource/LOAD'));
-      if (loads.length > 0) {
-        return Promise.all(loads)
+      if (!store.state.system.status.loaded) {
+        return store.dispatch('system/GET_STATUS')
+          .then(() => {
+            if (store.state.system.status.value !== 1) {
+              return store.dispatch('resource/LOAD')
+                .then(() => next())
+                .catch(() => next(false));
+            }
+            return next();
+          })
+          .catch(() => next(false));
+      }
+      if (store.state.system.status.value !== 1) {
+        return store.dispatch('resource/LOAD')
           .then(() => next())
           .catch(() => next(false));
       }
