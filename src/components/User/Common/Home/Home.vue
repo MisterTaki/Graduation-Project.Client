@@ -3,8 +3,8 @@
 <template lang="html">
   <div class="main-wrapper">
     <div class="main main-step">
-      <h2 class="main-title">当前状态</h2>
-      <router-link class="goto-link button-dom text black-color goto-btn" :to="gotoLink">{{gotoText}}-></router-link>
+      <h2 class="main-title">{{identity !== 'admin' ? '当前状态' : '系统进度'}}</h2>
+      <router-link v-if="identity !== 'admin'" class="goto-link button-dom text black-color goto-btn" :to="gotoLink">{{gotoText}}-></router-link>
       <div class="step-wrapper">
         <el-steps :space="80" :active="stepsActive" direction="vertical" finish-status="success">
           <el-step title="学生、导师双向选择" description="学生和导师之间进行双向选择。"></el-step>
