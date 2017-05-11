@@ -40,14 +40,14 @@
             <el-table-column prop="choosedTopic" label="选择的研究课题" align="center"></el-table-column>
             <el-table-column width="180" prop="status" label="状态" align="center" :filters="statusValues" :filter-method="filterStatus">
               <template scope="scope">
-                <el-tag :type="scope.row.status === '已确认选择为您的学生' ? 'primary' : scope.row.status === '可以选择成为您的学生' ? 'success' : 'warning'">{{scope.row.status}}</el-tag>
+                <el-tag :type="scope.row.status === '已确认选择为您的学生' ? 'primary' : scope.row.status === '可以选择成为您的学生' ? 'success' : scope.row.status === '已拒绝' ? 'danger' : 'warning'">{{scope.row.status}}</el-tag>
               </template>
             </el-table-column>
             <el-table-column width="120" label="操作" align="center">
               <template scope="scope">
                 <template v-if="scope.row.status === '可以选择成为您的学生'">
                   <el-button type="text" size="small" @click="addStudent(scope.$index, scope.row)">添加</el-button>
-                  <el-button class="refuse-btn" type="text" size="small" @click="refuseStudent(scope.$index, scope.row)">拒绝</el-button>
+                  <el-button class="refuse-btn" type="text" size="small" @click="submitRefuse(scope.$index, scope.row)">拒绝</el-button>
                 </template>
               </template>
             </el-table-column>
@@ -206,6 +206,30 @@
             Message.success('提交成功');
             this.dialog.studentList = false;
             this.choosedForm = [];
+          })
+          .catch(() => false);
+        }).catch(() => {
+          Message.closeAll();
+          Message.success('已取消');
+        });
+      },
+      submitRefuse (index, row) {
+        MessageBox.confirm('拒绝后无法再次选择该学生, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          store.dispatch('volunteer/REFUSE_STUDENT', {
+            index,
+            data: {
+              student: row._id,
+              order: row.order
+            }
+          })
+          .then(() => {
+            Message.closeAll();
+            Message.success('拒绝成功');
+            this.choosedForm.splice(this.choosedForm.indexOf(row), 1);
           })
           .catch(() => false);
         }).catch(() => {
