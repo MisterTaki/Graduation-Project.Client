@@ -111,7 +111,7 @@
     },
     beforeRouteEnter (to, from, next) {
       if (!store.state.system.status.loaded) {
-        return store.dispatch('system/GET_STATUS')
+        return store.dispatch('system/LOAD')
           .then(() => {
             if (store.state.system.status.value !== 1) {
               return store.dispatch('report/LOAD')

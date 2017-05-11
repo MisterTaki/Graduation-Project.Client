@@ -240,9 +240,8 @@
     },
     beforeRouteEnter (to, from, next) {
       const loads = [];
-      if (!store.state.system.status.loaded) loads.push(store.dispatch('system/GET_STATUS'));
       if (!store.state.global.academy.loaded) loads.push(store.dispatch('global/LOAD_ACADEMY'));
-      if (!store.state.system.status.loaded) loads.push(store.dispatch('system/GET_STATUS'));
+      if (!store.state.system.status.loaded) loads.push(store.dispatch('system/LOAD'));
       if (!store.state.volunteer.studentOptions.loaded) loads.push(store.dispatch('volunteer/LOAD_STUDENT_OPTIONS'));
       if (loads.length > 0) {
         return Promise.all(loads)

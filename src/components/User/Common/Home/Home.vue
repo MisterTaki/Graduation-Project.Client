@@ -96,7 +96,7 @@
     },
     beforeRouteEnter (to, from, next) {
       const loads = [];
-      if (!store.state.system.status.loaded) loads.push(store.dispatch('system/GET_STATUS'));
+      if (!store.state.system.status.loaded) loads.push(store.dispatch('system/LOAD'));
       if (!store.state.notice.data.loaded) loads.push(store.dispatch('notice/LOAD'));
       if (loads.length > 0) {
         return Promise.all(loads)
