@@ -9,6 +9,7 @@ const LOAD_CONFIRMED_STUDENTS = 'volunteer/LOAD_CONFIRMED_STUDENTS';
 const LOAD_CONFIRMED_TEACHER = 'volunteer/LOAD_CONFIRMED_TEACHER';
 const CHOOSE_TEACHERS = 'volunteer/CHOOSE_TEACHERS';
 const CHOOSE_STUDENTS = 'volunteer/CHOOSE_STUDENTS';
+const REFUSE_STUDENT = 'volunteer/REFUSE_STUDENT';
 
 export default {
   state: {
@@ -91,6 +92,10 @@ export default {
     async [CHOOSE_STUDENTS] ({ commit }, data) {
       await client.post(volunteer.choose, { data });
       commit(CHOOSE_STUDENTS, { data });
+    },
+    async [REFUSE_STUDENT] ({ commit }, { data, index }) {
+      await client.post(volunteer.refuse, { data });
+      commit(REFUSE_STUDENT, { index });
     }
   },
   mutations: {
@@ -141,6 +146,9 @@ export default {
         }
         return item;
       });
+    },
+    [REFUSE_STUDENT] (state, { index }) {
+      state.studentOptions.value[index].status = '已拒绝';
     },
   }
 };

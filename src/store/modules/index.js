@@ -6,3 +6,4 @@ export notice from './notice';
 export message from './message';
 export topic from './topic';
 export volunteer from './volunteer';
+export resource from './resource';
