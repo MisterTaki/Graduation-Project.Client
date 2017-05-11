@@ -1,3 +1,4 @@
 export default {
-  getStatus: '/system/status',
+  load: '/system/load',
+  modify: '/system/modify',
 };
