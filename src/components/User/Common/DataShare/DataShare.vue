@@ -24,7 +24,7 @@
           </el-table>
         </div>
         <el-dialog class="upload-dialog" title="资料分享上传" size="small" v-model="dialog.upload" @close="$refs.upload.clearFiles()" :close-on-click-modal=false>
-          <el-upload ref="upload" class="upload dataShare-view--upload" action="/api/v1/resource/upload" drag :before-upload="beforeUpload" :on-success="submitSuccess" :headers="headers" :data="uploadData">
+          <el-upload ref="upload" class="upload dataShare-view--upload" :action="uploadAction" drag :before-upload="beforeUpload" :on-success="submitSuccess" :headers="headers" :data="uploadData">
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
             <div class="el-upload__tip" slot="tip">支持所有文件格式，但单个文件大小不超过10MB</div>
@@ -55,6 +55,7 @@
         dialog: {
           upload: false
         },
+        uploadAction: `${config.baseURL}${resourceAPI.upload}`,
         uploadData: {
           resourceName: '',
           resourceSize: ''
