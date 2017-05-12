@@ -3,9 +3,12 @@ import { account } from '@/api';
 
 const CREATE = 'account/CREATE';
 const DELETE = 'account/DELETE';
+const AGREE = 'account/AGREE';
+const REFUSE = 'account/REFUSE';
 const LOAD_STUDENTS = 'account/LOAD_STUDENTS';
 const LOAD_TEACHERS = 'account/LOAD_TEACHERS';
 const LOAD_ADMINS = 'account/LOAD_ADMINS';
+const LOAD_APPLYS = 'account/LOAD_APPLYS';
 const MODIFY_STUDENT = 'account/MODIFY_STUDENT';
 const MODIFY_TEACHER = 'account/MODIFY_TEACHER';
 const MODIFY_ADMIN = 'account/MODIFY_ADMIN';
@@ -24,6 +27,10 @@ export default {
       value: '',
       loaded: false
     },
+    applys: {
+      value: '',
+      loaded: false
+    }
   },
   actions: {
     async [CREATE] ({ commit }, data) {
@@ -33,6 +40,21 @@ export default {
     async [DELETE] ({ commit }, { data, index }) {
       await client.delete(account.delete, { data });
       commit(DELETE, { index, identity: data.identity });
+    },
+    async [AGREE] ({ commit }, { data, index }) {
+      await client.post(account.agree, { data });
+      commit(AGREE, { index, data });
+    },
+    async [REFUSE] ({ commit }, { data, index }) {
+      await client.post(account.refuse, { data });
+      commit(REFUSE, { index, identity: data.identity });
+    },
+    async [LOAD_APPLYS] ({ commit }) {
+      commit(LOAD_APPLYS, await client.get(account.load, {
+        params: {
+          type: 'apply'
+        }
+      }));
     },
     async [LOAD_STUDENTS] ({ commit }) {
       commit(LOAD_STUDENTS, await client.get(account.load, {
@@ -75,6 +97,19 @@ export default {
     },
     [DELETE] (state, { index, identity }) {
       state[`${identity}s`].value.splice(index, 1);
+    },
+    [AGREE] (state, { index, data }) {
+      state.applys.value.splice(index, 1);
+      state.students.value.push(data);
+    },
+    [REFUSE] (state, { index }) {
+      state.applys.value.splice(index, 1);
+    },
+    [LOAD_APPLYS] (state, { accounts }) {
+      state.applys = {
+        value: accounts,
+        loaded: true
+      };
     },
     [LOAD_STUDENTS] (state, { accounts }) {
       state.students = {
