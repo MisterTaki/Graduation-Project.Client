@@ -22,6 +22,7 @@
                 v-for="(topic, index) in topicForm.topics"
                 :label="'课题' + (index + 1)"
                 :prop="'topics.' + index"
+                :key="index"
                 :rules="{ required: true, message: '课题不能为空', trigger: 'blur' }">
                 <el-row>
                   <el-col :span="20">
