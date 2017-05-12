@@ -14,12 +14,12 @@
     box-shadow: $hoverShadow;
   }
 }
-.addAccount-dropdown {
+.createAccount-dropdown {
   position: absolute;
   top: 30px;
   right: 10px;
 }
-.addAccount-span {
+.createAccount-span {
   color: $blue;
   cursor: pointer;
   &:hover {
@@ -31,21 +31,21 @@
   text-align: center;
   line-height: 32px;
 }
-.search-wrapper {
-  text-align: right;
-  margin-bottom: 12px;
-}
-.search-input {
-  width: 180px;
-}
+// .search-wrapper {
+//   text-align: right;
+//   margin-bottom: 12px;
+// }
+// .search-input {
+//   width: 180px;
+// }
 .tabs-wrapper {
   position: relative;
   padding-top: 10px;
 }
-.remove-btn {
+.delete-btn {
   color: $danger;
 }
-.addAccount-form {
+.createAccount-form {
   margin-top: 20px;
 }
 .form-btn-group {
