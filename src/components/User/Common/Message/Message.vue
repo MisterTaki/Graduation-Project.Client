@@ -205,10 +205,12 @@
           const { _id: messageID } = row;
           store.dispatch('message/DELETE', { data: { messageID }, index })
             .then(() => {
+              Message.closeAll();
               Message.success('删除成功');
             })
             .catch(() => false);
         }).catch(() => {
+          Message.closeAll();
           Message.info('已取消');
         });
       },
@@ -217,6 +219,7 @@
           if (valid) {
             return store.dispatch('message/SEND', this.messageForm)
               .then(() => {
+                Message.closeAll();
                 Message.success('操作成功');
                 this.dialog.edit = false;
               })
