@@ -1,0 +1,122 @@
+import { client } from '@/helpers';
+import { account } from '@/api';
+
+const CREATE = 'account/CREATE';
+const DELETE = 'account/DELETE';
+const LOAD_STUDENTS = 'account/LOAD_STUDENTS';
+const LOAD_TEACHERS = 'account/LOAD_TEACHERS';
+const LOAD_ADMINS = 'account/LOAD_ADMINS';
+const MODIFY_STUDENT = 'account/MODIFY_STUDENT';
+const MODIFY_TEACHER = 'account/MODIFY_TEACHER';
+const MODIFY_ADMIN = 'account/MODIFY_ADMIN';
+
+export default {
+  state: {
+    students: {
+      value: '',
+      loaded: false
+    },
+    teachers: {
+      value: '',
+      loaded: false
+    },
+    admins: {
+      value: '',
+      loaded: false
+    },
+  },
+  actions: {
+    async [CREATE] ({ commit }, data) {
+      await client.post(account.create, { data });
+      commit(CREATE, data);
+    },
+    async [DELETE] ({ commit }, { data, index }) {
+      await client.delete(account.delete, { data });
+      commit(DELETE, { index, identity: data.identity });
+    },
+    async [LOAD_STUDENTS] ({ commit }) {
+      commit(LOAD_STUDENTS, await client.get(account.load, {
+        params: {
+          type: 'student'
+        }
+      }));
+    },
+    async [LOAD_TEACHERS] ({ commit }) {
+      commit(LOAD_TEACHERS, await client.get(account.load, {
+        params: {
+          type: 'teacher'
+        }
+      }));
+    },
+    async [LOAD_ADMINS] ({ commit }) {
+      commit(LOAD_ADMINS, await client.get(account.load, {
+        params: {
+          type: 'admin'
+        }
+      }));
+    },
+    async [MODIFY_STUDENT] ({ commit }, data) {
+      await client.post(account.modify, { data });
+      commit(MODIFY_STUDENT, data);
+    },
+    async [MODIFY_TEACHER] ({ commit }, data) {
+      await client.post(account.modify, { data });
+      commit(MODIFY_TEACHER, data);
+    },
+    async [MODIFY_ADMIN] ({ commit }, data) {
+      await client.post(account.modify, { data });
+      commit(MODIFY_ADMIN, data);
+    },
+  },
+  mutations: {
+    [CREATE] (state, data) {
+      const { identity } = data;
+      state[`${identity}s`].value.push(data);
+    },
+    [DELETE] (state, { index, identity }) {
+      state[`${identity}s`].value.splice(index, 1);
+    },
+    [LOAD_STUDENTS] (state, { accounts }) {
+      state.students = {
+        value: accounts,
+        loaded: true
+      };
+    },
+    [LOAD_TEACHERS] (state, { accounts }) {
+      state.teachers = {
+        value: accounts,
+        loaded: true
+      };
+    },
+    [LOAD_ADMINS] (state, { accounts }) {
+      state.admins = {
+        value: accounts,
+        loaded: true
+      };
+    },
+    [MODIFY_STUDENT] (state, data) {
+      for (let i = 0; i < state.students.value.length; i += 1) {
+        if (state.students.value[i]._id === data._id) {
+          state.students.value.splice(i, 1, data);
+          return;
+        }
+      }
+    },
+    [MODIFY_TEACHER] (state, data) {
+      for (let i = 0; i < state.teachers.value.length; i += 1) {
+        if (state.teachers.value[i]._id === data._id) {
+          state.teachers.value.splice(i, 1, data);
+          return;
+        }
+      }
+    },
+    [MODIFY_ADMIN] (state, data) {
+      for (let i = 0; i < state.admins.value.length; i += 1) {
+        if (state.admins.value[i]._id === data._id) {
+          state.admins.value.splice(i, 1, data);
+          return;
+        }
+      }
+    },
+  }
+};
