@@ -138,6 +138,42 @@
               </el-table-column>
             </el-table>
           </el-tab-pane>
+          <el-tab-pane label="待审批学生账号" name="applyStudent">
+            <el-table class="studentAccount-list accountManage-view--table" :data="applyAccounts" border>
+              <el-table-column type="expand">
+                <template scope="props">
+                  <el-form label-position="left" label-width="100px">
+                    <el-form-item label="专业：">
+                      <span>{{ props.row.major }}</span>
+                    </el-form-item>
+                    <el-form-item label="身份证号：">
+                      <span>{{ props.row.ID }}</span>
+                    </el-form-item>
+                    <el-form-item label="性别：">
+                      <span>{{ props.row.gender === 'm' ? '男' : '女' }}</span>
+                    </el-form-item>
+                    <el-form-item label="邮箱：">
+                      <span>{{ props.row.email }}</span>
+                    </el-form-item>
+                    <el-form-item label="手机：">
+                      <span>{{ props.row.mobile }}</span>
+                    </el-form-item>
+                  </el-form>
+                </template>
+              </el-table-column>
+              <el-table-column type="index" label="序号" width="70" align="center"></el-table-column>
+              <el-table-column width="120" prop="_id" label="学号" align="center"></el-table-column>
+              <el-table-column width="100" prop="username" label="姓名" align="center"></el-table-column>
+              <el-table-column width="100" prop="_class" label="班级" align="center"></el-table-column>
+              <el-table-column prop="academy" :formatter="formatterAcademy" :filters="academyValues" :filter-method="filterAcademy" label="学院" align="center"></el-table-column>
+              <el-table-column width="140" label="操作" align="center">
+                <template scope="scope">
+                  <el-button class="modify-btn" type="text" size="small" @click="submitAgree(scope.$index, scope.row, 'student')">通过</el-button>
+                  <el-button class="delete-btn" type="text" size="small" @click="submitRefuse(scope.$index, scope.row, 'student')">拒绝</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-tab-pane>
         </el-tabs>
         <el-dropdown class="createAccount-dropdown" trigger="click">
           <span class="createAccount-span">
@@ -540,6 +576,7 @@
       studentAccounts: ({ account }) => account.students.value,
       teacherAccounts: ({ account }) => account.teachers.value,
       adminAccounts: ({ account }) => account.admins.value,
+      applyAccounts: ({ account }) => account.applys.value,
       academyValues () {
         return this.academyOptions.map(item => ({
           text: item.value,
@@ -563,6 +600,39 @@
       // searchSubmit () {
       //   Message.success('搜索成功');
       // },
+      submitAgree (index, data) {
+        MessageBox.confirm('确认通过该账号申请, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => store.dispatch('account/AGREE', {
+          index,
+          data
+        })
+        ).then(() => {
+          Message.closeAll();
+          Message.success('通过成功');
+        })
+        .catch(() => false);
+      },
+      submitRefuse (index, data) {
+        MessageBox.confirm('确认拒绝该账号申请, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => store.dispatch('account/REFUSE', {
+          index,
+          data: {
+            _id: data._id,
+            email: data.email
+          }
+        })
+        ).then(() => {
+          Message.closeAll();
+          Message.success('拒绝成功');
+        })
+        .catch(() => false);
+      },
       submitDelete (index, _id, identity) {
         MessageBox.confirm('此操作将永久删除该账户, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -578,11 +648,8 @@
         ).then(() => {
           Message.closeAll();
           Message.success('删除成功');
-        }, () => false)
-        .catch(() => {
-          Message.closeAll();
-          Message.info('已取消');
-        });
+        })
+        .catch(() => false);
       },
       createAccount (identity) {
         this.dialog.status = 'create';
@@ -747,6 +814,7 @@
     beforeRouteEnter (to, from, next) {
       const loads = [];
       if (!store.state.global.academy.loaded) loads.push(store.dispatch('global/LOAD_ACADEMY'));
+      if (!store.state.account.applys.loaded) loads.push(store.dispatch('account/LOAD_APPLYS'));
       if (!store.state.account.students.loaded) loads.push(store.dispatch('account/LOAD_STUDENTS'));
       if (!store.state.account.teachers.loaded) loads.push(store.dispatch('account/LOAD_TEACHERS'));
       if (!store.state.account.admins.loaded) loads.push(store.dispatch('account/LOAD_ADMINS'));
