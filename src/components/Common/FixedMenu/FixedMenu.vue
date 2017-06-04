@@ -14,7 +14,7 @@
       <router-link to="data-share" class="menu-item data-share" title="资料分享">资料分享</router-link>
     </template>
     <template v-else-if="identity === 'admin'">
-      <router-link to="reply-schedule" class="menu-item time-schedule" title="答辩安排">答辩安排</router-link>
+      <!-- <router-link to="reply-schedule" class="menu-item time-schedule" title="答辩安排">答辩安排</router-link> -->
       <router-link to="publish-notice" class="menu-item publish-notice" title="发布公告">发布公告</router-link>
       <router-link to="account-manage" class="menu-item account-manage" title="账号管理">账号管理</router-link>
       <router-link to="system-settings" class="menu-item system-settings" title="系统设置">系统设置</router-link>

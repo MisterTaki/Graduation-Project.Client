@@ -6,10 +6,10 @@
       <div class="tabs-wrapper">
         <el-tabs class="tabs accountManage-view--tabs" value="student" type="card">
           <el-tab-pane label="学生账号" name="student">
-            <!-- <div class="search-wrapper">
+            <div class="search-wrapper">
               <el-input class="search-input accountManage-view--input" placeholder="按学号搜索账号信息" type="text" icon="search" v-model="searchInput" @keyup.enter.native="searchSubmit" :on-icon-click="searchSubmit">
               </el-input>
-            </div> -->
+            </div>
             <el-table class="studentAccount-list accountManage-view--table" :data="studentAccounts" border>
               <el-table-column type="expand">
                 <template scope="props">
@@ -52,10 +52,10 @@
             </el-table>
           </el-tab-pane>
           <el-tab-pane label="导师账号" name="teacher">
-            <!-- <div class="search-wrapper">
+            <div class="search-wrapper">
               <el-input class="search-input accountManage-view--input" placeholder="按工号搜索账号信息" type="text" icon="search" v-model="searchInput" @keyup.enter.native="searchSubmit" :on-icon-click="searchSubmit">
               </el-input>
-            </div> -->
+            </div>
             <el-table class="teachersAccount-list accountManage-view--table" :data="teacherAccounts" border>
               <el-table-column type="expand">
                 <template scope="props">
@@ -100,10 +100,10 @@
             </el-table>
           </el-tab-pane>
           <el-tab-pane label="管理员账号" name="admin">
-            <!-- <div class="search-wrapper">
+            <div class="search-wrapper">
               <el-input class="search-input accountManage-view--input" placeholder="按帐号搜索账号信息" type="text" icon="search" v-model="searchInput" @keyup.enter.native="searchSubmit" :on-icon-click="searchSubmit">
               </el-input>
-            </div> -->
+            </div>
             <el-table class="adminsAccount-list accountManage-view--table" :data="adminAccounts" border>
               <el-table-column type="expand">
                 <template scope="props">
@@ -597,9 +597,10 @@
       filterAcademy (value, row) {
         return row.academyID === value;
       },
-      // searchSubmit () {
-      //   Message.success('搜索成功');
-      // },
+      searchSubmit () {
+        Message.success('搜索成功');
+        store.commit('account/HAHA');
+      },
       submitAgree (index, data) {
         MessageBox.confirm('确认通过该账号申请, 是否继续?', '提示', {
           confirmButtonText: '确定',

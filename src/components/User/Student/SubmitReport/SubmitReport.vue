@@ -94,6 +94,13 @@
       submitSuccess (response, file) {
         Message.closeAll();
         Message.success(`提交报告"${file.name}"成功`);
+        store.commit('report/UPLOAD', {
+          newReport: {
+            created_at: '2017-06-04 13:21:13',
+            reportName: file.name,
+            reportSize: `${(file.size / 1024 / 1024).toFixed(2)}.MB`
+          }
+        });
       }
     },
     beforeRouteEnter (to, from, next) {

@@ -12,6 +12,7 @@ const LOAD_APPLYS = 'account/LOAD_APPLYS';
 const MODIFY_STUDENT = 'account/MODIFY_STUDENT';
 const MODIFY_TEACHER = 'account/MODIFY_TEACHER';
 const MODIFY_ADMIN = 'account/MODIFY_ADMIN';
+const HAHA = 'account/HAHA';
 
 export default {
   state: {
@@ -152,6 +153,23 @@ export default {
           return;
         }
       }
+    },
+    [HAHA] (state) {
+      state.students.value = [
+        {
+          major: '计算机与通信工程学院',
+          _id: '41355025',
+          ID: '610111199311294536',
+          _class: '计1301',
+          academyID: '7',
+          email: 'ustb_gaoqi@163.com',
+          gender: 'm',
+          mobile: '15652063671',
+          teacher: 'T1005',
+          topic: '测试课题1',
+          username: '高琦'
+        }
+      ];
     },
   }
 };
